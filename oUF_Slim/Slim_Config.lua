@@ -29,8 +29,8 @@ cfg.texture = "Interface\\Addons\\oUF_Slim\\media\\texture.tga"
 	cfg.Itex = blankTex										-- BG texture
 --	cfg.Auratex = mediaFolder.."dBBorderL"					-- border texture for buffs/debuffs
 
-	cfg.NameFont = "Interface\\Addons\\SharedMedia\\fonts\\SKURRI.ttf"				-- font used for text (names)
-	cfg.NumbFont = "Interface\\Addons\\SharedMedia\\fonts\\SKURRI.ttf"				-- font used for numbers
+	cfg.NameFont = "Interface\\Addons\\oUF_Slim\\media\\SKURRI.ttf"				-- font used for text (names)
+	cfg.NumbFont = "Interface\\Addons\\oUF_Slim\\media\\SKURRI.ttf"				-- font used for numbers
 	cfg.NameFS = 7											-- name font size
 	cfg.NumbFS = 7  										-- number font size (power value, etc.)
 	cfg.hpNumbFS = 7										-- health value font size (player, target, focus)
