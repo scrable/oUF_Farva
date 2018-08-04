@@ -1,0 +1,18 @@
+## Interface: 460200
+## Author: Dawn(Original Author) edited by Scrable
+## Notes: oUF layout ... of slim'ness
+## Title: |cff01DFD7oUF_|r|cffffffffSlim|r
+## RequiredDeps: oUF
+## OptionalDeps: oUF_CombatFeedback, oUF_SpellRange, oUF_BarFader, oUF_Smooth
+
+
+Slim_Config.lua
+Slim.xml
+module\oUF_AuraTracker.lua
+module\oUF_AuraWatch.lua
+module\oUF_ThreatBar.lua
+module\oUF_RaidDebuffs.lua
+module\oUF_Smooth.lua
+Slim_AuraFilterList.lua
+Slim_Tags.lua
+Slim.lua
