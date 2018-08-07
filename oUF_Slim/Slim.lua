@@ -318,12 +318,12 @@ local createAuraWatch = function(self, unit)
 			icon.spellID = v[1]
 			icon:SetSize(8, 8)
 			if v[3] then
-			    icon:SetPoint(v[3])
+				icon:SetPoint(v[3])
 			else
-			    icon:SetPoint('BOTTOMLEFT', self.Health, 'BOTTOMRIGHT', -8 * i, 16)
+			  icon:SetPoint('BOTTOMLEFT', self.Health, 'BOTTOMRIGHT', -8 * i, 16)
 			end
 			icon:SetBackdrop(backdrop_1px)
-	        icon:SetBackdropColor(0, 0, 0, 1)
+	   	icon:SetBackdropColor(0, 0, 0, 1)
 
 			local tex = icon:CreateTexture(nil, 'ARTWORK')
 			tex:SetAllPoints(icon)
@@ -416,7 +416,7 @@ local PostCastStart = function(Castbar, unit, spell, spellrank)
 	Castbar:GetParent().Name:Hide()
 	Castbar:GetParent().Status:Hide()
 
-		if Castbar.interrupt and UnitCanAttack("player", unit) then
+		if Castbar.notInterruptible and UnitCanAttack("player", unit) then
 			--self.Shield:Show()
 			Castbar:SetStatusBarColor(1, 1, 0, 1)
 			if cfg.useSpellIcon then
@@ -493,14 +493,11 @@ local Shared = function(self, unit, isSingle)
 local _, playerClass = UnitClass('player')
 
 	self.menu = menu
-
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
-
 	self:RegisterForClicks"AnyUp"
 
 	-- set/clear focus with shift + left click
-
 	if cfg.ShiftClickFocus then
 		local ModKey = 'Shift'
 		local MouseButton = 1
@@ -575,7 +572,7 @@ local _, playerClass = UnitClass('player')
 	self.Power = pp
 	self.Power.PostUpdate = PostUpdatePower
 
-	self.Power.Smooth = false
+	self.Power.Smooth = true
 	self.Power.colorPower = false
 	self.Power.colorClass = true
 
@@ -642,7 +639,6 @@ local _, playerClass = UnitClass('player')
 	RaidTarget:SetPoint('TOP', self, 0, 8)
 	RaidTarget:SetSize(16, 16)
 	self.RaidTargetIndicator = RaidTarget
-
 end
 
 ----------------------
@@ -727,37 +723,37 @@ local createDebuffs = function(self)
 end
 
 local createQuestIcon = function(self)
-		local q = fs(self.Health, 'OVERLAY', cfg.NumbFont, 12, cfg.FontF, 1, 1, 1)
-	    q:SetPoint('LEFT', name, 'RIGHT', 1, 0)
-	    q:SetText('|cff8AFF30!|r')
-	    self.QuestIndicator = q
+	local q = fs(self.Health, 'OVERLAY', cfg.NumbFont, 12, cfg.FontF, 1, 1, 1)
+	  q:SetPoint('LEFT', name, 'RIGHT', 1, 0)
+	  q:SetText('|cff8AFF30!|r')
+	  self.QuestIndicator = q
 end
 
 -- class (healer) specific tags
 local classTags = function(self)
-		local PriestTags = "[NivPWS] [NivRenew] [NivPoM] [NivGS] [NivFW]"
-		local PaladinTags = "[NivBoL]"
-		local DruidTags = "[NivRej] [NivReg] [NivLB] [NivWG] [NivInn]"
-		local ShamanTags = "[NivES] [NivRipT] [NivErLiv]"
+	local PriestTags = "[NivPWS] [NivRenew] [NivPoM] [NivGS] [NivFW]"
+	local PaladinTags = "[NivBoL]"
+	local DruidTags = "[NivRej] [NivReg] [NivLB] [NivWG] [NivInn]"
+	local ShamanTags = "[NivES] [NivRipT] [NivErLiv]"
 
-		self.Text = self.Health:CreateFontString(nil, "ARTWORK")
-		self.Text:SetFont(cfg.NumbFont, cfg.RaidFS, cfg.fontFNum)
-		self.Text:SetTextColor(unpack(cfg.sndcolor))
-		--self.Text:SetPoint("TOPLEFT", self.Health, "TOPLEFT", cfg.widthR*0.3, 2)
-		self.Text:SetPoint("TOPLEFT", self.Health, "TOPLEFT", 1, 2)
-		self.Text:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -1, 0)
+	self.Text = self.Health:CreateFontString(nil, "ARTWORK")
+	self.Text:SetFont(cfg.NumbFont, cfg.RaidFS, cfg.fontFNum)
+	self.Text:SetTextColor(unpack(cfg.sndcolor))
+	--self.Text:SetPoint("TOPLEFT", self.Health, "TOPLEFT", cfg.widthR*0.3, 2)
+	self.Text:SetPoint("TOPLEFT", self.Health, "TOPLEFT", 1, 2)
+	self.Text:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -1, 0)
 
-		if playerClass == "PRIEST" then
-			self:Tag(self.Text, PriestTags)
-		elseif playerClass == "PALADIN" then
-			self:Tag(self.Text, PaladinTags)
-		elseif playerClass == "DRUID" then
-			self:Tag(self.Text, DruidTags)
-		elseif playerClass == "SHAMAN" then
-			self:Tag(self.Text, ShamanTags)
-		else
-			self:Tag(self.Text, " ")
-		end
+	if playerClass == "PRIEST" then
+		self:Tag(self.Text, PriestTags)
+	elseif playerClass == "PALADIN" then
+		self:Tag(self.Text, PaladinTags)
+	elseif playerClass == "DRUID" then
+		self:Tag(self.Text, DruidTags)
+	elseif playerClass == "SHAMAN" then
+		self:Tag(self.Text, ShamanTags)
+	else
+		self:Tag(self.Text, " ")
+	end
 end
 
 -- plugin support
@@ -766,15 +762,6 @@ local SpellRange = function(self)
 		self.SpellRange = {
 		insideAlpha = 1,
 		outsideAlpha = cfg.FadeOutAlpha}
-	end
-end
-
-local CombatFeedback = function(self)
-	if IsAddOnLoaded("oUF_CombatFeedback") then
-		local cbft = self.Health:CreateFontString(nil, "ARTWORK")
-		cbft:SetPoint("CENTER", self.Health, "CENTER", 0, 0)
-		self.CombatFeedbackText = cbft
-		self.CombatFeedbackText:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 	end
 end
 
@@ -831,9 +818,9 @@ local UnitSpecific = {
 		self.Health:SetWidth(cfg.widthP)
 		self.Power:SetWidth(cfg.widthP)
 		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
-        htext:SetPoint('RIGHT', 2, -19)
+    htext:SetPoint('RIGHT', 2, -19)
 		htext.frequentUpdates = .1
-        self:Tag(htext, '[player:hp]')
+    self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPRIGHT", htext, "BOTTOMRIGHT", 0, -2)
 
 		-- Icons
@@ -857,7 +844,6 @@ local UnitSpecific = {
 		self.LeaderIndicator = LIc
 
 		-- plugins
-		CombatFeedback(self)
 		BarFader(self)
 
 		local TFrame = CreateFrame("Frame", nil, self)
@@ -917,9 +903,9 @@ local UnitSpecific = {
 		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
 		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
-        htext:SetPoint('LEFT', 0, -19)
+    htext:SetPoint('LEFT', 0, -19)
 		htext.frequentUpdates = .1
-        self:Tag(htext, '[player:hp]')
+    self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
 
 		createBuffs(self)
@@ -949,7 +935,6 @@ local UnitSpecific = {
 
 		-- plugins
 		SpellRange(self)
-		CombatFeedback(self)
 
 		 --Icons
 		local Ihld = CreateFrame("Frame", nil, self)
@@ -1045,7 +1030,6 @@ local UnitSpecific = {
 
 		-- plugins
 		SpellRange(self)
-		CombatFeedback(self)
 
 		-- Icons
 		local Ihld = CreateFrame("Frame", nil, self)
@@ -1131,16 +1115,16 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS/2)
 		self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
-        htext:SetPoint('LEFT', 0, -16)
+		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+    htext:SetPoint('LEFT', 0, -16)
 		htext.frequentUpdates = .1
-        self:Tag(htext, '[player:hp]')
+    self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -1)
 
-		local alttext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
-        alttext:SetPoint('RIGHT', 0, -16)
+		local alttext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+    alttext:SetPoint('RIGHT', 0, -16)
 		alttext.frequentUpdates = .1
-        self:Tag(alttext, '[altpower]')
+    self:Tag(alttext, '[altpower]')
 
 		-- plugins
 		SpellRange(self)
@@ -1181,9 +1165,9 @@ local UnitSpecific = {
 		self.Health.value:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 
 		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
-        htext:SetPoint('RIGHT', 2, -19)
+    htext:SetPoint('RIGHT', 2, -19)
 		htext.frequentUpdates = .1
-        self:Tag(htext, '[player:hp]')
+    self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPRIGHT", htext, "BOTTOMRIGHT", 0, -2)
 
 		local Auras = CreateFrame("Frame", nil, self)
@@ -1207,12 +1191,7 @@ local UnitSpecific = {
 		end
 
 		-- plugins
-		CombatFeedback(self)
 		SpellRange(self)
-
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetPoint("LEFT", self.Health, "LEFT", 4, 0)]]--
 
 		self:SetSize(cfg.widthPA, cfg.heightPA + cfg.NumbFS + cfg.PPyOffset)
 	end,
@@ -1228,10 +1207,6 @@ local UnitSpecific = {
 		self.Power:SetWidth(cfg.widthS)
 		self.Name:SetPoint("CENTER", self.Health, 0, 0)
 		self:Tag(self.Name, '[raidcolor][shortname]')
-
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetPoint("CENTER", self.Health, "CENTER", 0, 0)]]--
 
 		self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbFS + cfg.PPyOffset)
 	end,
@@ -1258,60 +1233,45 @@ do
 		self.Power.value:SetPoint("RIGHT", self.Health.value, "LEFT", -2, 0)
 		self.Status:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
 		self.Name:SetPoint("TOPLEFT", self.Status, "TOPRIGHT", 0, 0)
-if cfg.RaidDebuffs then
-		local Auras = CreateFrame("Frame", nil, self)
-		Auras:SetHeight(cfg.heightPA)
-		Auras:SetPoint("TOPLEFT", self, "TOPRIGHT", 6, 2)
-		Auras.initialAnchor = "TOPLEFT"
-		Auras.size = cfg.buSize
-		Auras:SetWidth(Auras.size * 13)
-		Auras.gap = true
-		Auras.numBuffs = 8
-		Auras.numDebuffs = 4
-		Auras.spacing = 2
-
-		Auras.PostCreateIcon = PostCreateIcon
-		Auras.PostUpdateIcon = PostUpdateIcon
-		self.Auras = Auras
-
-		-- apply aura filter
-		if cfg.FilterAuras then
-			self.Auras.CustomFilter = CustomFilter
-		end
-end
+		if cfg.RaidDebuffs then
+			local d = CreateFrame('Frame', nil, self)
+			d:SetSize(20,20)
+			d:SetPoint('CENTER', 0, 4)
+			d:SetFrameStrata'HIGH'
+			d:SetBackdrop(backdrop3)
+			d.icon = d:CreateTexture(nil, 'OVERLAY')
+			d.icon:SetTexCoord(.1,.9,.1,.9)
+			d.icon:SetAllPoints(d)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
+			if cfg.FilterAuras then
+				d.CustomFilter = CustomFilter
+			end
+	   self.RaidDebuffs = d
+	 	end
 
 		-- plugins
 		HealComm4(self)
-		CombatFeedback(self)
 		self.Range = range
-
-		-- Icons
-		--[[createRaidIcon(self)
-		createPhaseIcon(self)
-		self.RaidIcon:SetPoint("RIGHT", self.Health, "RIGHT", -4, 0)
-		self.PhaseIcon:SetPoint("RIGHT", self.RaidIcon, "LEFT", -4, 0)]]--
 
 		LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
 		LfDR:SetSize(12, 12)
 		LfDR:SetPoint("TOPLEFT", self.Health, 4, 6)
-		self.LFDRole = LfDR
+		self.GroupRoleIndicator = LfDR
 
 		LIc = self.Health:CreateTexture(nil, "OVERLAY")
 		LIc:SetSize(12, 12)
 		LIc:SetPoint("LEFT", LfDR, "RIGHT", 4, 0)
-		self.Leader = LIc
-
-	--[[	MLIc = self.Health:CreateTexture(nil, 'OVERLAY')
-		MLIc:SetSize(12, 12)
-		MLIc:SetPoint("LEFT", LIc, "RIGHT", 4, 0)
-		self.MasterLooter = MLIc]]--
+		self.LeaderIndicator = LIc
 
 		rChk = self.Health:CreateTexture(nil, 'OVERLAY')
 		rChk:SetSize(18, 18)
 		rChk:SetPoint("CENTER", self.Health, 0, 0)
 		rChk.fadeTimer = 6
 		rChk.finishedTimer = 6
-		self.ReadyCheck = rChk
+		self.ReadyCheckIndicator = rChk
 
 		-- party pets
 		if (self:GetAttribute("unitsuffix") == "pet") then
@@ -1329,17 +1289,12 @@ end
 			self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -2)
 			self:Tag(self.Name, '[raidcolor][shortname]')
 
-			-- Icons
-			--self.RaidIcon:ClearAllPoints()
-			--self.RaidIcon:SetPoint("CENTER", self.Health, "CENTER", 0, 0)
-
 			self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbFS + cfg.PPyOffset)
 		end
 	end
 
 	UnitSpecific.raid = function(self, ...)
 		Shared(self, ...)
-		--createAuraWatch(self)
 		createAuraWatch(self)
 
 		self.Health:SetHeight(cfg.heightR)
@@ -1352,57 +1307,59 @@ end
 
 		local name = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
 		name:SetPoint('LEFT', 2, 6)
-	    name:SetJustifyH'LEFT'
+    name:SetJustifyH'LEFT'
 		self:Tag(name, '[color][veryshort:name]')
 
-        local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
-        htext:SetPoint('RIGHT', -2, -5)
+	  local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+	  htext:SetPoint('RIGHT', -2, -5)
 		htext:SetJustifyH'RIGHT'
 		htext.frequentUpdates = true
-        self:Tag(htext, '[raid:hp]')
-
-
+    self:Tag(htext, '[raid:hp]')
 
 		local rDhF = CreateFrame("Frame", nil, self)
 		rDhF:SetAllPoints(self.Health)
 		rDhF:SetFrameLevel(10)
-if cfg.RaidDebuffs then
-		local d = CreateFrame('Frame', nil, self)
-	       d:SetSize(20,20)
-	       d:SetPoint('CENTER', 0, 4)
-	       d:SetFrameStrata'HIGH'
-		   d:SetBackdrop(backdrop3)
-	       d.icon = d:CreateTexture(nil, 'OVERLAY')
-	       d.icon:SetTexCoord(.1,.9,.1,.9)
-	       d.icon:SetAllPoints(d)
-	       d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
-	       d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-		   d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
-	       d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
+		if cfg.RaidDebuffs then
+			local d = CreateFrame('Frame', nil, self)
+			d:SetSize(20,20)
+			d:SetPoint('CENTER', 0, 4)
+			d:SetFrameStrata'HIGH'
+			d:SetBackdrop(backdrop3)
+			d.icon = d:CreateTexture(nil, 'OVERLAY')
+			d.icon:SetTexCoord(.1,.9,.1,.9)
+			d.icon:SetAllPoints(d)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
 
-				 --d.PostCreateIcon = PostCreateIcon
-				 --d.PostUpdateIcon = PostUpdateIcon
-
-		   d.CustomFilter = CustomFilter
-		   self.RaidDebuffs = d
-end
+			if cfg.FilterAuras then
+				d.CustomFilter = CustomFilter
+			end
+	   self.RaidDebuffs = d
+	 	end
 		-- plugins
 		HealComm4(self)
 		self.Range = range
 		self.Health.Smooth = true
 		self.Power.Smooth = true
 
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetSize(14, 14)
-	    self.RaidIcon:SetPoint('TOP', self.Health, 10, 8)]]--
+		LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
+		LfDR:SetSize(12, 12)
+		LfDR:SetPoint("TOPLEFT", self.Health, 4, 6)
+		self.GroupRoleIndicator = LfDR
+
+		LIc = self.Health:CreateTexture(nil, "OVERLAY")
+		LIc:SetSize(12, 12)
+		LIc:SetPoint("LEFT", LfDR, "RIGHT", 4, 0)
+		self.LeaderIndicator = LIc
 
 		rChk = self.Health:CreateTexture(nil, 'OVERLAY')
 		rChk:SetSize(18, 18)
 		rChk:SetPoint("CENTER", self.Health, 0, 0)
 		rChk.fadeTimer = 6
 		rChk.finishedTimer = 6
-		self.ReadyCheck = rChk
+		self.ReadyCheckIndicator = rChk
 	end
 
 	UnitSpecific.r40 = UnitSpecific.raid
@@ -1461,12 +1418,6 @@ oUF:Factory(function(self)
 	local focus = spawnHelper(self, 'focus', "CENTER", 360, -164)
 	spawnHelper(self, 'focustarget', "CENTER", 436, -209)
 
-	--[[local abiRealm=GetRealmName()
-		function Frame1_OnLoad()
-		end
-		function Button1_OnClick()
-		FontString1:SetText(abiRealm)
-	end]]--
 	local spec = GetSpecialization()
 	local class = UnitClass("Player")
 	--priest spec 1,2
@@ -1498,109 +1449,78 @@ oUF:Factory(function(self)
 			else
 				party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
 			end
+	end
 
-	--[[if UnitName("player") == "Miku" then
-			party:SetPoint("CENTER", 0, -299)
-		else if UnitName("Player") == "Zetzl" then
-			if spec == 1 or spec == 2 then
-				party:SetPoint("CENTER", 0, -300)
-			else
-				party:SetPoint("BOTTOMRIGHT", -216, 9)
-			end
-		else if UnitName("Player") == "Shrable" then
-						if spec == 3 then
-							party:SetPoint("CENTER", 0, -359)
-							--raid:SetPoint("BOTTOMRIGHT", -45, 9)
-						else
-							party:SetPoint("BOTTOMRIGHT", -45, 9)
+	local arenaprep = {}
+	for i = 1, 5 do
+	  arenaprep[i] = CreateFrame('Frame', 'oUF_ArenaPrep'..i, UIParent)
+	  arenaprep[i]:SetAllPoints(_G['oUF_Arena'..i])
+	  arenaprep[i]:SetFrameStrata('BACKGROUND')
+	arenaprep[i].framebd = framebd(arenaprep[i], arenaprep[i])
 
-						end
+	  arenaprep[i].Health = CreateFrame('StatusBar', nil, arenaprep[i])
+	  arenaprep[i].Health:SetAllPoints()
+	  arenaprep[i].Health:SetStatusBarTexture(cfg.blanktexture)
 
-		else if abiRealm == "Kel'Thuzad" then
-			 if UnitName("player") == "Biganimetits" then
-				party:SetPoint("CENTER", 0, -299)
-			end
-		else
-			party:SetPoint("BOTTOMRIGHT", -216, 9)
-		end
-		end
-		end
-	end--]]
-  end
+	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, 8, cfg.FontF, 1, 1, 1)
+	  arenaprep[i].Spec:SetPoint('CENTER')
+	arenaprep[i].Spec:SetJustifyH'CENTER'
 
-local arenaprep = {}
+	  arenaprep[i]:Hide()
+	end
+
+	local arenaprepupdate = CreateFrame('Frame')
+	arenaprepupdate:RegisterEvent('PLAYER_LOGIN')
+	arenaprepupdate:RegisterEvent('PLAYER_ENTERING_WORLD')
+	arenaprepupdate:RegisterEvent('ARENA_OPPONENT_UPDATE')
+	arenaprepupdate:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS')
+	arenaprepupdate:SetScript('OnEvent', function(self, event)
+	  if event == 'PLAYER_LOGIN' then
 	    for i = 1, 5 do
-		    arenaprep[i] = CreateFrame('Frame', 'oUF_ArenaPrep'..i, UIParent)
 		    arenaprep[i]:SetAllPoints(_G['oUF_Arena'..i])
-		    arenaprep[i]:SetFrameStrata('BACKGROUND')
-			arenaprep[i].framebd = framebd(arenaprep[i], arenaprep[i])
-
-		    arenaprep[i].Health = CreateFrame('StatusBar', nil, arenaprep[i])
-		    arenaprep[i].Health:SetAllPoints()
-		    arenaprep[i].Health:SetStatusBarTexture(cfg.blanktexture)
-
-		    arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, 8, cfg.FontF, 1, 1, 1)
-		    arenaprep[i].Spec:SetPoint('CENTER')
-			arenaprep[i].Spec:SetJustifyH'CENTER'
-
+	    end
+	  elseif event == 'ARENA_OPPONENT_UPDATE' then
+	    for i = 1, 5 do
 		    arenaprep[i]:Hide()
 	    end
+	  else
+	    local numOpps = GetNumArenaOpponentSpecs()
 
-	    local arenaprepupdate = CreateFrame('Frame')
-	    arenaprepupdate:RegisterEvent('PLAYER_LOGIN')
-	    arenaprepupdate:RegisterEvent('PLAYER_ENTERING_WORLD')
-	    arenaprepupdate:RegisterEvent('ARENA_OPPONENT_UPDATE')
-	    arenaprepupdate:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS')
-	    arenaprepupdate:SetScript('OnEvent', function(self, event)
-		    if event == 'PLAYER_LOGIN' then
-			    for i = 1, 5 do
-				    arenaprep[i]:SetAllPoints(_G['oUF_Arena'..i])
-			    end
-		    elseif event == 'ARENA_OPPONENT_UPDATE' then
-			    for i = 1, 5 do
-				    arenaprep[i]:Hide()
-			    end
-		    else
-			    local numOpps = GetNumArenaOpponentSpecs()
+	    if numOpps > 0 then
+		    for i = 1, 5 do
+			    local f = arenaprep[i]
 
-			    if numOpps > 0 then
-				    for i = 1, 5 do
-					    local f = arenaprep[i]
+			    if i <= numOpps then
+				    local s = GetArenaOpponentSpec(i)
+				    local _, spec, class = nil, 'UNKNOWN', 'UNKNOWN'
 
-					    if i <= numOpps then
-						    local s = GetArenaOpponentSpec(i)
-						    local _, spec, class = nil, 'UNKNOWN', 'UNKNOWN'
+				    if s and s > 0 then
+					    _, spec, _, _, _, _, class = GetSpecializationInfoByID(s)
+				    end
 
-						    if s and s > 0 then
-							    _, spec, _, _, _, _, class = GetSpecializationInfoByID(s)
-						    end
-
-						    if class and spec then
-							    local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
-								if cfg.class_colorbars and color then
-								    f.Health:SetStatusBarColor(color.r, color.g, color.b)
-								else
-									f.Health:SetStatusBarColor(40/255, 40/255, 40/255)
-								end
-							    f.Spec:SetText(spec..'  -  '..LOCALIZED_CLASS_NAMES_MALE[class])
-							    f:Show()
-						    end
-					    else
-						    f:Hide()
-					    end
+				    if class and spec then
+					    local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+						if cfg.class_colorbars and color then
+						    f.Health:SetStatusBarColor(color.r, color.g, color.b)
+						else
+							f.Health:SetStatusBarColor(40/255, 40/255, 40/255)
+						end
+					    f.Spec:SetText(spec..'  -  '..LOCALIZED_CLASS_NAMES_MALE[class])
+					    f:Show()
 				    end
 			    else
-				    for i = 1, 5 do
-					    arenaprep[i]:Hide()
-				    end
+				    f:Hide()
 			    end
 		    end
-	    end)
+	    else
+		    for i = 1, 5 do
+			    arenaprep[i]:Hide()
+		    end
+	    end
+	  end
+	end)
 
-
-
-
-		if cfg.RaidFrames then
+	if cfg.RaidFrames then
 		self:SetActiveStyle"Slim - Raid"
 		--difficultyID = GetDungeonDifficultyID()
 		--	print(difficultyID)
@@ -1638,66 +1558,36 @@ local arenaprep = {}
 			else
 				raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
 			end
-
-
-
-				--[[if UnitName("player") == "Miku" then
-					raid:SetPoint("CENTER", 0, -359)
-				else if abiRealm == "Kel'Thuzad" then
-					if UnitName("player") == "Biganimetits" then
-						raid:SetPoint("CENTER", 0, -359)
-					end
-
-
-
-				else if UnitName("Player") == "Zetzl" then
-					if spec == 1 or spec == 2 then
-						raid:SetPoint("CENTER", 0, -359)
-						--raid:SetPoint("BOTTOMRIGHT", -45, 9)
-					else
-						raid:SetPoint("BOTTOMRIGHT", -45, 9)
-
-					end
-				else if UnitName("Player") == "Shrable" then
-					if spec == 3 then
-						raid:SetPoint("CENTER", 0, -359)
-					else
-						raid:SetPoint("BOTTOMRIGHT", -45, 9)
-
-					end
-				else
-					raid:SetPoint("BOTTOMRIGHT", -216, 9)
-				end]]--
 	end
 
-if cfg.BossFrames then
-	self:SetActiveStyle"Slim - Boss"
-	local boss = {}
-		for i = 1, MAX_BOSS_FRAMES do
-			local unit = self:Spawn("boss"..i, "oUF_SlimBoss"..i)
+	if cfg.BossFrames then
+		self:SetActiveStyle"Slim - Boss"
+		local boss = {}
+			for i = 1, MAX_BOSS_FRAMES do
+				local unit = self:Spawn("boss"..i, "oUF_SlimBoss"..i)
 
-			if i==1 then
-				unit:SetPoint("LEFT", 25, -162)
-			else
-				unit:SetPoint("TOPLEFT", boss[i-1], "BOTTOMLEFT", 0, -10)
+				if i==1 then
+					unit:SetPoint("LEFT", 25, -162)
+				else
+					unit:SetPoint("TOPLEFT", boss[i-1], "BOTTOMLEFT", 0, -10)
+				end
+				boss[i] = unit
 			end
-			boss[i] = unit
-		end
-end
+	end
 
-if cfg.MTFrames then
-	self:SetActiveStyle"Slim - MainTank"
-	local Main_Tank = self:SpawnHeader("oUF_MainTank", nil, 'raid, party, solo',
-		'showRaid', true,
-		"groupFilter", "MAINTANK",
-		'yOffset', -10,
-		"template", "oUF_SlimMTartemplate",		-- MT Target
-		'oUF-initialConfigFunction', ([[
-			self:SetWidth(%d)
-			self:SetHeight(%d)
-		]]):format(cfg.widthM, cfg.heightM))
-	Main_Tank:SetPoint("TOPLEFT", 22, -251)
-end
+	if cfg.MTFrames then
+		self:SetActiveStyle"Slim - MainTank"
+		local Main_Tank = self:SpawnHeader("oUF_MainTank", nil, 'raid, party, solo',
+			'showRaid', true,
+			"groupFilter", "MAINTANK",
+			'yOffset', -10,
+			"template", "oUF_SlimMTartemplate",		-- MT Target
+			'oUF-initialConfigFunction', ([[
+				self:SetWidth(%d)
+				self:SetHeight(%d)
+			]]):format(cfg.widthM, cfg.heightM))
+		Main_Tank:SetPoint("TOPLEFT", 22, -251)
+	end
 
 end)
 

@@ -105,7 +105,6 @@ cfg.texture = "Interface\\Addons\\oUF_Slim\\media\\texture.tga"
 
 	cfg.RaidFrames = true	 				-- set to false to disable raid frame groups 1-5
 	cfg.disableRaidFrameManager = true		-- enable/disable blizzards raidframe manager
-	cfg.RaidDebuffNumb = 2					-- maximum number of visible debuffs on raidframes
 	cfg.RaidDebuffs = true					-- enable/disable raid debuffs
 	cfg.raidDebuffSize = 14					--size for debuffs in raid frames
 
