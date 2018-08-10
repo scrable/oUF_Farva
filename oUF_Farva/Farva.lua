@@ -400,11 +400,12 @@ end
 
 -- debuff highlight
 local CanDispel = {
-	PRIEST = { Magic = true, Disease = false, },
-	SHAMAN = { Magic = true, Curse = true},
+	PRIEST = 	{ Magic = true, Disease = false, },
+	SHAMAN = 	{ Magic = true, Curse = true},
 	PALADIN = { Magic = true, Poison = true, Disease = true, },
-	MAGE = { Curse = true, },
-	DRUID = { Magic = true, Curse = true, Poison = true},
+	MAGE = 		{ Curse = true, },
+	DRUID = 	{ Magic = true, Curse = true, Poison = true},
+	MONK = 		{ Magic = true, Poison = true, Disease = true, }
 }
 local dispellist = CanDispel[playerClass] or {}
 
@@ -438,7 +439,6 @@ local PostCastStart = function(Castbar, unit, spell, spellrank)
 	Castbar:GetParent().Status:Hide()
 
 		if Castbar.notInterruptible and UnitCanAttack("player", unit) then
-			--self.Shield:Show()
 			Castbar:SetStatusBarColor(1, 1, 0, 1)
 			if cfg.useSpellIcon then
 				Castbar.IconGlow:SetBackdropColor(0.9, 0, 1.0, 0.6)
@@ -751,33 +751,6 @@ local createQuestIcon = function(self)
 	  q:SetPoint('LEFT', name, 'RIGHT', 1, 0)
 	  q:SetText('|cff8AFF30!|r')
 	  self.QuestIndicator = q
-end
-
--- class (healer) specific tags
-local classTags = function(self)
-	local PriestTags = "[NivPWS] [NivRenew] [NivPoM] [NivGS] [NivFW]"
-	local PaladinTags = "[NivBoL]"
-	local DruidTags = "[NivRej] [NivReg] [NivLB] [NivWG] [NivInn]"
-	local ShamanTags = "[NivES] [NivRipT] [NivErLiv]"
-
-	self.Text = self.Health:CreateFontString(nil, "ARTWORK")
-	self.Text:SetFont(cfg.NumbFont, cfg.RaidFS, cfg.fontFNum)
-	self.Text:SetTextColor(unpack(cfg.sndcolor))
-	--self.Text:SetPoint("TOPLEFT", self.Health, "TOPLEFT", cfg.widthR*0.3, 2)
-	self.Text:SetPoint("TOPLEFT", self.Health, "TOPLEFT", 1, 2)
-	self.Text:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -1, 0)
-
-	if playerClass == "PRIEST" then
-		self:Tag(self.Text, PriestTags)
-	elseif playerClass == "PALADIN" then
-		self:Tag(self.Text, PaladinTags)
-	elseif playerClass == "DRUID" then
-		self:Tag(self.Text, DruidTags)
-	elseif playerClass == "SHAMAN" then
-		self:Tag(self.Text, ShamanTags)
-	else
-		self:Tag(self.Text, " ")
-	end
 end
 
 -- plugin support
