@@ -1,4 +1,4 @@
-## Interface: 460200
+## Interface: 80000
 ## Author: Scrable
 ## Credits Haste, Dawn, Skaarj
 ## Title: |cff01DFD7oUF_|r|cffffffffFarva|r

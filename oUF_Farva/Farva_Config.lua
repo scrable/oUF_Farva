@@ -151,7 +151,6 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	            {6940, {0.89, 0.1, 0.1}, 'BOTTOMLEFT'}, -- Hand of Sacrifice
 	            {1022, {0.2, 0.2, 1}, 'BOTTOMLEFT'},	-- Hand of Protection
 	            {1044, {0.89, 0.45, 0}, 'BOTTOMLEFT'},  -- Hand of Freedom
-	            {114163, {0.9, 0.6, 0.4}, 'RIGHT'},	    -- Eternal Flame
 	            {53563, {0.7, 0.3, 0.7}, 'TOPRIGHT'},   -- Beacon of Light
 							{25771,{0.7, 0.3, 0.7}, 'BOTTOM'},
 	            },
@@ -168,11 +167,12 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	            },
   DEATHKNIGHT = {
 	            },
+	DEMONHUNTER = {
+							},
 	   HUNTER = {
 	            {34477, {0.2, 0.2, 1}},				    -- Misdirection
 	            },
 	     MAGE = {
-	            {111264, {0.2, 0.2, 1}},			    -- Ice Ward
 	            },
 	    ROGUE = {
 	            {57934, {0.89, 0.1, 0.1}},			    -- Tricks of the Trade
@@ -182,7 +182,6 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	            },
 	  WARRIOR = {
 	            {114030, {0.2, 0.2, 1}},			    -- Vigilance
-	            {3411, {0.89, 0.1, 0.1}, 'TOPRIGHT'},   -- Intervene
 	            },
  }
 
