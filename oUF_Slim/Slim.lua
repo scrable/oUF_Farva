@@ -35,9 +35,9 @@ end
 
 function CoolNumber(num)
 	if(num >= 1e6) then
-		return round(num/1e6,cfg.Numberzzz).."m"
+		return round(num/1e6,1).."m"
 	elseif(num >= 1e3) then
-		return round(num/1e3,cfg.Numberzzz).."k"
+		return round(num/1e3,1).."k"
 	else
 		return num
 	end
@@ -221,11 +221,24 @@ end
 -- aura functions --
 --------------------
 -- filter some crap
-local Whitelist = RaidDebuffs
-local CustomFilter = function(icons, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID)
+--[[local Whitelist = RaidDebuffs
+local CustomFilter = function(icons, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
 	if(spellID) then
 		return true
 	end
+end]]--
+
+local CustomFilter = function(icons, ...)
+    local _, icon, name, _, _, _, _, _, _, caster = ...
+    local isPlayer
+    if (caster == 'player' or caster == 'vechicle') then
+        isPlayer = true
+    end
+    if((icons.onlyShowPlayer and isPlayer) or (not icons.onlyShowPlayer and name)) then
+        icon.isPlayer = isPlayer
+        icon.owner = caster
+        return true
+    end
 end
 
 -- format time
@@ -276,8 +289,9 @@ end
 -- icon style
 local PostCreateIcon = function(Auras, button)
 	local buttonwidth = button:GetWidth()
-	button.cd.noOCC = true		 		-- hide OmniCC CDs
-	button.cd.noCooldownCount = true	-- hide CDC CDs
+	button.cd.noOCC = false		 		-- hide OmniCC CDs
+	button.cd.noCooldownCount = false	-- hide CDC CDs
+	button.cd.disableCooldown = false
 	Auras.disableCooldown = true		-- hide CD spiral
 	Auras.showDebuffType = false			-- show debuff border type color
 
@@ -298,10 +312,17 @@ local PostCreateIcon = function(Auras, button)
 	local count = button.count
 	count:ClearAllPoints()
 	count:SetPoint("BOTTOMRIGHT", button, 0, 2)
-	count:SetFont(cfg.NumbFont, 7, cfg.fontFNum)
+	count:SetFont(cfg.NumbFont, 7, cfg.fontF)
 	count:SetVertexColor(unpack(cfg.sndcolor))
 
 	button.icon:SetTexCoord(.08, .92, .08, .92)
+end
+
+local AWIcon = function(AWatch, icon, spellID, name, self)
+	local count = fs(icon, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
+	count:SetPoint('BOTTOMRIGHT', icon, 5, -5)
+	icon.count = count
+	icon.cd:SetReverse(true)
 end
 
 local createAuraWatch = function(self, unit)
@@ -520,7 +541,9 @@ local _, playerClass = UnitClass('player')
 	hp:GetStatusBarTexture():SetHorizTile(true)
 	hp:SetFrameLevel(3)
 	hp.frequentUpdates = true
-	hp.Smooth = true
+	if cfg.SmoothHealthUpdate then
+		hp.Smooth = true
+	end
 	self.Health = hp
 
 	if cfg.TransparencyMode then
@@ -571,8 +594,9 @@ local _, playerClass = UnitClass('player')
 	pp.colorPower = false
 	self.Power = pp
 	self.Power.PostUpdate = PostUpdatePower
-
-	self.Power.Smooth = true
+	if cfg.SmoothPowerUpdate then
+		self.Power.Smooth = true
+	end
 	self.Power.colorPower = false
 	self.Power.colorClass = true
 
@@ -851,18 +875,18 @@ local UnitSpecific = {
 		TFrame:SetPoint("BOTTOMRIGHT", self.Power, "BOTTOMRIGHT", 4, -4)
 		TFrame:SetFrameLevel(0)
 
-		if cfg.treat.enable then
-		    local treat = createStatusbar(UIParent, cfg.texture, nil, cfg.treat.height, cfg.treat.width, 1, 1, 1, 1)
-					treat:SetFrameStrata('LOW')
-	        treat:SetPoint(unpack(cfg.treat.pos))
-					treat.useRawThreat = false
-					treat.usePlayerTarget = false
-					treat.bg = treat:CreateTexture(nil, 'BACKGROUND')
-          treat.bg:SetAllPoints(treat)
-          treat.bg:SetTexture(cfg.texture)
-          treat.bg:SetVertexColor(1, 0, 0, 0.2)
-	        treat.bg = framebd(treat, treat)
-				self.ThreatBar = treat
+		if cfg.threat.enable then
+		    local threat = createStatusbar(UIParent, cfg.texture, nil, cfg.threat.height, cfg.threat.width, 1, 1, 1, 1)
+					threat:SetFrameStrata('LOW')
+	        threat:SetPoint(unpack(cfg.threat.pos))
+					threat.useRawThreat = false
+					threat.usePlayerTarget = false
+					threat.bg = threat:CreateTexture(nil, 'BACKGROUND')
+          threat.bg:SetAllPoints(threat)
+          threat.bg:SetTexture(cfg.texture)
+          threat.bg:SetVertexColor(1, 0, 0, 0.2)
+	        threat.bg = framebd(threat, threat)
+				self.ThreatBar = threat
 		end
 
 		createDebuffs(self)
@@ -874,6 +898,9 @@ local UnitSpecific = {
 		self.Debuffs.num = 14
 		self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
 		self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbFS + cfg.PPyOffset)
+		if cfg.FilterAuras then
+			self.Debuffs.CustomFilter = CustomFilter
+		end
 	end,
 
 	target = function(self, ...)
@@ -1258,7 +1285,7 @@ do
 
 		LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
 		LfDR:SetSize(12, 12)
-		LfDR:SetPoint("TOPLEFT", self.Health, 4, 6)
+		LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
 		self.GroupRoleIndicator = LfDR
 
 		LIc = self.Health:CreateTexture(nil, "OVERLAY")
@@ -1341,12 +1368,16 @@ do
 		-- plugins
 		HealComm4(self)
 		self.Range = range
-		self.Health.Smooth = true
-		self.Power.Smooth = true
+		if cfg.SmoothHealthUpdate then
+			self.Health.Smooth = true
+		end
+		if cfg.SmoothPowerUpdate then
+			self.Power.Smooth = true
+		end
 
 		LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
 		LfDR:SetSize(12, 12)
-		LfDR:SetPoint("TOPLEFT", self.Health, 4, 6)
+		LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
 		self.GroupRoleIndicator = LfDR
 
 		LIc = self.Health:CreateTexture(nil, "OVERLAY")

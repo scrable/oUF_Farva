@@ -144,14 +144,14 @@ local function DefaultResetIcon(watch, icon, count, duration, expire)
 	if not icon.onlyShowMissing then
 		if icon.cd then
 			if duration and duration > 0 then
-				--icon.cd:SetCooldown(expire - duration, duration)
-				--icon.cd:Show()
+				icon.cd:SetCooldown(expire - duration, duration)
+				icon.cd:Show()
 			else
 				icon.cd:Hide()
 			end
 		end
 		if icon.count then
-			--icon.count:SetText(count > 1 and count)
+			icon.count:SetText(count > 1 and count)
 		end
 		if icon.overlay then
 			icon.overlay:Hide()
@@ -176,13 +176,13 @@ local function DefaultExpireIcon(watch, icon)
 			icon.cd:Hide()
 		end
 		if icon.count then
-			--icon.count:SetText()
+			icon.count:SetText()
 		end
 		icon:SetAlpha(watch.missingAlpha)
 		if icon.overlay then
 			icon.overlay:Show()
 		end
-		--icon:Show()
+		icon:Show()
 		if watch.PostExpireIcon then watch.PostExpireIcon(watch, icon) end
 	end
 end
@@ -266,17 +266,17 @@ local function SetupIcons(self)
 			tex:SetTexture(image)
 			icon.icon = tex
 
-		--[[	local overlay = icon:CreateTexture(nil, "OVERLAY")
+			local overlay = icon:CreateTexture(nil, "OVERLAY")
 			overlay:SetTexture"Interface\\Buttons\\UI-Debuff-Overlays"
 			overlay:SetAllPoints(icon)
 			overlay:SetTexCoord(.296875, .5703125, 0, .515625)
 			overlay:SetVertexColor(1, 0, 0)
-			icon.overlay = overlay]]--
+			icon.overlay = overlay
 
-			--[[local count = icon:CreateFontString(nil, "OVERLAY")
+			local count = icon:CreateFontString(nil, "OVERLAY")
 			count:SetFontObject(NumberFontNormal)
 			count:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", -1, 0)
-			icon.count = count]]--
+			icon.count = count
 		end
 
 		if icon.onlyShowMissing == nil then

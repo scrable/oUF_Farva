@@ -3,7 +3,7 @@ local cfg = ns.cfg
 local oUF = ns.oUF or oUF
 assert(oUF, 'oUF Reputation was unable to locate oUF install')
 
-if not cfg.treat.enable then return end
+if not cfg.threat.enable then return end
 
 local aggroColors = {
 	[1] = {0, 1, 0},
@@ -33,18 +33,18 @@ end
 local function update(self, event, unit)
 	if( UnitAffectingCombat(self.unit) ) then
 		local _, _, threatpct, rawthreatpct, _ = UnitDetailedThreatSituation(self.unit, self.tar)
-		
+
 		if( self.useRawThreat ) then
 			threatval = rawthreatpct or 0
 		else
 			threatval = threatpct or 0
 		end
-		
+
 		self:SetValue(threatval)
 		if( self.Text ) then
 			self.Text:SetFormattedText("%3.f%%", threatval)
 		end
-		
+
 		if( threatval < 30 ) then
 			self:SetStatusBarColor(unpack(self.Colors[1]))
 		elseif( threatval >= 30 and threatval < 70 ) then
@@ -52,7 +52,7 @@ local function update(self, event, unit)
 		else
 			self:SetStatusBarColor(unpack(self.Colors[3]))
 		end
-		
+
 	end
 end
 
@@ -66,12 +66,12 @@ local function enable(self)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent)
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent)
 		self:RegisterEvent("ZONE_CHANGED_NEW_AREA", OnEvent)
-		
+
 		bar:SetScript("OnUpdate", update)
-		
+
 		bar.Colors = (self.ThreatBar.Colors or aggroColors)
 		bar.unit = self.unit
-		
+
 		if( self.usePlayerTarget ) then
 			bar.tar = "playertarget"
 		else

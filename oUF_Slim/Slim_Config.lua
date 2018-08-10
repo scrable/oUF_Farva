@@ -4,7 +4,6 @@ local mediaFolder = "Interface\\AddOns\\oUF_Slim\\media\\"	-- don't touch this .
 local blankTex = "Interface\\Buttons\\WHITE8x8"
 
 cfg.texture = "Interface\\Addons\\oUF_Slim\\media\\texture.tga"
---cfg.texture = mediaFolder.."dM3"
 
 ------------
 -- colors --
@@ -43,9 +42,10 @@ cfg.texture = "Interface\\Addons\\oUF_Slim\\media\\texture.tga"
 ----------------------
 -- general settings --
 ----------------------
-	cfg.Numberzzz = 1						-- 0 will display 18400k as 18k, 1 = 18.4k, ....
 	cfg.FadeOutAlpha = 0.3 					-- alpha for out of range units (oUF_SpellRange plugin, required)
 	cfg.BarFadeAlpha = 0.0					-- alpha for oUF_BarFader (required) plugin (can be 0 - 1)
+	cfg.SmoothHealthUpdate = true		-- makes the updates for health smooth
+	cfg.SmoothPowerUpdate = true		-- makes the updates for the power smooth
 
 	-- switches -- true/false (on/off)
 	cfg.useCastbar = true					-- show/hide player, target, focus castbar
@@ -57,7 +57,7 @@ cfg.texture = "Interface\\Addons\\oUF_Slim\\media\\texture.tga"
 	cfg.buSizeRaid = 22						-- aura size for raid
 	cfg.buHeightMulti = 1					-- aura size height multiplier (1 = square), rectangle ftw :p
 
-	cfg.treat = {
+	cfg.threat = {
         enable = true,
         pos = {'BOTTOM', UIParent, 1, 2},
         width = 260,
@@ -103,7 +103,7 @@ cfg.texture = "Interface\\Addons\\oUF_Slim\\media\\texture.tga"
 	cfg.healerX = 0									-- X coordinate for raid frame
 	cfg.healerY =	-300								-- Y coordinate for raid frame
 
-	cfg.RaidFrames = true	 				-- set to false to disable raid frame groups 1-5
+	cfg.RaidFrames = true	 				-- set to false to disable raid frame
 	cfg.disableRaidFrameManager = true		-- enable/disable blizzards raidframe manager
 	cfg.RaidDebuffs = true					-- enable/disable raid debuffs
 	cfg.raidDebuffSize = 14					--size for debuffs in raid frames
@@ -160,7 +160,7 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 							{25771,{0.7, 0.3, 0.7}, 'BOTTOM'},
 	            },
 	   PRIEST = {
-	            {33076, {0.2, 0.7, 0.2}},			    -- Prayer of Mending
+	            {41635, {0.2, 0.7, 0.2}},			    -- Prayer of Mending
 	            {33206, {0.89, 0.1, 0.1}},			    -- Pain Suppress
 	            {194384, {0.86, 0.52, 0}, 'BOTTOMRIGHT'},			    -- Atonement
 	            {6788, {1, 0, 0}, 'BOTTOMLEFT'},	    -- Weakened Soul
