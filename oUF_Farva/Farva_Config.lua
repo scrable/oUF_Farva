@@ -42,20 +42,16 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 ----------------------
 -- general settings --
 ----------------------
-	cfg.FadeOutAlpha = 0.3 					-- alpha for out of range units (oUF_SpellRange plugin, required)
-	cfg.BarFadeAlpha = 0.0					-- alpha for oUF_BarFader (required) plugin (can be 0 - 1)
+	cfg.FadeOutAlpha = 0.3 					-- alpha for out of range units
 	cfg.SmoothHealthUpdate = true		-- makes the updates for health smooth
 	cfg.SmoothPowerUpdate = true		-- makes the updates for the power smooth
 
-	-- switches -- true/false (on/off)
 	cfg.useCastbar = true					-- show/hide player, target, focus castbar
 
-	cfg.useSpellIcon = false				-- show/hide castbar spellicon
+	cfg.useSpellIcon = true				-- show/hide castbar spellicon
 	cfg.ShiftClickFocus = true				-- enable/disable using shift + click for creating a focus
 
-	cfg.buSize = 26							-- aura size for all frames except raid
-	cfg.buSizeRaid = 22						-- aura size for raid
-	cfg.buHeightMulti = 1					-- aura size height multiplier (1 = square), rectangle ftw :p
+	cfg.buSize = 24							-- aura size for all frames
 
 	cfg.threat = {
 		showEverywhere = false,
@@ -65,28 +61,24 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 		height = 8,
 	}
 
-
-
 ------------
 -- player --
 ------------
-	cfg.PlayerRightSideSpellIcon = true		-- switch player's castbars spell icon position from left to right
 
-------------------------------------
--- height of Deathknight rune bar --
-------------------------------------
-	cfg.ClassBarHeight = 2
+	cfg.PlayerDebuffs = true				-- show debuffs acting on the player
 
 ------------
 -- target --
 ------------
-	cfg.TargetRightSideSpellIcon = false	-- switch target's castbars spell icon position from left to right
+	cfg.showTargetBuffs = true
+	cfg.showTargetDebuffs = false
 	cfg.onlyShowPlayerBuffs = false 		-- only show buffs casted by player (target and focus)
 	cfg.onlyShowPlayerDebuffs = true		-- only show debuffs casted by player (target and focus)
 
 -----------
 -- focus --
 -----------
+
 	cfg.FocusRightSideSpellIcon = false		-- switch focus's castbars spell icon position from left to right
 
 -----------
@@ -95,40 +87,40 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 
 	--Coordinate values here will be overwritten by oUF_MovableFrames
 	--If you want to have these values work, don't move the anchor in oUF_MovableFrames
-	--Healer mode requires OMF values removed for party and raid
+	--Healer mode requires OMF values removed/cleared/deleted for party and raid
 	cfg.PartyFrames = true 					-- set to false to disable party frames
 	cfg.partyX = -216								--X coordinate for party and raid frames
 	cfg.partyY = 9									--Y coordinate for party and raid frames
 
-	cfg.healer = true							--set to true to have two different frame positions depending if healing or not. Requires a reload to change location after changing spec in game
+	cfg.healer = true							--set to true to have two different frame positions depending if healing or not
 	cfg.healerX = 0									-- X coordinate for raid frame
 	cfg.healerY =	-300								-- Y coordinate for raid frame
 
 	cfg.RaidFrames = true	 				-- set to false to disable raid frame
 	cfg.disableRaidFrameManager = true		-- enable/disable blizzards raidframe manager
 	cfg.RaidDebuffs = true					-- enable/disable raid debuffs
-	cfg.raidDebuffSize = 14					--size for debuffs in raid frames
+	cfg.raidDebuffSize = 20					--size for debuffs in raid frames
 
 -----------
 -- arena --
 -----------
-	cfg.ArenaFrames = true	 				-- set to false to disable arena frames
+	cfg.ArenaFrames = true	 				-- enable/disable arena frames
 
 ---------------
 -- main tank --
 ---------------
-	cfg.MTFrames = false	 					-- set to false to disable main tank frames
+	cfg.MTFrames = false	 					-- enable/disable main tank frames
 
 ----------
 -- boss --
 ----------
-	cfg.BossFrames = true	 				-- set to false to disable boss frames
+	cfg.BossFrames = true	 				-- enable/disable boss frames
 
 -------------------
 -- aura specific --
 -------------------
 	cfg.FilterAuras = true					-- filter arena, party and raid auras by applying a whitelist (the whitelist can be found in Farva_AuraFilterList.lua)
-	cfg.PlayerDebuffs = true				-- show player debuffs
+
 
 --***********************
 
