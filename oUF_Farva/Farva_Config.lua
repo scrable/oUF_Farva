@@ -48,7 +48,7 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 
 	cfg.useCastbar = true					-- show/hide player, target, focus castbar
 
-	cfg.useSpellIcon = true				-- show/hide castbar spellicon
+	cfg.useSpellIcon = false				-- show/hide castbar spellicon
 	cfg.ShiftClickFocus = true				-- enable/disable using shift + click for creating a focus
 
 	cfg.buSize = 24							-- aura size for all frames
@@ -72,14 +72,17 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 ------------
 	cfg.showTargetBuffs = true
 	cfg.showTargetDebuffs = false
-	cfg.onlyShowPlayerBuffs = false 		-- only show buffs casted by player (target and focus)
-	cfg.onlyShowPlayerDebuffs = true		-- only show debuffs casted by player (target and focus)
+	cfg.onlyShowPlayerBuffsTarget = false 		-- only show buffs casted by player (target and focus)
+	cfg.onlyShowPlayerDebuffsTarget = true		-- only show debuffs casted by player (target and focus)
 
 -----------
 -- focus --
 -----------
 
-	cfg.FocusRightSideSpellIcon = false		-- switch focus's castbars spell icon position from left to right
+	cfg.showFocusBuffs = true
+	cfg.showFocusDebuffs = true
+	cfg.onlyShowPlayerBuffsFocus = false
+	cfg.onlyShowPlayerDebuffsFocus = true
 
 -----------
 -- party & Raid--
@@ -93,8 +96,8 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.partyY = 9									--Y coordinate for party and raid frames
 
 	cfg.healer = true							--set to true to have two different frame positions depending if healing or not
-	cfg.healerX = 0									-- X coordinate for raid frame
-	cfg.healerY =	-300								-- Y coordinate for raid frame
+	cfg.healerX = -1									-- X coordinate for raid frame
+	cfg.healerY =	-295								-- Y coordinate for raid frame
 
 	cfg.RaidFrames = true	 				-- set to false to disable raid frame
 	cfg.disableRaidFrameManager = true		-- enable/disable blizzards raidframe manager

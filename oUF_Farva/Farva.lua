@@ -848,18 +848,19 @@ local UnitSpecific = {
 	        threat.bg = framebd(threat, threat)
 				self.ThreatBar = threat
 		end
-
-		createDebuffs(self)
-		self.Debuffs.size = 32
-		self.Debuffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
-		self.Debuffs.initialAnchor = "BOTTOMLEFT"
-		self.Debuffs["growth-x"] = "RIGHT"
-		self.Debuffs["growth-y"] = "UP"
-		self.Debuffs.num = 14
-		self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
-		self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbFS + cfg.PPyOffset)
-		if cfg.FilterAuras then
-			self.Debuffs.CustomFilter = CustomFilter
+		if cfg.PlayerDebuffs then
+			createDebuffs(self)
+			self.Debuffs.size = 32
+			self.Debuffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
+			self.Debuffs.initialAnchor = "BOTTOMLEFT"
+			self.Debuffs["growth-x"] = "RIGHT"
+			self.Debuffs["growth-y"] = "UP"
+			self.Debuffs.num = 14
+			self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
+			self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbFS + cfg.PPyOffset)
+			if cfg.FilterAuras then
+				self.Debuffs.CustomFilter = CustomFilter
+			end
 		end
 	end,
 
@@ -901,7 +902,7 @@ local UnitSpecific = {
 			self.Buffs.spacing = 4
 			self.Buffs:SetSize(cfg.widthP, self.Buffs.size)
 
-			if cfg.onlyShowPlayerBuffs then
+			if cfg.onlyShowPlayerBuffsTarget then
 				self.Buffs.onlyShowPlayer = true
 			end
 		end
@@ -917,7 +918,7 @@ local UnitSpecific = {
 			self.Debuffs.spacing = 4
 			self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)
 
-			if cfg.onlyShowPlayerDebuffs then
+			if cfg.onlyShowPlayerDebuffsTarget then
 				self.Debuffs.onlyShowPlayer = true
 			end
 		end
@@ -971,36 +972,41 @@ local UnitSpecific = {
 		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
 		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
-        htext:SetPoint('LEFT', 0, -19)
+		htext:SetPoint('LEFT', 0, -19)
 		htext.frequentUpdates = .1
-        self:Tag(htext, '[player:hp]')
+		self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
 
+		if cfg.showFocusBuffs then
+			createBuffs(self)
+			self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
+			self.Buffs.initialAnchor = "BOTTOMLEFT"
+			self.Buffs["growth-x"] = "RIGHT"
+			self.Buffs.num = 7
+			self.Buffs.size = 24
+			self.Buffs.spacing = 5
+			self.Buffs:SetSize(cfg.widthP, self.Buffs.size)
 
-		createBuffs(self)
-		self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
-		self.Buffs.initialAnchor = "BOTTOMLEFT"
-		self.Buffs["growth-x"] = "RIGHT"
-		self.Buffs.num = 7
-		self.Buffs.size = 24
-		self.Buffs.spacing = 5
-		self.Buffs:SetSize(cfg.widthP, self.Buffs.size)
-
-		createDebuffs(self)
-		self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 3, -3)
-		self.Debuffs.initialAnchor = "LEFT"
-		self.Debuffs["growth-x"] = "RIGHT"
-		self.Debuffs["growth-y"] = "UP"
-		self.Debuffs.num = 4
-		self.Debuffs.size = 20
-		self.Debuffs.spacing = 4
-		self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)
-
-		if cfg.onlyShowPlayerBuffs then
-			self.Buffs.onlyShowPlayer = true
+			if cfg.onlyShowPlayerBuffsFocus then
+				self.Buffs.onlyShowPlayer = true
+			end
 		end
 
-		self.Debuffs.onlyShowPlayer = false
+		if cfg.showFocusDebuffs then
+			createDebuffs(self)
+			self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 3, -3)
+			self.Debuffs.initialAnchor = "LEFT"
+			self.Debuffs["growth-x"] = "RIGHT"
+			self.Debuffs["growth-y"] = "UP"
+			self.Debuffs.num = 4
+			self.Debuffs.size = 20
+			self.Debuffs.spacing = 4
+			self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)
+
+			if cfg.onlyShowPlayerDebuffsFocus then
+				self.Debuffs.onlyShowPlayer = false
+			end
+		end
 
 		-- plugins
 		SpellRange(self)
@@ -1478,7 +1484,7 @@ oUF:Factory(function(self)
 			'showSolo', true,
 			'showParty', true,
 			'showRaid', true,
-			'xoffset', 4,
+			'xoffset', 5,
 			'yOffset', -10,
 			'point', 'LEFT',
 			'groupFilter', '1,2,3,4,5,6,7,8',
@@ -1486,7 +1492,7 @@ oUF:Factory(function(self)
 			'groupBy', 'GROUP',
 			'maxColumns', 8,
 			'unitsPerColumn', 5,
-			'columnSpacing', -2,
+			'columnSpacing', -1,
 			'sortMethod', 'INDEX',
 			'columnAnchorPoint', 'TOP',
 			'oUF-initialConfigFunction', ([[
