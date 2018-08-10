@@ -11,6 +11,7 @@ Todo/Plans:
 * remove classtags
 * add cfg for raid icons, role icon, leader icon on party/raid frame
 * update spellids for aurawatch
+* add more screenshots
 
 Credits: Haste, Skaarj, Dawn
 
