@@ -16,16 +16,19 @@ local function OnEvent(self, event, ...)
 	local num = GetNumGroupMembers()
 	local pet = select(1, HasPetUI())
 	local inInstance, instanceType = IsInInstance()
-	if event == "PLAYER_ENTERING_WORLD" then
-		bar:Hide()
-		bar:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	elseif event == "PLAYER_REGEN_ENABLED" then
-		bar:Hide()
-	elseif event == "PLAYER_REGEN_DISABLED" then
-		if (num > 0 or pet == 1) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
-			bar:Show()
-		else
+
+	if not cfg.threat.showEverywhere then
+		if event == "PLAYER_ENTERING_WORLD" then
 			bar:Hide()
+			bar:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			bar:Hide()
+		elseif event == "PLAYER_REGEN_DISABLED" then
+			if (num > 0 or pet == 1) and not (inInstance and (instanceType == "pvp" or instanceType == "arena")) then
+				bar:Show()
+			else
+				bar:Hide()
+			end
 		end
 	end
 end

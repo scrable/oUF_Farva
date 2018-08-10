@@ -58,9 +58,10 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.buHeightMulti = 1					-- aura size height multiplier (1 = square), rectangle ftw :p
 
 	cfg.threat = {
-        enable = true,
-        pos = {'BOTTOM', UIParent, 1, 2},
-        width = 260,
+		showEverywhere = false,
+		enable = true,
+		pos = {'BOTTOM', UIParent, 1, 2},
+		width = 260,
 		height = 8,
 	}
 
