@@ -16,4 +16,4 @@ Todo/Plans:
 
 Credits: Haste, Skaarj, Dawn
 
-![](https://i.imgur.com/G11dnWp.jpg)
+![](https://i.imgur.com/mPbGpap.jpg)
