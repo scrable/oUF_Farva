@@ -307,7 +307,7 @@ local PostCreateIcon = function(Auras, button)
 	button.time:SetPoint("TOPLEFT", button, 3, -2)
 	button.time:SetJustifyH('CENTER')
 	button.time:SetVertexColor(unpack(cfg.sndcolor))
-	button:SetSize(cfg.buSize, cfg.buSize*cfg.buHeightMulti)
+	button:SetSize(cfg.buSize, cfg.buSize)
 
 	local count = button.count
 	count:ClearAllPoints()
@@ -755,18 +755,9 @@ end
 
 -- plugin support
 local SpellRange = function(self)
-	if IsAddOnLoaded("oUF_SpellRange") then
-		self.SpellRange = {
-		insideAlpha = 1,
-		outsideAlpha = cfg.FadeOutAlpha}
-	end
-end
-
-local BarFader = function(self)
-	if IsAddOnLoaded("oUF_BarFader") then
-		self.BarFade = true
-		self.BarFaderMinAlpha = cfg.BarFadeAlpha
-	end
+	self.SpellRange = {
+	insideAlpha = 1,
+	outsideAlpha = cfg.FadeOutAlpha}
 end
 
 local HealComm4 = function(self)
@@ -803,11 +794,7 @@ local UnitSpecific = {
 			self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
 
 			if cfg.useSpellIcon then
-				if not cfg.PlayerRightSideSpellIcon then
-					self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -4, 0)
-				else
-					self.Castbar.Icon:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", 4, 0)
-				end
+				self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
 			end
 		end
 
@@ -841,7 +828,7 @@ local UnitSpecific = {
 		self.LeaderIndicator = LIc
 
 		-- plugins
-		BarFader(self)
+
 
 		local TFrame = CreateFrame("Frame", nil, self)
 		TFrame:SetPoint("TOPLEFT", self, "TOPLEFT", -4, 4)
@@ -890,11 +877,7 @@ local UnitSpecific = {
 			self.Castbar.Time:SetPoint("BOTTOMRIGHT", self.Castbar.Time2, "BOTTOMLEFT", 0, 0)
 
 			if cfg.useSpellIcon then
-				if not cfg.TargetRightSideSpellIcon then
-					self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -4, 0)
-				else
-					self.Castbar.Icon:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", 4, 0)
-				end
+				self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
 			end
 		end
 
@@ -908,30 +891,36 @@ local UnitSpecific = {
     self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
 
-		createBuffs(self)
-		self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
-		self.Buffs.initialAnchor = "BOTTOMLEFT"
-		self.Buffs["growth-x"] = "RIGHT"
-		self.Buffs.num = 18
-		self.Buffs.size = 24
-		self.Buffs.spacing = 4
-		self.Buffs:SetSize(cfg.widthP, self.Buffs.size)
+		if cfg.showTargetBuffs then
+			createBuffs(self)
+			self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
+			self.Buffs.initialAnchor = "BOTTOMLEFT"
+			self.Buffs["growth-x"] = "RIGHT"
+			self.Buffs.num = 18
+			self.Buffs.size = 24
+			self.Buffs.spacing = 4
+			self.Buffs:SetSize(cfg.widthP, self.Buffs.size)
 
-		--[[createDebuffs(self)
-		self.Debuffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, self.Buffs.size*cfg.buHeightMulti+12)
-		self.Debuffs.initialAnchor = "BOTTOMLEFT"
-		self.Debuffs["growth-x"] = "RIGHT"
-		self.Debuffs["growth-y"] = "UP"
-		self.Debuffs.num = 0
-		self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)]]--
-
-		if cfg.onlyShowPlayerBuffs then
-			self.Buffs.onlyShowPlayer = true
+			if cfg.onlyShowPlayerBuffs then
+				self.Buffs.onlyShowPlayer = true
+			end
 		end
 
-	--[[	if cfg.onlyShowPlayerDebuffs then
-			self.Debuffs.onlyShowPlayer = true
-		end]]--
+		if cfg.showTargetDebuffs then
+			createDebuffs(self)
+			self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 3, -3)
+			self.Debuffs.initialAnchor = "LEFT"
+			self.Debuffs["growth-x"] = "RIGHT"
+			self.Debuffs["growth-y"] = "UP"
+			self.Debuffs.num = 4
+			self.Debuffs.size = 20
+			self.Debuffs.spacing = 4
+			self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)
+
+			if cfg.onlyShowPlayerDebuffs then
+				self.Debuffs.onlyShowPlayer = true
+			end
+		end
 
 		-- plugins
 		SpellRange(self)
@@ -950,17 +939,6 @@ local UnitSpecific = {
 			LIc:SetSize(14, 14)
 			LIc:SetPoint("LEFT", htext, "RIGHT", 4, 0)
 			self.LeaderIndicator = LIc
-
-		--[[createRaidIcon(self)
-		createQuestIcon(self)
-		createPhaseIcon(self)
-		self.RaidIcon:SetPoint("LEFT", self.Health, "LEFT", 4, 0)
-		self.QuestIcon:SetPoint("LEFT", self.RaidIcon, "RIGHT", 90, -1)
-		self.QuestIcon:SetSize(32,32)
-		self.PhaseIcon:SetPoint("LEFT", self.QuestIcon, "RIGHT", 4, 0)
-		self.RaidIcon:SetParent(Ihld)
-		self.QuestIcon:SetParent(Ihld)
-		self.PhaseIcon:SetParent(Ihld)]]--
 
 		--target of target frame
 		local TTFrame = CreateFrame("Frame", nil, self)
@@ -985,11 +963,7 @@ local UnitSpecific = {
 			self.Castbar.Time:SetPoint("BOTTOMRIGHT", self.Castbar.Time2, "BOTTOMLEFT", 0, 0)
 
 			if cfg.useSpellIcon then
-				if not cfg.FocusRightSideSpellIcon then
-					self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -4, 0)
-				else
-					self.Castbar.Icon:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", 4, 0)
-				end
+				self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
 			end
 		end
 
@@ -1036,13 +1010,6 @@ local UnitSpecific = {
 		Ihld:SetAllPoints(self.Health)
 		Ihld:SetFrameLevel(6)
 
-		--[[createRaidIcon(self)
-		createQuestIcon(self)
-		self.RaidIcon:SetPoint("LEFT", self.Health, "LEFT", 4, 0)
-		self.QuestIcon:SetPoint("LEFT", self.RaidIcon, "RIGHT", 75, -1)
-		self.RaidIcon:SetParent(Ihld)
-		self.QuestIcon:SetParent(Ihld)]]--
-
 		self:SetSize(cfg.widthF, cfg.heightF + cfg.NumbFS + cfg.PPyOffset)
 	end,
 
@@ -1059,11 +1026,6 @@ local UnitSpecific = {
 
 		-- plugins
 		SpellRange(self)
-		BarFader(self)
-
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetPoint("CENTER", self.Health, "CENTER", 0, 0)]]--
 
 		self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
 	end,
@@ -1080,10 +1042,6 @@ local UnitSpecific = {
 		-- plugins
 		SpellRange(self)
 
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetPoint("CENTER", self.Health, "CENTER", 0, 0)]]--
-
 		self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
 	end,
 
@@ -1098,10 +1056,6 @@ local UnitSpecific = {
 
 		-- plugins
 		SpellRange(self)
-
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetPoint("CENTER", self.Health, "CENTER", 0, 0)]]--
 
 		self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
 	end,
@@ -1129,10 +1083,6 @@ local UnitSpecific = {
 		-- plugins
 		SpellRange(self)
 
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetPoint("CENTER", self.Health, "CENTER", 0, 0)]]--
-
 		self:SetSize(cfg.widthM, cfg.heightM + cfg.NumbFS + cfg.PPyOffset)
 	end,
 
@@ -1149,9 +1099,6 @@ local UnitSpecific = {
 		-- plugins
 		SpellRange(self)
 
-		-- Icons
-		--[[createRaidIcon(self)
-		self.RaidIcon:SetPoint("CENTER", self.Health, "CENTER", 0, 0)]]--
 	end,
 
 	arenaframes = function(self, ...)
@@ -1235,7 +1182,7 @@ do
 		self.Name:SetPoint("TOPLEFT", self.Status, "TOPRIGHT", 0, 0)
 		if cfg.RaidDebuffs then
 			local d = CreateFrame('Frame', nil, self)
-			d:SetSize(20,20)
+			d:SetSize(cfg.raidDebuffSize, cfg.raidDebuffSize)
 			d:SetPoint('CENTER', 0, 4)
 			d:SetFrameStrata'HIGH'
 			d:SetBackdrop(backdrop3)
@@ -1321,7 +1268,7 @@ do
 		rDhF:SetFrameLevel(10)
 		if cfg.RaidDebuffs then
 			local d = CreateFrame('Frame', nil, self)
-			d:SetSize(20,20)
+			d:SetSize(cfg.raidDebuffSize, cfg.raidDebuffSize)
 			d:SetPoint('CENTER', 0, 4)
 			d:SetFrameStrata'HIGH'
 			d:SetBackdrop(backdrop3)
@@ -1526,8 +1473,6 @@ oUF:Factory(function(self)
 
 	if cfg.RaidFrames then
 		self:SetActiveStyle"Farva - Raid"
-		--difficultyID = GetDungeonDifficultyID()
-		--	print(difficultyID)
 		local raid = self:SpawnHeader(nil, nil, 'custom [@raid6,exists] show; hide',
 			'showPlayer', true,
 			'showSolo', true,
