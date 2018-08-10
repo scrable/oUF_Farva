@@ -3,6 +3,8 @@ Unit frames I've been working with since Cataclysm.
 
 Largely based off oUF_Slim and ouf_Skaarj
 
+Works with oUF version 8.0.2
+
 Todo/Plans:
 
 * update debuff whitelist
