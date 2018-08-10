@@ -12,6 +12,7 @@ Todo/Plans:
 * add cfg for raid icons, role icon, leader icon on party/raid frame
 * update spellids for aurawatch
 * add more screenshots
+* fix aurawatch icon remaining duration
 
 Credits: Haste, Skaarj, Dawn
 
