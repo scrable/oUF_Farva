@@ -1,5 +1,5 @@
 local _, ns = ...
-local cfg = ns.Slim_Config
+local cfg = ns.Farva_Config
 local oUF = ns.oUF or oUF
 
 --if not cfg.RaidDebuffs.enable then

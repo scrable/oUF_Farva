@@ -1,0 +1,16 @@
+## Interface: 460200
+## Author: Scrable
+## Credits Haste, Dawn, Skaarj
+## Title: |cff01DFD7oUF_|r|cffffffffFarva|r
+## RequiredDeps: oUF
+
+Farva_Config.lua
+Farva.xml
+module\oUF_AuraTracker.lua
+module\oUF_AuraWatch.lua
+module\oUF_ThreatBar.lua
+module\oUF_RaidDebuffs.lua
+module\oUF_Smooth.lua
+Farva_AuraFilterList.lua
+Farva_Tags.lua
+Farva.lua
