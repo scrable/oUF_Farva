@@ -7,8 +7,8 @@ Todo/Plans:
 
 * update debuff whitelist
 * add healcomm4
-* embed spellrange
-* remove classtags
+* ~~embed spellrange~~
+* ~~remove classtags~~
 * add cfg for raid icons, role icon, leader icon on party/raid frame
 * update spellids for aurawatch
 * add more screenshots
