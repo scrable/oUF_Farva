@@ -318,47 +318,6 @@ local PostCreateIcon = function(Auras, button)
 	button.icon:SetTexCoord(.08, .92, .08, .92)
 end
 
-local AWIcon = function(AWatch, icon, spellID, name, self)
-	local count = fs(icon, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
-	count:SetPoint('BOTTOMRIGHT', icon, 5, -5)
-	icon.count = count
-	icon.cd:SetReverse(true)
-end
-
-local createAuraWatch = function(self, unit)
-	if cfg.aw.enable then
-		local auras = CreateFrame('Frame', nil, self)
-		auras:SetAllPoints(self.Health)
-		auras.onlyShowPresent = cfg.aw.onlyShowPresent
-		auras.anyUnit = cfg.aw.anyUnit
-		auras.icons = {}
-		auras.PostCreateIcon = AWIcon
-
-		for i, v in pairs(cfg.spellIDs[class]) do
-			local icon = CreateFrame('Frame', nil, auras)
-			icon.spellID = v[1]
-			icon:SetSize(8, 8)
-			if v[3] then
-				icon:SetPoint(v[3])
-			else
-			  icon:SetPoint('BOTTOMLEFT', self.Health, 'BOTTOMRIGHT', -8 * i, 16)
-			end
-			icon:SetBackdrop(backdrop_1px)
-	   	icon:SetBackdropColor(0, 0, 0, 1)
-
-			local tex = icon:CreateTexture(nil, 'ARTWORK')
-			tex:SetAllPoints(icon)
-			tex:SetTexCoord(.1, .9, .1, .9)
-			tex:SetTexture(cfg.texture)
-			tex:SetVertexColor(unpack(v[2]))
-			icon.icon = tex
-
-			auras.icons[v[1]] = icon
-		end
-		self.AuraWatch = auras
-	end
-end
-
 -- update icon
 local PostUpdateIcon
 do
@@ -384,6 +343,60 @@ do
 	icon.first = true
 	end
 end
+
+local AWIcon = function(AWatch, icon, spellID, name, self)
+	local count = fs(icon, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
+	count:SetPoint('BOTTOMRIGHT', icon, 5, -5)
+	icon.count = count
+
+	if cfg.AWCooldownCount then
+		local f = CreateFrame('Frame', nil, icon)
+		f:SetAllPoints(icon)
+		local tex = f:CreateTexture()
+		tex:SetAllPoints()
+		tex:SetTexture(nil)
+		local cd = CreateFrame("Cooldown", "cd", f, "CooldownFrameTemplate")
+		cd:SetAllPoints()
+		icon.cd = cd
+	end
+end
+
+local createAuraWatch = function(self, unit)
+	if cfg.aw.enable then
+		local auras = CreateFrame('Frame', nil, self)
+		auras:SetAllPoints(self.Health)
+
+		auras.onlyShowPresent = cfg.aw.onlyShowPresent
+		auras.anyUnit = cfg.aw.anyUnit
+		auras.icons = {}
+		auras.PostCreateIcon = AWIcon
+
+		for i, v in pairs(cfg.spellIDs[class]) do
+			local icon = CreateFrame('Frame', nil, auras)
+			icon.spellID = v[1]
+			icon:SetSize(8, 8)
+			if v[3] then
+				icon:SetPoint(v[3])
+			else
+			  icon:SetPoint('BOTTOMLEFT', self.Health, 'BOTTOMRIGHT', -8 * i, 16)
+			end
+			icon:SetBackdrop(backdrop_1px)
+	   	icon:SetBackdropColor(0, 0, 0, 1)
+
+			local tex = icon:CreateTexture()--nil, 'ARTWORK')
+			tex:SetAllPoints()
+			tex:SetTexCoord(.1, .9, .1, .9)
+			tex:SetTexture(cfg.texture)
+			tex:SetVertexColor(unpack(v[2]))
+			icon.icon = tex
+
+			auras.icons[v[1]] = icon
+		end
+		self.AuraWatch = auras
+	end
+end
+
+
 
 -- threat highlight
 local function updateThreatStatus(self, event, u)

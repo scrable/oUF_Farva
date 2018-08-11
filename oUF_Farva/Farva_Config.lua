@@ -104,6 +104,7 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.RaidDebuffs = true					-- enable/disable raid debuffs
 	cfg.raidDebuffSize = 20					--size for debuffs in raid frames
 
+	cfg.FilterAuras = true					-- filter arena, party and raid auras by applying a whitelist (the whitelist can be found in Farva_AuraFilterList.lua)
 -----------
 -- arena --
 -----------
@@ -119,19 +120,15 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 ----------
 	cfg.BossFrames = true	 				-- enable/disable boss frames
 
--------------------
--- aura specific --
--------------------
-	cfg.FilterAuras = true					-- filter arena, party and raid auras by applying a whitelist (the whitelist can be found in Farva_AuraFilterList.lua)
-
 
 --***********************
-
+--aurawatch
 cfg.aw = {
         enable = true,						--enable/disable oUF_Aurawatch
         onlyShowPresent = true,
-				anyUnit = true,						--show only player auras or everyones auras
+				anyUnit = false,						--show only player auras or everyones auras
 }
+	cfg.AWCooldownCount = true		--enable/disable aurawatch icons spiral. false displays a solid color modified below in the spellids
 
 
 cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
