@@ -47,7 +47,7 @@
 			</Button>
 		</Frames>
 	</Button>
-	
+
 	<Button name="oUF_FarvaRaid" inherits="SecureUnitButtonTemplate" hidden="true" virtual="true">
 		<Frames>
 			<Button name="$parentPet" inherits="SecureUnitButtonTemplate">
@@ -67,5 +67,5 @@
 			</Button>
 		</Frames>
 	</Button>
-	
+
 </Ui>

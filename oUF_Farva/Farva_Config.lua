@@ -92,7 +92,7 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	--If you want to have these values work, don't move the anchor in oUF_MovableFrames
 	--Healer mode requires OMF values removed/cleared/deleted for party and raid
 	cfg.PartyFrames = true 					-- set to false to disable party frames
-	cfg.partyX = -216								--X coordinate for party and raid frames
+	cfg.partyX = -45								--X coordinate for party and raid frames
 	cfg.partyY = 9									--Y coordinate for party and raid frames
 
 	cfg.healer = true							--set to true to have two different frame positions depending if healing or not

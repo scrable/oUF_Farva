@@ -526,7 +526,7 @@ end
 local Shared = function(self, unit, isSingle)
 local _, playerClass = UnitClass('player')
 
-	self.menu = menu
+	--[[self.menu = menu]]--
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	self:RegisterForClicks"AnyUp"
@@ -1397,8 +1397,8 @@ oUF:Factory(function(self)
 	--druid spec 4
 
 	if cfg.PartyFrames then
-		    self:SetActiveStyle'Farva - Raid'
-            local party = self:SpawnHeader('oUF_Party', nil, 'custom  [@raid6, exists] hide; show',
+	    self:SetActiveStyle'Farva - Raid'
+      local party = self:SpawnHeader('oUF_Party', nil, 'custom  [@raid6, exists] hide; show',
 			'showPlayer',
 			true,'showSolo',false,'showParty',true ,'point','RIGHT','xOffset',-5,
 			'oUF-initialConfigFunction', ([[
