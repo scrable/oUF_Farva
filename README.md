@@ -16,6 +16,6 @@ Todo/Plans:
 * add more screenshots
 * ~~fix aurawatch icon remaining duration~~
 
-Credits: Haste, Skaarj, Dawn
+Credits: Haste, Skaarj, Dawn, p3lim
 
 ![](https://i.imgur.com/1DhaRvP.jpg)
