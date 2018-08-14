@@ -1569,19 +1569,6 @@ if cfg.disableRaidFrameManager then
         CompactRaidFrameContainer:Hide()
 end
 
--- remove SET_FOCUS & CLEAR_FOCUS from menu, to prevent errors
-do
-    for k,v in pairs(UnitPopupMenus) do
-        for x,y in pairs(UnitPopupMenus[k]) do
-            if y == "SET_FOCUS" then
-                table.remove(UnitPopupMenus[k],x)
-            elseif y == "CLEAR_FOCUS" then
-                table.remove(UnitPopupMenus[k],x)
-            end
-        end
-    end
-end
-
 -------------
 -- The End --
 -------------
