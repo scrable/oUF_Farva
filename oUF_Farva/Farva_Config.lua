@@ -26,7 +26,6 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.PPtex = mediaFolder.."dM2"							-- power bar texture
 	cfg.CBtex = mediaFolder.."dM2"							-- castbar texture
 	cfg.Itex = blankTex										-- BG texture
---	cfg.Auratex = mediaFolder.."dBBorderL"					-- border texture for buffs/debuffs
 
 	cfg.NameFont = "Interface\\Addons\\oUF_Farva\\media\\SKURRI.ttf"				-- font used for text (names)
 	cfg.NumbFont = "Interface\\Addons\\oUF_Farva\\media\\SKURRI.ttf"				-- font used for numbers
@@ -51,7 +50,7 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.useSpellIcon = false				-- show/hide castbar spellicon
 	cfg.ShiftClickFocus = true				-- enable/disable using shift + click for creating a focus
 
-	cfg.buSize = 24							-- aura size for all frames
+	cfg.buSize = 24							-- aura size for all frames except player debuff
 
 	cfg.threat = {
 		showEverywhere = false,
@@ -66,6 +65,7 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 ------------
 
 	cfg.PlayerDebuffs = true				-- show debuffs acting on the player
+	cfg.showExperienceBar = true		-- show an experience bar under the player frame
 
 ------------
 -- target --

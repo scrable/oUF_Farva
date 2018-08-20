@@ -12,6 +12,7 @@ module\oUF_ThreatBar.lua
 module\oUF_RaidDebuffs.lua
 module\oUF_Smooth.lua
 module\oUF_SpellRange.lua
+module\oUF_Experience.lua
 Farva_AuraFilterList.lua
 Farva_Tags.lua
 Farva.lua

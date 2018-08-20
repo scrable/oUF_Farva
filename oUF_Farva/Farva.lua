@@ -801,10 +801,7 @@ local UnitSpecific = {
 			PetCastingBarFrame.Show = function() end
 			PetCastingBarFrame:Hide()
 
-			self.Castbar:SetAllPoints(self.Health)
-			self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
-			self.Castbar.Time:SetPoint("BOTTOMLEFT", self.Castbar.Text, "BOTTOMRIGHT", 2, 0)
-			self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
+
 
 			if cfg.useSpellIcon then
 				self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
@@ -814,8 +811,23 @@ local UnitSpecific = {
 		self.Health:SetHeight(cfg.heightP)
 		self.Health:SetWidth(cfg.widthP)
 		self.Power:SetWidth(cfg.widthP)
+
 		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
-    htext:SetPoint('RIGHT', 2, -19)
+			if cfg.showExperienceBar then
+				if UnitLevel('player') < MAX_PLAYER_LEVEL then
+					htext:SetPoint('RIGHT', 2, -31)
+					self.Castbar:SetAllPoints(self.Health)
+					self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -19)
+					self.Castbar.Time:SetPoint("BOTTOMLEFT", self.Castbar.Text, "BOTTOMRIGHT", 2, 0)
+					self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
+				else
+				htext:SetPoint('RIGHT', 2, -19)
+				self.Castbar:SetAllPoints(self.Health)
+				self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
+				self.Castbar.Time:SetPoint("BOTTOMLEFT", self.Castbar.Text, "BOTTOMRIGHT", 2, 0)
+				self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
+				end
+			end
 		htext.frequentUpdates = .1
     self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPRIGHT", htext, "BOTTOMRIGHT", 0, -2)
@@ -847,6 +859,31 @@ local UnitSpecific = {
 		TFrame:SetPoint("TOPLEFT", self, "TOPLEFT", -4, 4)
 		TFrame:SetPoint("BOTTOMRIGHT", self.Power, "BOTTOMRIGHT", 4, -4)
 		TFrame:SetFrameLevel(0)
+
+		--experience bar
+		if cfg.showExperienceBar then
+					local expbar = createStatusbar(self, cfg.texture, nil, cfg.heightP, cfg.widthP, 0, .7, 1, 1)
+					expbar:SetFrameStrata('LOW')
+					expbar:SetPoint("BOTTOM", self, "BOTTOM", 0, -9)
+					expbar.Rested = createStatusbar(expbar, cfg.texture, nil, nil, nil, 0, .5, .5, .6)
+					expbar.Rested:SetAllPoints(expbar)
+					expbar.bg = expbar.Rested:CreateTexture(nil, 'BORDER')
+					expbar.bg:SetAllPoints(expbar)
+					expbar.bg:SetTexture(cfg.texture)
+					expbar.bg:SetVertexColor(.5, .5, .5, 0.4)
+					local xptext = expbar:CreateFontString(nil, 'OVERLAY')
+					xptext:SetAllPoints(expbar)
+					xptext:SetFont(cfg.NameFont, cfg.NameFS, cfg.fontF)
+					self:Tag(xptext, '[experience:cur] / [experience:max]')
+
+					--only show on mouseover
+					xptext:Hide()
+					expbar:SetScript('OnEnter', function(self)UIFrameFadeIn(xptext, 0.3, 0, 1)end)
+					expbar:SetScript('OnLeave', function(self)UIFrameFadeOut(xptext, 0.3, 1, 0)end)
+
+					expbar.bd = framebd(expbar, expbar)
+					self.Experience = expbar
+		end
 
 		if cfg.threat.enable then
 		    local threat = createStatusbar(UIParent, cfg.texture, nil, cfg.threat.height, cfg.threat.width, 1, 1, 1, 1)
