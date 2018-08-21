@@ -1,6 +1,6 @@
 ## Interface: 80000
 ## Author: Scrable
-## Credits Haste, Dawn, Skaarj
+## Credits Haste, Dawn, Skaarj, p3lim
 ## Title: |cff01DFD7oUF_|r|cffffffffFarva|r
 ## RequiredDeps: oUF
 
