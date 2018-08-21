@@ -874,7 +874,7 @@ local UnitSpecific = {
 					local xptext = expbar:CreateFontString(nil, 'OVERLAY')
 					xptext:SetAllPoints(expbar)
 					xptext:SetFont(cfg.NameFont, cfg.NameFS, cfg.fontF)
-					self:Tag(xptext, '[experience:cur] / [experience:max]')
+					self:Tag(xptext, '[experience:cur] / [experience:max]   [experience:per]%')
 
 					--only show on mouseover
 					xptext:Hide()
