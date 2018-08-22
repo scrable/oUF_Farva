@@ -1416,6 +1416,8 @@ oUF:SetActiveStyle("oUF_Farva_ArenaTarget")
 	end
 end
 
+
+
 oUF:Factory(function(self)
 
 	local player = spawnHelper(self, 'player', "BOTTOM", -338, 233)
@@ -1427,11 +1429,12 @@ oUF:Factory(function(self)
 
 	local spec = GetSpecialization()
 	local class = UnitClass("Player")
-	--priest spec 1,2
-	--paladin spec 1
-	--shaman spec 3
-	--monk spec 2
-	--druid spec 4
+
+	local EventFrame = CreateFrame("Frame")
+	EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
+	EventFrame:SetScript("OnEvent", function(self, event, ...)
+			self[event](self, ...)
+	end)
 
 	if cfg.PartyFrames then
 	    self:SetActiveStyle'Farva - Raid'
@@ -1443,6 +1446,35 @@ oUF:Factory(function(self)
 			self:SetHeight(%d)
 			]]):format(cfg.widthR, cfg.heightR + cfg.NumbFS))
 
+			--priest spec 1,2
+			--paladin spec 1
+			--shaman spec 3
+			--monk spec 2
+			--druid spec 4
+
+			--function fired after spec changes
+			function EventFrame:PLAYER_TALENT_UPDATE()
+				if cfg.PartyFrames then
+						if(cfg.healer) then
+							party:ClearAllPoints()
+							local spec = GetSpecialization()
+							if((class == "Priest" and spec == 1)
+							or (class == "Priest" and spec == 2)
+							or (class == "Shaman" and spec == 3)
+							or (class == "Paladin" and spec == 1)
+							or (class == "Monk" and spec == 2)
+							or (class == "Druid" and spec == 4)) then
+								party:SetPoint("CENTER", cfg.healerX, cfg.healerY)
+							else
+								party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+							end
+						else
+							party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+						end
+				end
+			end
+
+			--initial setpoints
 			if(cfg.healer) then
 				if((class == "Priest" and spec == 1)
 				or (class == "Priest" and spec == 2)
@@ -1551,6 +1583,35 @@ oUF:Factory(function(self)
 			self:SetHeight(%d)
 			]]):format(cfg.widthR, cfg.heightR + cfg.NumbFS))
 
+			--priest spec 1,2
+			--paladin spec 1
+			--shaman spec 3
+			--monk spec 2
+			--druid spec 4
+
+			--function fired after spec changes
+			function EventFrame:PLAYER_TALENT_UPDATE()
+				if cfg.RaidFrames then
+						if(cfg.healer) then
+							raid:ClearAllPoints()
+							local spec = GetSpecialization()
+							if((class == "Priest" and spec == 1)
+							or (class == "Priest" and spec == 2)
+							or (class == "Shaman" and spec == 3)
+							or (class == "Paladin" and spec == 1)
+							or (class == "Monk" and spec == 2)
+							or (class == "Druid" and spec == 4)) then
+								raid:SetPoint("CENTER", cfg.healerX, cfg.healerY)
+							else
+								raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+							end
+						else
+							raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+						end
+				end
+			end
+
+			--initial setpoints
 			if(cfg.healer) then
 				if((class == "Priest" and spec == 1)
 				or (class == "Priest" and spec == 2)
@@ -1566,6 +1627,7 @@ oUF:Factory(function(self)
 				raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
 			end
 	end
+
 
 	if cfg.BossFrames then
 		self:SetActiveStyle"Farva - Boss"
