@@ -9,7 +9,6 @@ Todo/Plans:
 
 * update debuff whitelist
 * add healcomm
-* embed omf
 * re-add experience and reputation bar
 * ~~embed spellrange~~
 * ~~remove classtags~~
