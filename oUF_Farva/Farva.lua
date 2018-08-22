@@ -1430,13 +1430,13 @@ oUF:Factory(function(self)
 	local spec = GetSpecialization()
 	local class = UnitClass("Player")
 
-	local EventFrame = CreateFrame("Frame")
-	EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
-	EventFrame:SetScript("OnEvent", function(self, event, ...)
-			self[event](self, ...)
-	end)
-
 	if cfg.PartyFrames then
+		local EventFrame = CreateFrame("Frame")
+		EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
+		EventFrame:SetScript("OnEvent", function(self, event, ...)
+				self[event](self, ...)
+		end)
+
 	    self:SetActiveStyle'Farva - Raid'
       local party = self:SpawnHeader('oUF_Party', nil, 'custom  [@raid6, exists] hide; show',
 			'showPlayer',
@@ -1496,7 +1496,7 @@ oUF:Factory(function(self)
 	  arenaprep[i] = CreateFrame('Frame', 'oUF_ArenaPrep'..i, UIParent)
 	  arenaprep[i]:SetAllPoints(_G['oUF_Arena'..i])
 	  arenaprep[i]:SetFrameStrata('BACKGROUND')
-	arenaprep[i].framebd = framebd(arenaprep[i], arenaprep[i])
+		arenaprep[i].framebd = framebd(arenaprep[i], arenaprep[i])
 
 	  arenaprep[i].Health = CreateFrame('StatusBar', nil, arenaprep[i])
 	  arenaprep[i].Health:SetAllPoints()
@@ -1504,7 +1504,7 @@ oUF:Factory(function(self)
 
 	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, 8, cfg.FontF, 1, 1, 1)
 	  arenaprep[i].Spec:SetPoint('CENTER')
-	arenaprep[i].Spec:SetJustifyH'CENTER'
+		arenaprep[i].Spec:SetJustifyH'CENTER'
 
 	  arenaprep[i]:Hide()
 	end
@@ -1525,7 +1525,6 @@ oUF:Factory(function(self)
 	    end
 	  else
 	    local numOpps = GetNumArenaOpponentSpecs()
-
 	    if numOpps > 0 then
 		    for i = 1, 5 do
 			    local f = arenaprep[i]
@@ -1561,6 +1560,12 @@ oUF:Factory(function(self)
 	end)
 
 	if cfg.RaidFrames then
+		local EventFrame = CreateFrame("Frame")
+		EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
+		EventFrame:SetScript("OnEvent", function(self, event, ...)
+				self[event](self, ...)
+		end)
+
 		self:SetActiveStyle"Farva - Raid"
 		local raid = self:SpawnHeader(nil, nil, 'custom [@raid6,exists] show; hide',
 			'showPlayer', true,
@@ -1628,7 +1633,6 @@ oUF:Factory(function(self)
 			end
 	end
 
-
 	if cfg.BossFrames then
 		self:SetActiveStyle"Farva - Boss"
 		local boss = {}
@@ -1657,7 +1661,6 @@ oUF:Factory(function(self)
 			]]):format(cfg.widthM, cfg.heightM))
 		Main_Tank:SetPoint("TOPLEFT", 22, -251)
 	end
-
 end)
 
 -- disable blizzard raidframe manager
