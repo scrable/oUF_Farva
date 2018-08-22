@@ -1444,11 +1444,12 @@ oUF:Factory(function(self)
 			]]):format(cfg.widthR, cfg.heightR + cfg.NumbFS))
 
 			if(cfg.healer) then
-				if(class == "Priest" and spec == 1 or spec == 2
-				or class == "Shaman" and spec == 3
-				or class == "Paladin" and spec == 1
-				or class == "Monk" and spec == 2
-				or class == "Druid" and spec == 4) then
+				if((class == "Priest" and spec == 1)
+				or (class == "Priest" and spec == 2)
+				or (class == "Shaman" and spec == 3)
+				or (class == "Paladin" and spec == 1)
+				or (class == "Monk" and spec == 2)
+				or (class == "Druid" and spec == 4)) then
 					party:SetPoint("CENTER", cfg.healerX, cfg.healerY)
 				else
 					party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
@@ -1551,11 +1552,12 @@ oUF:Factory(function(self)
 			]]):format(cfg.widthR, cfg.heightR + cfg.NumbFS))
 
 			if(cfg.healer) then
-				if(class == "Priest" and spec == 1 or spec == 2
-				or class == "Shaman" and spec == 3
-				or class == "Paladin" and spec == 1
-				or class == "Monk" and spec == 2
-				or class == "Druid" and spec == 4) then
+				if((class == "Priest" and spec == 1)
+				or (class == "Priest" and spec == 2)
+				or (class == "Shaman" and spec == 3)
+				or (class == "Paladin" and spec == 1)
+				or (class == "Monk" and spec == 2)
+				or (class == "Druid" and spec == 4)) then
 					raid:SetPoint("CENTER", cfg.healerX, cfg.healerY)
 				else
 					raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
