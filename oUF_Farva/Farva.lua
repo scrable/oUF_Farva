@@ -43,9 +43,9 @@ function CoolNumber(num)
 	end
 end
 
-fs = function(parent, layer, font, fontsiz, outline, r, g, b, justify)
+fs = function(parent, layer, font, fontsize, outline, r, g, b, justify)
     local string = parent:CreateFontString(nil, layer)
-    string:SetFont(font, fontsiz, outline)
+    string:SetFont(font, fontsize, outline)
     string:SetShadowOffset(0, 0)
     string:SetTextColor(r, g, b)
     if justify then
@@ -197,7 +197,6 @@ Power.value:SetText()
         if(colors.power[ptype]) then
 		r, g, b = unpack(colors.power[ptype])
 	end
-
 	Power.value:SetTextColor(r, g, b)
 end
 
@@ -220,13 +219,6 @@ end
 --------------------
 -- aura functions --
 --------------------
--- filter some crap
---[[local Whitelist = RaidDebuffs
-local CustomFilter = function(icons, unit, icon, name, texture, count, dtype, duration, timeLeft, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
-	if(spellID) then
-		return true
-	end
-end]]--
 
 local CustomFilter = function(icons, ...)
     local _, icon, name, _, _, _, _, _, _, caster = ...
@@ -396,8 +388,6 @@ local createAuraWatch = function(self, unit)
 	end
 end
 
-
-
 -- threat highlight
 local function updateThreatStatus(self, event, u)
 	if (self.unit ~= u) then return end
@@ -413,12 +403,12 @@ end
 
 -- debuff highlight
 local CanDispel = {
-	PRIEST = 	{ Magic = true, Disease = false, },
-	SHAMAN = 	{ Magic = true, Curse = true},
-	PALADIN = { Magic = true, Poison = true, Disease = true, },
-	MAGE = 		{ Curse = true, },
-	DRUID = 	{ Magic = true, Curse = true, Poison = true},
-	MONK = 		{ Magic = true, Poison = true, Disease = true, }
+	PRIEST = 	{ Magic = true, Disease = false, Enrage = false,},
+	SHAMAN = 	{ Magic = true, Curse = true, Enrage = false,},
+	PALADIN = { Magic = true, Poison = true, Disease = true, Enrage = false,},
+	MAGE = 		{ Curse = true, Enrage = false,},
+	DRUID = 	{ Magic = true, Curse = true, Poison = true, Enrage = false,},
+	MONK = 		{ Magic = true, Poison = true, Disease = true, Enrage = false}
 }
 local dispellist = CanDispel[playerClass] or {}
 
@@ -526,7 +516,6 @@ end
 local Shared = function(self, unit, isSingle)
 local _, playerClass = UnitClass('player')
 
-	--[[self.menu = menu]]--
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 	self:RegisterForClicks"AnyUp"
@@ -773,18 +762,6 @@ local SpellRange = function(self)
 	outsideAlpha = cfg.FadeOutAlpha}
 end
 
-local HealComm4 = function(self)
-	if IsAddOnLoaded("oUF_HealComm4") then
-		HCB = CreateFrame('StatusBar', nil, self.Health)
-		HCB:SetStatusBarTexture(cfg.HPtex)
-		HCB:SetStatusBarColor(0, 0.8, 0, 0.5)
-		HCB:SetPoint('LEFT', self.Health, 'LEFT')
-		self.HealCommBar = HCB
-		self.allowHealCommOverflow = false
-		self.HealCommOthersOnly = true
-	end
-end
-
 -------------------------
 -- unit specific stuff --
 -------------------------
@@ -862,41 +839,41 @@ local UnitSpecific = {
 
 		--experience bar
 		if cfg.showExperienceBar then
-					local expbar = createStatusbar(self, cfg.texture, nil, cfg.heightP, cfg.widthP, 0, .7, 1, 1)
-					expbar:SetFrameStrata('LOW')
-					expbar:SetPoint("BOTTOM", self, "BOTTOM", 0, -9)
-					expbar.Rested = createStatusbar(expbar, cfg.texture, nil, nil, nil, 0, .5, .5, .6)
-					expbar.Rested:SetAllPoints(expbar)
-					expbar.bg = expbar.Rested:CreateTexture(nil, 'BORDER')
-					expbar.bg:SetAllPoints(expbar)
-					expbar.bg:SetTexture(cfg.texture)
-					expbar.bg:SetVertexColor(.5, .5, .5, 0.4)
-					local xptext = expbar:CreateFontString(nil, 'OVERLAY')
-					xptext:SetAllPoints(expbar)
-					xptext:SetFont(cfg.NameFont, cfg.NameFS, cfg.fontF)
-					self:Tag(xptext, '[experience:cur] / [experience:max]   [experience:per]%')
+			local expbar = createStatusbar(self, cfg.texture, nil, cfg.heightP, cfg.widthP, 0, .7, 1, 1)
+			expbar:SetFrameStrata('LOW')
+			expbar:SetPoint("BOTTOM", self, "BOTTOM", 0, -9)
+			expbar.Rested = createStatusbar(expbar, cfg.texture, nil, nil, nil, 0, .5, .5, .6)
+			expbar.Rested:SetAllPoints(expbar)
+			expbar.bg = expbar.Rested:CreateTexture(nil, 'BORDER')
+			expbar.bg:SetAllPoints(expbar)
+			expbar.bg:SetTexture(cfg.texture)
+			expbar.bg:SetVertexColor(.5, .5, .5, 0.4)
+			local xptext = expbar:CreateFontString(nil, 'OVERLAY')
+			xptext:SetAllPoints(expbar)
+			xptext:SetFont(cfg.NameFont, cfg.NameFS, cfg.fontF)
+			self:Tag(xptext, '[experience:cur] / [experience:max]   [experience:per]%')
 
-					--only show on mouseover
-					xptext:Hide()
-					expbar:SetScript('OnEnter', function(self)UIFrameFadeIn(xptext, 0.3, 0, 1)end)
-					expbar:SetScript('OnLeave', function(self)UIFrameFadeOut(xptext, 0.3, 1, 0)end)
+			--only show on mouseover
+			xptext:Hide()
+			expbar:SetScript('OnEnter', function(self)UIFrameFadeIn(xptext, 0.3, 0, 1)end)
+			expbar:SetScript('OnLeave', function(self)UIFrameFadeOut(xptext, 0.3, 1, 0)end)
 
-					expbar.bd = framebd(expbar, expbar)
-					self.Experience = expbar
+			expbar.bd = framebd(expbar, expbar)
+			self.Experience = expbar
 		end
 
 		if cfg.threat.enable then
-		    local threat = createStatusbar(UIParent, cfg.texture, nil, cfg.threat.height, cfg.threat.width, 1, 1, 1, 1)
-					threat:SetFrameStrata('LOW')
-	        threat:SetPoint(unpack(cfg.threat.pos))
-					threat.useRawThreat = false
-					threat.usePlayerTarget = false
-					threat.bg = threat:CreateTexture(nil, 'BACKGROUND')
-          threat.bg:SetAllPoints(threat)
-          threat.bg:SetTexture(cfg.texture)
-          threat.bg:SetVertexColor(1, 0, 0, 0.2)
-	        threat.bg = framebd(threat, threat)
-				self.ThreatBar = threat
+	    local threat = createStatusbar(UIParent, cfg.texture, nil, cfg.threat.height, cfg.threat.width, 1, 1, 1, 1)
+				threat:SetFrameStrata('LOW')
+	      threat:SetPoint(unpack(cfg.threat.pos))
+				threat.useRawThreat = false
+				threat.usePlayerTarget = false
+				threat.bg = threat:CreateTexture(nil, 'BACKGROUND')
+	      threat.bg:SetAllPoints(threat)
+	      threat.bg:SetTexture(cfg.texture)
+	      threat.bg:SetVertexColor(1, 0, 0, 0.2)
+	      threat.bg = framebd(threat, threat)
+			self.ThreatBar = threat
 		end
 		if cfg.PlayerDebuffs then
 			createDebuffs(self)
@@ -982,14 +959,14 @@ local UnitSpecific = {
 		Ihld:SetFrameLevel(6)
 
 		local q = fs(self.Health, 'OVERLAY', cfg.NameFont, 12, cfg.FontF, 1, 1, 1)
-	    q:SetPoint('LEFT', name, 'RIGHT', 1, 25)
-	    q:SetText('|cff8AFF30!|r')
-	    self.QuestIndicator = q
+    q:SetPoint('LEFT', name, 'RIGHT', 1, 25)
+    q:SetText('|cff8AFF30!|r')
+    self.QuestIndicator = q
 
-			LIc = Ihld:CreateTexture(nil, "OVERLAY")
-			LIc:SetSize(14, 14)
-			LIc:SetPoint("LEFT", htext, "RIGHT", 4, 0)
-			self.LeaderIndicator = LIc
+		LIc = Ihld:CreateTexture(nil, "OVERLAY")
+		LIc:SetSize(14, 14)
+		LIc:SetPoint("LEFT", htext, "RIGHT", 4, 0)
+		self.LeaderIndicator = LIc
 
 		--target of target frame
 		local TTFrame = CreateFrame("Frame", nil, self)
@@ -1255,8 +1232,9 @@ do
 	   self.RaidDebuffs = d
 	 	end
 
+
+
 		-- plugins
-		HealComm4(self)
 		self.Range = range
 
 		LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
@@ -1342,7 +1320,6 @@ do
 	   self.RaidDebuffs = d
 	 	end
 		-- plugins
-		HealComm4(self)
 		self.Range = range
 		if cfg.SmoothHealthUpdate then
 			self.Health.Smooth = true
@@ -1666,11 +1643,11 @@ end)
 -- disable blizzard raidframe manager
 if cfg.disableRaidFrameManager then
 		CompactRaidFrameManager:UnregisterAllEvents()
-        CompactRaidFrameManager:HookScript('OnShow', function(s) s:Hide() end)
-        CompactRaidFrameManager:Hide()
-        CompactRaidFrameContainer:UnregisterAllEvents()
-        CompactRaidFrameContainer:HookScript('OnShow', function(s) s:Hide() end)
-        CompactRaidFrameContainer:Hide()
+    CompactRaidFrameManager:HookScript('OnShow', function(s) s:Hide() end)
+    CompactRaidFrameManager:Hide()
+    CompactRaidFrameContainer:UnregisterAllEvents()
+    CompactRaidFrameContainer:HookScript('OnShow', function(s) s:Hide() end)
+    CompactRaidFrameContainer:Hide()
 end
 
 -------------

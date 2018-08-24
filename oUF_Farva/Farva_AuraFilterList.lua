@@ -16,15 +16,7 @@ ORD.MatchBySpellName = false
 		... wall of text inc ...
 --]]
 
---Whitelist = {
-	--auras = {
-
 	local RaidDebuffs = {
-
-	--31803,
-    --6788,
-	--3674,
-
 
 	---------------------------------------------------------------------
 
@@ -605,7 +597,7 @@ ORD.MatchBySpellName = false
 	136914, -- Electrical Shock
 --	Siege of Orgrimmar
 	--Immerseus
-	143437,	-- Corrosive Blast
+	143436,	-- Corrosive Blast
 	--The Fallen Protectors
 	143840,	-- Mark of Anguish
 	143198,	-- Garrote
@@ -662,6 +654,18 @@ ORD.MatchBySpellName = false
 	145065, --touch of ysharrj
 	145171, -- empowered^^
 
+--draenor world bosses
+	167615, -- pierce armor
+	176004, -- savage vines
+
+--highmaul
+	--kargath
+	159178, -- open wounds
+	159113, -- impale
+	--butcher
+	156152, -- gushing wounds
+	157139,
+	156297, --acid
 
 --	HFC
 	--iskar
