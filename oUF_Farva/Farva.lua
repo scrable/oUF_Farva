@@ -220,19 +220,6 @@ end
 -- aura functions --
 --------------------
 
-local CustomFilter = function(icons, ...)
-    local _, icon, name, _, _, _, _, _, _, caster = ...
-    local isPlayer
-    if (caster == 'player' or caster == 'vechicle') then
-        isPlayer = true
-    end
-    if((icons.onlyShowPlayer and isPlayer) or (not icons.onlyShowPlayer and name)) then
-        icon.isPlayer = isPlayer
-        icon.owner = caster
-        return true
-    end
-end
-
 -- format time
 local FormatTime = function(s)
 	local day, hour, minute = 86400, 3600, 60
@@ -398,30 +385,6 @@ local function updateThreatStatus(self, event, u)
 		self.ThreatHlt:SetVertexColor(r, g, b, 1.0)
 	else
 		self.ThreatHlt:Hide()
-	end
-end
-
--- debuff highlight
-local CanDispel = {
-	PRIEST = 	{ Magic = true, Disease = false, Enrage = false,},
-	SHAMAN = 	{ Magic = true, Curse = true, Enrage = false,},
-	PALADIN = { Magic = true, Poison = true, Disease = true, Enrage = false,},
-	MAGE = 		{ Curse = true, Enrage = false,},
-	DRUID = 	{ Magic = true, Curse = true, Poison = true, Enrage = false,},
-	MONK = 		{ Magic = true, Poison = true, Disease = true, Enrage = false}
-}
-local dispellist = CanDispel[playerClass] or {}
-
-local function GetDebuffType(unit)
-	if not UnitCanAssist("player", unit) then return nil end
-	local i = 1
-	while true do
-		local name, rank, texture, count, debufftype, duration, expirationTime, source = UnitDebuff(unit, i)
-		if not texture then break end
-		if debufftype and dispellist[debufftype] then
-			return debufftype
-		end
-		i = i + 1
 	end
 end
 
@@ -885,9 +848,6 @@ local UnitSpecific = {
 			self.Debuffs.num = 14
 			self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
 			self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbFS + cfg.PPyOffset)
-			if cfg.FilterAuras then
-				self.Debuffs.CustomFilter = CustomFilter
-			end
 		end
 	end,
 
@@ -1165,11 +1125,6 @@ local UnitSpecific = {
 		Auras.PostCreateIcon = PostCreateIcon
 		self.Auras = Auras
 
-		-- apply aura filter
-		if cfg.FilterAuras then
-			self.Auras.CustomFilter = CustomFilter
-		end
-
 		-- plugins
 		SpellRange(self)
 
@@ -1226,9 +1181,7 @@ do
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
 			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
-			if cfg.FilterAuras then
-				d.CustomFilter = CustomFilter
-			end
+			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
 	 	end
 
@@ -1313,10 +1266,7 @@ do
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
 			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
-
-			if cfg.FilterAuras then
-				d.CustomFilter = CustomFilter
-			end
+			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
 	 	end
 		-- plugins

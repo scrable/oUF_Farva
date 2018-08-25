@@ -598,6 +598,7 @@ ORD.MatchBySpellName = false
 --	Siege of Orgrimmar
 	--Immerseus
 	143436,	-- Corrosive Blast
+	143437,	-- Corrosive Blast
 	--The Fallen Protectors
 	143840,	-- Mark of Anguish
 	143198,	-- Garrote
@@ -662,10 +663,21 @@ ORD.MatchBySpellName = false
 	--kargath
 	159178, -- open wounds
 	159113, -- impale
+	158986, -- berserker rush
 	--butcher
 	156152, -- gushing wounds
 	157139,
 	156297, --acid
+	--brackenspore
+	163241, -- rot
+	159219, -- necrotic breath
+	159220, -- necrotic breath
+	163242, -- infesting spores
+	159996, -- infesting spores
+	--twins
+	155569, -- injured
+	167200, -- arcane wound
+	159709, -- weakened defenses
 
 --	HFC
 	--iskar

@@ -104,7 +104,6 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.RaidDebuffs = true					-- enable/disable raid debuffs
 	cfg.raidDebuffSize = 20					--size for debuffs in raid frames
 
-	cfg.FilterAuras = true					-- filter arena, party and raid auras by applying a whitelist (the whitelist can be found in Farva_AuraFilterList.lua)
 -----------
 -- arena --
 -----------
