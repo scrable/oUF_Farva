@@ -683,6 +683,20 @@ ORD.MatchBySpellName = false
 	--iskar
 	181957, -- phantasmal winds
 	179219, -- bombs
+
+--BFA
+	--atal'dazar
+	--priestess
+	255582, -- molten gold
+	250372, -- lingering nausea
+	--dino
+	255421, -- devour
+	257407, -- pursuit
+	255434, -- serrated teeth
+
+	260741, --jagged nettles
+
+
 }
 
 
