@@ -362,7 +362,7 @@ local createAuraWatch = function(self, unit)
 			icon:SetBackdrop(backdrop_1px)
 	   	icon:SetBackdropColor(0, 0, 0, 1)
 
-			local tex = icon:CreateTexture()--nil, 'ARTWORK')
+			local tex = icon:CreateTexture()
 			tex:SetAllPoints()
 			tex:SetTexCoord(.1, .9, .1, .9)
 			tex:SetTexture(cfg.texture)
@@ -741,8 +741,6 @@ local UnitSpecific = {
 			PetCastingBarFrame.Show = function() end
 			PetCastingBarFrame:Hide()
 
-
-
 			if cfg.useSpellIcon then
 				self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
 			end
@@ -793,12 +791,6 @@ local UnitSpecific = {
 		self.LeaderIndicator = LIc
 
 		-- plugins
-
-
-		local TFrame = CreateFrame("Frame", nil, self)
-		TFrame:SetPoint("TOPLEFT", self, "TOPLEFT", -4, 4)
-		TFrame:SetPoint("BOTTOMRIGHT", self.Power, "BOTTOMRIGHT", 4, -4)
-		TFrame:SetFrameLevel(0)
 
 		--experience bar
 		if cfg.showExperienceBar then
@@ -1184,8 +1176,6 @@ do
 			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
 	 	end
-
-
 
 		-- plugins
 		self.Range = range
