@@ -686,17 +686,60 @@ ORD.MatchBySpellName = false
 
 --BFA
 	--atal'dazar
-	--priestess
 	255582, -- molten gold
 	250372, -- lingering nausea
-	--dino
 	255421, -- devour
 	257407, -- pursuit
 	255434, -- serrated teeth
-
+	256577, -- soulfeast
+	--waycrest manor
 	260741, --jagged nettles
-
-
+	261440, -- virulent pathogen
+	264456, -- tracking explosive
+	268088, -- aura of dread
+	260703, -- unstable runic mark
+	263891, -- grasping thorns
+	--shrine of the storm
+	268896, -- mind rend
+	264560, -- choking brine
+	268233, -- electrifying shock
+	276297, -- void seed
+	--freehold
+	257908, -- oiled blade
+	--underrot
+	269301, -- putrid blood
+	259714, -- decaying spores
+	265433, -- withering curse
+	260455, -- serrated fangs
+	266107, -- thirst for blood
+	--king's rest
+	266238, -- shattered defenses
+	270507, -- poison barrage
+	270499, -- frost shock
+	267626, -- dessication
+	276031, -- pit of despair
+	269936, -- fixate
+	--siege of boralus
+	257168, -- cursed slash
+	--tol dagor
+	256474, -- heartstopper venom
+	256039, -- deadeye
+	257028, -- fuselighter
+	258079, -- massice chomp
+	--Temple of Sethraliss
+	268008, -- snake charm
+	269686, -- plague
+	272699, -- venomous spit
+	267027, -- cytotoxin
+	273563, -- neurotoxin
+	--motherlode
+	262515, -- azerite heartseeker
+	260838, -- homing missile
+	259856, -- chemical burn
+	268797, -- goo
+	263074, -- festering bite
+	257582, -- raging gaze
+	280605, -- brain freeze
 }
 
 
