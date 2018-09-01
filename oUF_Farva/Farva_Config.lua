@@ -53,7 +53,7 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.buSize = 24							-- aura size for all frames except player debuff
 
 	cfg.threat = {
-		showEverywhere = false,
+		showEverywhere = false, -- false = only show in combat
 		enable = true,
 		pos = {'BOTTOM', UIParent, 1, 2},
 		width = 260,
