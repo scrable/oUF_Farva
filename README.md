@@ -13,9 +13,9 @@ Also downloadable through the Twitch client or on [WoWInterface](http://www.wowi
 
 ### Todo/Plans:
 
-* update debuff whitelist
-* add healcomm
-* re-add experience and reputation bar
+* ~~update debuff whitelist~~
+* ~~add healcomm~~ (not going to add this in the near future)
+* ~~re-add experience and reputation bar~~
 * ~~embed spellrange~~
 * ~~remove classtags~~
 * add cfg for raid icons, role icon, leader icon on party/raid frame
