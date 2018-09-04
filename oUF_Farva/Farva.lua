@@ -272,7 +272,7 @@ local PostCreateIcon = function(Auras, button)
 	button.cd.noCooldownCount = false	-- hide CDC CDs
 	button.cd.disableCooldown = false
 	Auras.disableCooldown = true		-- hide CD spiral
-	Auras.showDebuffType = true			-- show debuff border type color
+	Auras.showDebuffType = cfg.showDebuffColorPerType			-- show debuff border type color
 
 	button.overlay:SetTexture("Interface\\Addons\\oUF_Farva\\media\\flash")
   button.overlay:SetPoint("TOPLEFT", button.icon, "TOPLEFT", -2, 2)

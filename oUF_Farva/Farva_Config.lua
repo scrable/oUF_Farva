@@ -65,6 +65,7 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 ------------
 
 	cfg.PlayerDebuffs = true				-- show debuffs acting on the player
+	cfg.showDebuffColorPerType = true -- show colors for different spell types - green = poison, blue = magic, purple = curse, disease = yellow, red is undispellable
 	cfg.showExperienceBar = true		-- show an experience bar under the player frame
 
 ------------
