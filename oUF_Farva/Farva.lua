@@ -973,12 +973,12 @@ local UnitSpecific = {
 
 		if cfg.showFocusDebuffs then
 			createDebuffs(self)
-			self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 3, -3)
+			self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 4, -3)
 			self.Debuffs.initialAnchor = "LEFT"
 			self.Debuffs["growth-x"] = "RIGHT"
 			self.Debuffs["growth-y"] = "UP"
-			self.Debuffs.num = 4
-			self.Debuffs.size = 20
+			self.Debuffs.num = 5
+			self.Debuffs.size = 21
 			self.Debuffs.spacing = 4
 			self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)
 
