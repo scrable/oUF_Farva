@@ -44,7 +44,7 @@ local DispellColor = {
 	['Curse']	= {.6, 0, 1},
 	['Disease']	= {.6, .4, 0},
 	['Poison']	= {0, .6, 0},
-	['nil'] = {.6, .6, .6},
+	['nil'] = {1, 0, 0},
 }
 
 local DispellPriority = {
