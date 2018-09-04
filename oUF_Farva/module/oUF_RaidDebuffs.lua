@@ -44,7 +44,7 @@ local DispellColor = {
 	['Curse']	= {.6, 0, 1},
 	['Disease']	= {.6, .4, 0},
 	['Poison']	= {0, .6, 0},
-	['none'] = {.6, .6, .6},
+	['nil'] = {.6, .6, .6},
 }
 
 local DispellPriority = {
@@ -168,10 +168,8 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
 				f.cd:Hide()
 			end
 		end
-
-		local c = DispellColor[debuffType] or DispellColor.none
-		f:SetBackdropBorderColor(c[1], c[2], c[3])
-
+		local c = DispellColor[debuffType]
+		f:SetBackdropColor(c[1], c[2], c[3])
 		f:Show()
 	else
 		f:Hide()
@@ -186,7 +184,7 @@ local function Update(self, event, unit)
 		local name, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, nameplateShowPersonal, spellId, canApplyAura, isBossDebuff, isCastByPlayer, nameplateShowAll, timeMod = UnitAura(unit, i, 'HARMFUL')
 		if (not name) then break end
 
-		if addon.ShowDispelableDebuff and debuffType and debuffType ~= "" then
+		if addon.ShowDispelableDebuff and debuffType and debuffType ~= "" then --empty string is returned when enrage == debuffType, cant dispell enrage as healer
 			if addon.FilterDispellableDebuff then
 				DispellPriority[debuffType] = DispellPriority[debuffType] + addon.priority --Make Dispell buffs on top of Boss Debuffs
 				priority = DispellFilter[debuffType] and DispellPriority[debuffType]
