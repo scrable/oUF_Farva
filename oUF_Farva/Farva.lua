@@ -272,7 +272,7 @@ local PostCreateIcon = function(Auras, button)
 	button.cd.noCooldownCount = false	-- hide CDC CDs
 	button.cd.disableCooldown = false
 	Auras.disableCooldown = true		-- hide CD spiral
-	Auras.showDebuffType = false			-- show debuff border type color
+	Auras.showDebuffType = true			-- show debuff border type color
 
 	button.overlay:SetTexture("Interface\\Addons\\oUF_Farva\\media\\flash")
   button.overlay:SetPoint("TOPLEFT", button.icon, "TOPLEFT", -2, 2)
@@ -1167,7 +1167,7 @@ do
 			d:SetFrameStrata'HIGH'
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
-			d.icon:SetTexCoord(.1,.9,.1,.9)
+			--d.icon:SetTexCoord(.1,.9,.1,.9)
 			d.icon:SetAllPoints(d)
 			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
