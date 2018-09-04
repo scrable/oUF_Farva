@@ -88,18 +88,40 @@ do
 	DispellFilter = dispellClasses[select(2, UnitClass('player'))] or {}
 end
 
-local function CheckSpec()
-	local role = ""
-	local tree = GetSpecialization()
-
-	if tree then
-		role = select(6, GetSpecializationInfo(tree))
-	end
-
-	if role == "HEALER" then
-		DispellFilter.Magic = true
-	else
-		DispellFilter.Magic = false
+local function CheckSpec(self, event)
+	local spec = GetSpecialization()
+	if select(2, UnitClass("player")) == "DRUID" then
+		if (spec == 4) then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
+	elseif select(2, UnitClass("player")) == "MONK" then
+		if (spec == 2) then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
+	elseif select(2, UnitClass("player")) == "PALADIN" then
+		if (spec == 1) then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
+	elseif select(2, UnitClass("player")) == "SHAMAN" then
+		if (spec == 3) then
+			DispellFilter.Magic = true
+		else
+			DispellFilter.Magic = false
+		end
+	elseif select(2, UnitClass("player")) == "PRIEST" then
+		if (spec == 3) then
+			DispellFilter.Disease = false
+			DispellFilter.Magic = false
+		else
+			DispellFilter.Disease = true
+			DispellFilter.Magic = true
+		end
 	end
 end
 Plugin:RegisterEvent("PLAYER_TALENT_UPDATE")
