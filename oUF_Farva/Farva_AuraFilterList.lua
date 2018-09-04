@@ -735,7 +735,7 @@ ORD.MatchBySpellName = false
 	--motherlode
 	262515, -- azerite heartseeker
 	260838, -- homing missile
-	259856, -- chemical burn
+	259853, -- chemical burn
 	268797, -- goo
 	263074, -- festering bite
 	257582, -- raging gaze
