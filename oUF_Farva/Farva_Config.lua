@@ -19,6 +19,8 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.hpTransMcolor = {40/255, 40/255, 40/255}			-- health bar color - Transparency Mode, only
 	cfg.hpTransMalpha = 0.4									-- healthbar alpha - Transparency Mode, only
 
+	cfg.RaidDebuffColor = {255/255, 255/255, 255/255}
+
 -----------
 -- media --
 -----------
@@ -60,12 +62,13 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 		height = 8,
 	}
 
+	cfg.showDebuffColorPerType = true -- false removes background, while true shows colors for different spell types - green = poison, blue = magic, purple = curse, disease = yellow, red is undispellable
+
 ------------
 -- player --
 ------------
 
 	cfg.PlayerDebuffs = true				-- show debuffs acting on the player
-	cfg.showDebuffColorPerType = true -- show colors for different spell types - green = poison, blue = magic, purple = curse, disease = yellow, red is undispellable
 	cfg.showExperienceBar = true		-- show an experience bar under the player frame
 
 ------------
@@ -103,6 +106,10 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.RaidFrames = true	 				-- set to false to disable raid frame
 	cfg.disableRaidFrameManager = true		-- enable/disable blizzards raidframe manager
 	cfg.RaidDebuffs = true					-- enable/disable raid debuffs
+
+	cfg.ColorRaidDebuffPerType = true -- show colors for different spell types - green = poison, blue = magic, purple = curse, disease = yellow, red is undispellable
+																		-- if false, color for debuff background can be set with cfg.RaidDebuffColor located at the top of the file
+
 	cfg.raidDebuffSize = 20					--size for debuffs in raid frames
 
 -----------
