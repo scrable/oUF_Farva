@@ -90,22 +90,9 @@ end
 -- health update
 local PostUpdateHealth = function(Health, unit, min, max)
 	local self = Health:GetParent()
-    local d =(round(min/max, 2)*100)
+  local d =(round(min/max, 2)*100)
 	local c = UnitClassification(unit)
 
-	if(UnitIsDead(unit)) then
-		Health:SetValue(0)
-		Health.value:SetText"RIP"
-	elseif(UnitIsGhost(unit)) then
-		Health:SetValue(0)
-		Health.value:SetText"GHO"
-	elseif(not UnitIsConnected(unit)) then
-		Health.value:SetText"OFF"
-	else
-		Health.value:SetText(CoolNumber(min))
-	end
-
-	-- set text color
 	if(unit) then
 		if(d <= 35 and d >= 25) then
 			Health.value:SetTextColor(253/255, 238/255, 80/255)
@@ -117,32 +104,13 @@ local PostUpdateHealth = function(Health, unit, min, max)
 			Health.value:SetTextColor(unpack(cfg.sndcolor))
 		end
 	end
-end
-
--- health update transparency mode
-local PostUpdateHealthTM = function(Health, unit, min, max)
-	local self = Health:GetParent()
-    local d =(round(min/max, 2)*100)
-	local c = UnitClassification(unit)
 
 	local HPheight = Health:GetHeight()
 	self.Health.bg:SetPoint('LEFT', Health:GetStatusBarTexture(), 'RIGHT')
 	self.Health.bg:SetHeight(HPheight)
 
-	if(UnitIsDead(unit)) then
-		Health.value:SetText"RIP"
-	elseif(UnitIsGhost(unit)) then
-		Health.value:SetText"GHO"
-	elseif(not UnitIsConnected(unit)) then
-		Health.value:SetText"OFF"
-	elseif(c == 'worldboss') then
-		Health.value:SetText(CoolNumber(min).."  "..(round(min/max, 2)*100))
-	else
-		Health.value:SetText(CoolNumber(min))
-	end
-
 	-- set health background color
-	if not cfg.solidHPBGcolor then
+	if cfg.TransparencyMode then
 		local _, class = UnitClass(unit)
 		local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 
@@ -156,21 +124,8 @@ local PostUpdateHealthTM = function(Health, unit, min, max)
 		if UnitIsDeadOrGhost(unit) == 1 then
 			self.Health.bg:SetVertexColor(200/255, 20/255, 40/255, 0.5)
 		else
-			hpBGr, hpBGg, hpBGb = unpack(cfg.hpBGcolor)
+			hpBGr, hpBGg, hpBGb = unpack(cfg.HPBackgroundColor)
 			self.Health.bg:SetVertexColor(hpBGr, hpBGg, hpBGb, 1)
-		end
-	end
-
-	-- set text color
-	if(unit) then
-		if(d <= 35 and d >= 25) then
-			Health.value:SetTextColor(253/255, 238/255, 80/255)
-		elseif(d < 25 and d >= 20) then
-			Health.value:SetTextColor(250/255, 130/255, 0/255)
-		elseif(d < 20) then
-			Health.value:SetTextColor(200/255, 20/255, 40/255)
-		else
-			Health.value:SetTextColor(unpack(cfg.sndcolor))
 		end
 	end
 end
@@ -286,7 +241,7 @@ local PostCreateIcon = function(Auras, button)
 	button.time:SetPoint("TOPLEFT", button, 3, -2)
 	button.time:SetJustifyH('CENTER')
 	button.time:SetVertexColor(unpack(cfg.sndcolor))
-	button:SetSize(cfg.buSize, cfg.buSize)
+	button:SetSize(cfg.BuffSize, cfg.BuffSize)
 
 	local count = button.count
 	count:ClearAllPoints()
@@ -364,7 +319,6 @@ local createAuraWatch = function(self, unit)
 
 			local tex = icon:CreateTexture()
 			tex:SetAllPoints()
-			tex:SetTexCoord(.1, .9, .1, .9)
 			tex:SetTexture(cfg.texture)
 			tex:SetVertexColor(unpack(v[2]))
 			icon.icon = tex
@@ -404,23 +358,16 @@ local PostCastStart = function(Castbar, unit, spell, spellrank)
 	Castbar:GetParent().Name:Hide()
 	Castbar:GetParent().Status:Hide()
 
-		if Castbar.notInterruptible and UnitCanAttack("player", unit) then
-			Castbar:SetStatusBarColor(1, 1, 0, 1)
-			if cfg.useSpellIcon then
-				Castbar.IconGlow:SetBackdropColor(0.9, 0, 1.0, 0.6)
-			end
-		else if unit == "player" then
-			local cbR, cbG, cbB = unpack(cfg.trdcolor)
-			Castbar:SetStatusBarColor(cbR, cbG, cbB, 1)
-			if cfg.useSpellIcon then
-				Castbar.IconGlow:SetBackdropColor(unpack(cfg.brdcolor))
-			end
-		else
-			local cbbR, cbbG, cbbB = unpack(cfg.enemycast)
-			Castbar:SetStatusBarColor(cbbR, cbbG, cbbB, 1)
-			if cfg.useSpellIcon then
-				Castbar.IconGlow:SetBackdropColor(unpack(cfg.brdcolor))
-			end
+	if Castbar.notInterruptible and UnitCanAttack("player", unit) then
+		Castbar:SetStatusBarColor(1, 1, 0, 1)
+		if cfg.useSpellIcon then
+			Castbar.IconGlow:SetBackdropColor(0.9, 0, 1.0, 0.6)
+		end
+	else
+		local cbbR, cbbG, cbbB, cbbA= unpack(cfg.CastbarColor)
+		Castbar:SetStatusBarColor(cbbR, cbbG, cbbB, cbbA)
+		if cfg.useSpellIcon then
+			Castbar.IconGlow:SetBackdropColor(unpack(cfg.brdcolor))
 		end
 	end
 end
@@ -498,7 +445,6 @@ local _, playerClass = UnitClass('player')
 
 	-- hp
 	local hp = CreateFrame("StatusBar", nil, self)
-	hp:SetHeight(cfg.heightHP)
 	hp:SetStatusBarTexture(cfg.HPtex)
 	hp:SetPoint"TOP"
 	hp:SetPoint"LEFT"
@@ -514,7 +460,7 @@ local _, playerClass = UnitClass('player')
 	if cfg.TransparencyMode then
 		local tmR, tmG, tmB = unpack(cfg.hpTransMcolor)
 		hp:SetStatusBarColor(tmR, tmG, tmB, cfg.hpTransMalpha)
-		self.Health.PostUpdate = PostUpdateHealthTM
+		self.Health.PostUpdate = PostUpdateHealth
 	else
 		hp.colorTapping = true
 		hp.colorClass = true
@@ -689,12 +635,7 @@ end
 -- buffs
 local createBuffs = function(self)
 	local Buffs = CreateFrame("Frame", nil, self)
-	Buffs.num = 40
-	Buffs.spacing = 2
-	Buffs.size = cfg.buSize
-
 	self.Buffs = Buffs
-
 	Buffs.PostCreateIcon = PostCreateIcon
 	Buffs.PostUpdateIcon = PostUpdateIcon
 end
@@ -702,11 +643,7 @@ end
 -- debuffs
 local createDebuffs = function(self)
 	local Debuffs = CreateFrame("Frame", nil, self)
-	Debuffs.spacing = 2
-	Debuffs.size = cfg.buSize
-
 	self.Debuffs = Debuffs
-
 	Debuffs.PostCreateIcon = PostCreateIcon
 	Debuffs.PostUpdateIcon = PostUpdateIcon
 end
@@ -832,7 +769,7 @@ local UnitSpecific = {
 		end
 		if cfg.PlayerDebuffs then
 			createDebuffs(self)
-			self.Debuffs.size = 32
+			self.Debuffs.size = cfg.PlayerDebuffSize
 			self.Debuffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
 			self.Debuffs.initialAnchor = "BOTTOMLEFT"
 			self.Debuffs["growth-x"] = "RIGHT"
@@ -877,9 +814,9 @@ local UnitSpecific = {
 			self.Buffs.initialAnchor = "BOTTOMLEFT"
 			self.Buffs["growth-x"] = "RIGHT"
 			self.Buffs.num = 18
-			self.Buffs.size = 24
+			self.Buffs.size = cfg.BuffSize
 			self.Buffs.spacing = 4
-			self.Buffs:SetSize(cfg.widthP, self.Buffs.size)
+			self.Buffs:SetSize(cfg.widthT, self.Buffs.size)
 
 			if cfg.onlyShowPlayerBuffsTarget then
 				self.Buffs.onlyShowPlayer = true
@@ -893,9 +830,9 @@ local UnitSpecific = {
 			self.Debuffs["growth-x"] = "RIGHT"
 			self.Debuffs["growth-y"] = "UP"
 			self.Debuffs.num = 4
-			self.Debuffs.size = 20
+			self.Debuffs.size = cfg.DebuffSize
 			self.Debuffs.spacing = 4
-			self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)
+			self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
 
 			if cfg.onlyShowPlayerDebuffsTarget then
 				self.Debuffs.onlyShowPlayer = true
@@ -961,10 +898,11 @@ local UnitSpecific = {
 			self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
 			self.Buffs.initialAnchor = "BOTTOMLEFT"
 			self.Buffs["growth-x"] = "RIGHT"
-			self.Buffs.num = 7
-			self.Buffs.size = 24
+			self.Buffs["growth-y"] = "UP"
+			self.Buffs.num = 14
+			self.Buffs.size = cfg.BuffSize
 			self.Buffs.spacing = 5
-			self.Buffs:SetSize(cfg.widthP, self.Buffs.size)
+			self.Buffs:SetSize(cfg.widthF, self.Buffs.size)
 
 			if cfg.onlyShowPlayerBuffsFocus then
 				self.Buffs.onlyShowPlayer = true
@@ -978,9 +916,9 @@ local UnitSpecific = {
 			self.Debuffs["growth-x"] = "RIGHT"
 			self.Debuffs["growth-y"] = "UP"
 			self.Debuffs.num = 5
-			self.Debuffs.size = 21
+			self.Debuffs.size = cfg.DebuffSize
 			self.Debuffs.spacing = 4
-			self.Debuffs:SetSize(self.Debuffs.size*13, self.Debuffs.size*2)
+			self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
 
 			if cfg.onlyShowPlayerDebuffsFocus then
 				self.Debuffs.onlyShowPlayer = false
@@ -1106,7 +1044,7 @@ local UnitSpecific = {
 		Auras:SetHeight(cfg.heightPA)
 		Auras:SetPoint("TOPRIGHT", self, "TOPLEFT", 300, 30)
 		Auras.initialAnchor = "TOPLEFT"
-		Auras.size = 24
+		Auras.size = cfg.BuffSize
 		Auras:SetWidth(Auras.size * 13)
 		Auras.gap = false
 		Auras.numBuffs = 8
@@ -1167,7 +1105,6 @@ do
 			d:SetFrameStrata'HIGH'
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
-			--d.icon:SetTexCoord(.1,.9,.1,.9)
 			d.icon:SetAllPoints(d)
 			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
@@ -1250,7 +1187,6 @@ do
 			d:SetFrameStrata'HIGH'
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
-			d.icon:SetTexCoord(.1,.9,.1,.9)
 			d.icon:SetAllPoints(d)
 			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
