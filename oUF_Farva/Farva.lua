@@ -921,7 +921,7 @@ local UnitSpecific = {
 			self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
 
 			if cfg.onlyShowPlayerDebuffsFocus then
-				self.Debuffs.onlyShowPlayer = false
+				self.Debuffs.onlyShowPlayer = true
 			end
 		end
 
