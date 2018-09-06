@@ -195,9 +195,9 @@ local function UpdateDebuff(self, name, icon, count, debuffType, duration, endTi
 		--filter raiddebuff list and color if player can dispel, red if can't dispel
 		if cfg.ColorRaidDebuffPerType then
 			if (debuffType == "Magic" and DispellFilter.Magic == true) or (debuffType == "Poison" and DispellFilter.Poison == true) or (debuffType == "Curse" and DispellFilter.Curse == true) or (debuffType == "Disease" and DispellFilter.Disease == true) then
-			f:SetBackdropColor(c[1], c[2], c[3])
+				f:SetBackdropColor(c[1], c[2], c[3])
 			else
-			f:SetBackdropColor(1, 0, 0)
+				f:SetBackdropColor(1, 0, 0)
 			end
 		else
 			f:SetBackdropColor(cfg.RaidDebuffColor[1], cfg.RaidDebuffColor[2], cfg.RaidDebuffColor[3])
