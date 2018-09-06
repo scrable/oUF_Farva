@@ -3,17 +3,16 @@ local cfg = CreateFrame("Frame")
 local mediaFolder = "Interface\\AddOns\\oUF_Farva\\media\\"	-- don't touch this ...
 local blankTex = "Interface\\Buttons\\WHITE8x8"
 
-cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
+cfg.texture = mediaFolder.."texture.tga"
 
 ------------
 -- colors --
 ------------
 	cfg.maincolor = {53/255, 69/255, 105/255}				-- portrait BG, raid health bar, castbar color
 	cfg.sndcolor = {255/255, 255/255, 255/255}				-- font color, ...
-	cfg.trdcolor = {85/255, 150/255, 85/255}
-	cfg.backdropcolor = {26/255, 25/255, 31/255}			-- backdrop color
+	cfg.HPBackgroundColor = {26/255, 25/255, 31/255}			-- background color for when transparency mode is disabled
 	cfg.brdcolor = {0/255, 0/255, 0/255}					-- border color
-	cfg.enemycast = {85/255, 150/255, 85/255}				--enemy interruptable cast color
+	cfg.CastbarColor = {85/255, 150/255, 85/255, .8}				--enemy interruptable cast color
 
 	cfg.TransparencyMode = true						-- enable/disable Transparency Mode - transparent healthbars, with class/reaction colored background. Besides looking nifty, it's especially nice for healers.
 	cfg.hpTransMcolor = {40/255, 40/255, 40/255}			-- health bar color - Transparency Mode, only
@@ -29,8 +28,8 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.CBtex = mediaFolder.."dM2"							-- castbar texture
 	cfg.Itex = blankTex										-- BG texture
 
-	cfg.NameFont = "Interface\\Addons\\oUF_Farva\\media\\SKURRI.ttf"				-- font used for text (names)
-	cfg.NumbFont = "Interface\\Addons\\oUF_Farva\\media\\SKURRI.ttf"				-- font used for numbers
+	cfg.NameFont = mediaFolder.."SKURRI.ttf"				-- font used for text (names)
+	cfg.NumbFont = mediaFolder.."SKURRI.ttf"				-- font used for numbers
 	cfg.NameFS = 7											-- name font size
 	cfg.NumbFS = 7  										-- number font size (power value, etc.)
 	cfg.hpNumbFS = 7										-- health value font size (player, target, focus)
@@ -52,7 +51,8 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 	cfg.useSpellIcon = false				-- show/hide castbar spellicon
 	cfg.ShiftClickFocus = true				-- enable/disable using shift + click for creating a focus
 
-	cfg.buSize = 24							-- aura size for all frames except player debuff
+	cfg.BuffSize = 24							-- buff size for all frames
+	cfg.DebuffSize = 21						-- debuff size for target and focus
 
 	cfg.threat = {
 		showEverywhere = false, -- false = only show in combat
@@ -69,13 +69,14 @@ cfg.texture = "Interface\\Addons\\oUF_Farva\\media\\texture.tga"
 ------------
 
 	cfg.PlayerDebuffs = true				-- show debuffs acting on the player
+	cfg.PlayerDebuffSize = 32				-- size of player debuff
 	cfg.showExperienceBar = true		-- show an experience bar under the player frame
 
 ------------
 -- target --
 ------------
 	cfg.showTargetBuffs = true
-	cfg.showTargetDebuffs = false
+	cfg.showTargetDebuffs = true
 	cfg.onlyShowPlayerBuffsTarget = false 		-- only show buffs casted by player (target and focus)
 	cfg.onlyShowPlayerDebuffsTarget = true		-- only show debuffs casted by player (target and focus)
 
@@ -202,7 +203,6 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	cfg.heightM = 10 		-- MT, boss frames
 	cfg.heightPA = 10		-- party, party pet - arena
 	cfg.heightR = 24		-- raid
-	cfg.heightCB = 30		-- class bar
 
 	-- width
 	cfg.widthP = 250		-- player
@@ -212,12 +212,9 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	cfg.widthS = 48 		-- ToT, FocusTarget, pet, party pet
 	cfg.widthPA = 200 		-- party - arena
 	cfg.widthR = 80 		-- raid
-	cfg.widthCB = 30		-- class bar
 
-	-- hp|pp height, pp|info offset (optional)
-	cfg.heightHP = 18		-- change frame height above, instead
 	cfg.heightPP = 2		-- power height
-	cfg.PPyOffset = 4		-- power y-Offset, can be a positiv/negative (down/up) value
+	cfg.PPyOffset = 4		-- power y-offset
 
 
 ns.cfg = cfg	-- don't touch this ...
