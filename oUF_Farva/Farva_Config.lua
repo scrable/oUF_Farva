@@ -76,7 +76,7 @@ cfg.texture = mediaFolder.."texture.tga"
 -- target --
 ------------
 	cfg.showTargetBuffs = true
-	cfg.showTargetDebuffs = true
+	cfg.showTargetDebuffs = false
 	cfg.onlyShowPlayerBuffsTarget = false 		-- only show buffs casted by player (target and focus)
 	cfg.onlyShowPlayerDebuffsTarget = true		-- only show debuffs casted by player (target and focus)
 
