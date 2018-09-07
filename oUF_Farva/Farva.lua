@@ -229,7 +229,7 @@ local PostCreateIcon = function(Auras, button)
 	button.overlay.Hide = function(self) self:SetVertexColor(unpack(cfg.brdcolor)) end
 
 	button.time = button:CreateFontString(nil, 'OVERLAY')
-	button.time:SetFont(cfg.NumbFont, 7, cfg.fontFNum)
+	button.time:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 	button.time:SetPoint("TOPLEFT", button, 3, -2)
 	button.time:SetJustifyH('CENTER')
 	button.time:SetVertexColor(unpack(cfg.sndcolor))
@@ -238,7 +238,7 @@ local PostCreateIcon = function(Auras, button)
 	local count = button.count
 	count:ClearAllPoints()
 	count:SetPoint("BOTTOMRIGHT", button, 0, 2)
-	count:SetFont(cfg.NumbFont, 7, cfg.fontF)
+	count:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 	count:SetVertexColor(unpack(cfg.sndcolor))
 
 	button.icon:SetTexCoord(.08, .92, .08, .92)
@@ -632,7 +632,7 @@ local createDebuffs = function(self)
 end
 
 local createQuestIcon = function(self)
-	local q = fs(self.Health, 'OVERLAY', cfg.NumbFont, 12, cfg.FontF, 1, 1, 1)
+	local q = fs(self.Health, 'OVERLAY', cfg.NumbFont, 12, cfg.FontFNum, 1, 1, 1)
 	  q:SetPoint('LEFT', name, 'RIGHT', 1, 0)
 	  q:SetText('|cff8AFF30!|r')
 	  self.QuestIndicator = q
@@ -670,7 +670,7 @@ local UnitSpecific = {
 		self.Health:SetWidth(cfg.widthP)
 		self.Power:SetWidth(cfg.widthP)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
+		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
 			if cfg.showExperienceBar then
 				if UnitLevel('player') < MAX_PLAYER_LEVEL then
 					htext:SetPoint('RIGHT', 2, -31)
@@ -786,7 +786,7 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
+		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
     htext:SetPoint('LEFT', 0, -19)
 		htext.frequentUpdates = .1
     self:Tag(htext, '[player:hp]')
@@ -871,7 +871,7 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
+		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
 		htext:SetPoint('LEFT', 0, -19)
 		htext.frequentUpdates = .1
 		self:Tag(htext, '[player:hp]')
@@ -1018,7 +1018,7 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPLEFT", self.Status, "TOPRIGHT", 0, 0)
 		self.Health.value:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, 7, cfg.FontF, 1, 1, 1)
+		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
     htext:SetPoint('RIGHT', 2, -19)
 		htext.frequentUpdates = .1
     self:Tag(htext, '[player:hp]')
@@ -1090,9 +1090,9 @@ do
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
 			d.icon:SetAllPoints(d)
-			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
 			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
@@ -1172,9 +1172,9 @@ do
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
 			d.icon:SetAllPoints(d)
-			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontF, 0.8, 0.8, 0.8)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
 			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
@@ -1339,7 +1339,7 @@ oUF:Factory(function(self)
 	  arenaprep[i].Health:SetAllPoints()
 	  arenaprep[i].Health:SetStatusBarTexture(cfg.blanktexture)
 
-	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, 8, cfg.FontF, 1, 1, 1)
+	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.FontFNum, 1, 1, 1)
 	  arenaprep[i].Spec:SetPoint('CENTER')
 		arenaprep[i].Spec:SetJustifyH'CENTER'
 
