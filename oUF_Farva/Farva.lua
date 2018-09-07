@@ -670,7 +670,7 @@ local UnitSpecific = {
 		self.Health:SetWidth(cfg.widthP)
 		self.Power:SetWidth(cfg.widthP)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+		local htext = self.Health.value
 			if cfg.showExperienceBar then
 				if UnitLevel('player') < MAX_PLAYER_LEVEL then
 					htext:SetPoint('RIGHT', 2, -31)
@@ -786,7 +786,7 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+		local htext = self.Health.value
     htext:SetPoint('LEFT', 0, -19)
 		htext.frequentUpdates = .1
     self:Tag(htext, '[player:hp]')
@@ -871,7 +871,7 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
 		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+		local htext = self.Health.value
 		htext:SetPoint('LEFT', 0, -19)
 		htext.frequentUpdates = .1
 		self:Tag(htext, '[player:hp]')
@@ -976,7 +976,7 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS/2)
 		self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+		local htext = self.Health.value
     htext:SetPoint('LEFT', 0, -16)
 		htext.frequentUpdates = .1
     self:Tag(htext, '[player:hp]')
@@ -1018,7 +1018,7 @@ local UnitSpecific = {
 		self.Name:SetPoint("TOPLEFT", self.Status, "TOPRIGHT", 0, 0)
 		self.Health.value:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 
-		local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+		local htext = self.Health.value
     htext:SetPoint('RIGHT', 2, -19)
 		htext.frequentUpdates = .1
     self:Tag(htext, '[player:hp]')
@@ -1155,7 +1155,7 @@ do
     name:SetJustifyH'LEFT'
 		self:Tag(name, '[color][veryshort:name]')
 
-	  local htext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+	  local htext = self.Health.value
 	  htext:SetPoint('RIGHT', -2, -5)
 		htext:SetJustifyH'RIGHT'
 		htext.frequentUpdates = true
