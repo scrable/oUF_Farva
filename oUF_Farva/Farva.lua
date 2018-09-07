@@ -96,19 +96,6 @@ local PostUpdateHealth = function(Health, unit, min, max)
   local d =(round(min/max, 2)*100)
 	local c = UnitClassification(unit)
 
-	--base color is if transparency mode is disabled
-	if(unit) then
-		if(d <= 35 and d >= 25) then
-			Health.value:SetTextColor(253/255, 238/255, 80/255)
-		elseif(d < 25 and d >= 20) then
-			Health.value:SetTextColor(250/255, 130/255, 0/255)
-		elseif(d < 20) then
-			Health.value:SetTextColor(200/255, 20/255, 40/255)
-		else
-			Health.value:SetTextColor(unpack(cfg.sndcolor))
-		end
-	end
-
 	local HPheight = Health:GetHeight()
 	self.Health.bg:SetPoint('LEFT', Health:GetStatusBarTexture(), 'RIGHT')
 	self.Health.bg:SetHeight(HPheight)
