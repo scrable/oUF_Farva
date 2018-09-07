@@ -43,6 +43,7 @@ function CoolNumber(num)
 	end
 end
 
+-- font string creator
 fs = function(parent, layer, font, fontsize, outline, r, g, b, justify)
     local string = parent:CreateFontString(nil, layer)
     string:SetFont(font, fontsize, outline)
@@ -54,6 +55,7 @@ fs = function(parent, layer, font, fontsize, outline, r, g, b, justify)
     return string
 end
 
+-- frame creator
 framebd = function(parent, anchor)
     local frame = CreateFrame('Frame', nil, parent)
     frame:SetFrameStrata('BACKGROUND')
@@ -72,6 +74,7 @@ local fixStatusbar = function(bar)
     bar:GetStatusBarTexture():SetVertTile(false)
 end
 
+-- bar creator
 createStatusbar = function(parent, tex, layer, height, width, r, g, b, alpha)
     local bar = CreateFrame'StatusBar'
     bar:SetParent(parent)
@@ -93,6 +96,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
   local d =(round(min/max, 2)*100)
 	local c = UnitClassification(unit)
 
+	--base color is if transparency mode is disabled
 	if(unit) then
 		if(d <= 35 and d >= 25) then
 			Health.value:SetTextColor(253/255, 238/255, 80/255)
@@ -109,7 +113,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 	self.Health.bg:SetPoint('LEFT', Health:GetStatusBarTexture(), 'RIGHT')
 	self.Health.bg:SetHeight(HPheight)
 
-	-- set health background color
+	-- set health background color for transparency mode
 	if cfg.TransparencyMode then
 		local _, class = UnitClass(unit)
 		local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
@@ -155,6 +159,7 @@ Power.value:SetText()
 	Power.value:SetTextColor(r, g, b)
 end
 
+-- power update for raid, no text values set for raid power so we use a seperate function
 local PostUpdatePowerRaid = function(Power, unit)
 	local powertype, _ = UnitPowerType(unit)
 		Power:Show()
@@ -175,7 +180,7 @@ end
 -- aura functions --
 --------------------
 
--- format time
+-- format time for auras
 local FormatTime = function(s)
 	local day, hour, minute = 86400, 3600, 60
 	if s >= day then
@@ -278,6 +283,7 @@ do
 	end
 end
 
+-- update aurawatch icon
 local AWIcon = function(AWatch, icon, spellID, name, self)
 	local count = fs(icon, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
 	count:SetPoint('BOTTOMRIGHT', icon, 5, -5)
@@ -295,6 +301,7 @@ local AWIcon = function(AWatch, icon, spellID, name, self)
 	end
 end
 
+-- initial creation of aurawatch
 local createAuraWatch = function(self, unit)
 	if cfg.aw.enable then
 		local auras = CreateFrame('Frame', nil, self)
@@ -329,25 +336,11 @@ local createAuraWatch = function(self, unit)
 	end
 end
 
--- threat highlight
-local function updateThreatStatus(self, event, u)
-	if (self.unit ~= u) then return end
-	local s = UnitThreatSituation(u)
-	if s and s > 1 then
-		local r, g, b = GetThreatStatusColor(s)
-		self.ThreatHlt:Show()
-		self.ThreatHlt:SetVertexColor(r, g, b, 1.0)
-	else
-		self.ThreatHlt:Hide()
-	end
-end
-
 -- mouseover highlight
 local UnitFrame_OnEnter = function(self)
 	UnitFrame_OnEnter(self)
 	self.Mouseover:Show()
 end
-
 local UnitFrame_OnLeave = function(self)
 	UnitFrame_OnLeave(self)
 	self.Mouseover:Hide()
@@ -372,6 +365,7 @@ local PostCastStart = function(Castbar, unit, spell, spellrank)
 	end
 end
 
+-- restore status
 local PostCastStop = function(Castbar, unit)
 	local self = Castbar:GetParent()
 	self.Name:Show()
@@ -570,6 +564,8 @@ local _, playerClass = UnitClass('player')
 		pIcon:SetSize(18, 18)
 		self.PhaseIndicator = pIcon
 	end
+
+	-- raid icons for all frames
 	local RaidTarget = StringParent:CreateTexture(nil, 'OVERLAY')
 	RaidTarget:SetPoint('TOP', self, 0, 8)
 	RaidTarget:SetSize(16, 16)
@@ -774,6 +770,7 @@ local UnitSpecific = {
 			self.Debuffs.initialAnchor = "BOTTOMLEFT"
 			self.Debuffs["growth-x"] = "RIGHT"
 			self.Debuffs["growth-y"] = "UP"
+			self.Debuffs.spacing = 3
 			self.Debuffs.num = 14
 			self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
 			self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbFS + cfg.PPyOffset)
