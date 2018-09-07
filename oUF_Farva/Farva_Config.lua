@@ -87,7 +87,7 @@ cfg.texture = mediaFolder.."texture.tga"
 	cfg.showFocusBuffs = true
 	cfg.showFocusDebuffs = true
 	cfg.onlyShowPlayerBuffsFocus = false
-	cfg.onlyShowPlayerDebuffsFocus = true
+	cfg.onlyShowPlayerDebuffsFocus = false
 
 -----------
 -- party & Raid--
