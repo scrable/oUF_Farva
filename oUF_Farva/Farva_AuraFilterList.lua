@@ -740,6 +740,53 @@ ORD.MatchBySpellName = false
 	263074, -- festering bite
 	257582, -- raging gaze
 	280605, -- brain freeze
+	--Uldir
+	--taloc the corrupted
+	275205, -- enlarged heart
+	--mother
+	268198, -- clinging corruption
+	279662, -- endemic virus
+	279663, -- spreading epidemic
+	--fetid devourer
+	262314, -- putrid paroxysm
+	--zek'voz
+	265264, -- void lash
+	265662, -- corruptors pact
+	265646, -- will of the corruptor
+	270589, -- void wall
+	270620, -- psionic blast
+	265360, -- rolling deceit
+	--vectis
+	265129, -- omega vector
+	274999, -- bursting lesions
+	265178, -- evolving affliction
+	265206, -- immunosuppression
+	266948, -- plague bomb
+	--zul reborn
+	276672, -- unleashed shadow
+	273434, -- pit of despair
+	276299, -- engorged burst
+	274195, -- corrupted blood
+	274358, -- rupturing blooc
+	274271, -- deathwish
+	--mythrax the unraveler
+	272336, -- annihilation
+	272407, -- oblivion sphere
+	272536, -- imminent ruin
+	274019, -- mind flay
+	--g'huun
+	267813, -- blood host
+	273406, -- dark bargain 1
+	273405, -- dark bargain 2
+	267409, -- dark bargain 3
+	263420, -- power matrix
+	263436, -- imperfect physiology
+	268174, -- tendrils of corruption
+	270447, -- growing corruption
+	263227, -- putrid blood
+	277007, -- bursting boil
+	272506, -- explosive corruption
+	267700, -- gaze of g'huun
 }
 
 
