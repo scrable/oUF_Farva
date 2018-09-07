@@ -522,7 +522,7 @@ local _, playerClass = UnitClass('player')
 	self.Health.value:SetFont(cfg.NumbFont, cfg.hpNumbFS, cfg.fontFNum)
 
 	self.Power.value = hp:CreateFontString(nil, "OVERLAY")
-	self.Power.value:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
+	self.Power.value:SetFont(cfg.NumbFont, cfg.PowerFS, cfg.fontFNum)
 
 	self.Name = hp:CreateFontString(nil, "OVERLAY")
 	self.Name:SetFont(cfg.NameFont, cfg.NameFS, cfg.FontF)
@@ -1016,7 +1016,6 @@ local UnitSpecific = {
 
 		self.Status:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
 		self.Name:SetPoint("TOPLEFT", self.Status, "TOPRIGHT", 0, 0)
-		self.Health.value:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 
 		local htext = self.Health.value
     htext:SetPoint('RIGHT', 2, -19)
@@ -1077,7 +1076,6 @@ do
 		self.Health:SetWidth(cfg.widthPA)
 		self.Power:SetWidth(cfg.widthPA)
 
-		self.Health.value:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 		self.Health.value:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -2)
 		self.Power.value:SetPoint("RIGHT", self.Health.value, "LEFT", -2, 0)
 		self.Status:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
