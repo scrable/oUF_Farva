@@ -22,7 +22,7 @@ Also downloadable through the Twitch client or on [WoWInterface](http://www.wowi
 * update spellids for aurawatch
 * add more screenshots
 * ~~fix aurawatch icon remaining duration~~
-* unsure, but might add ingame config if i have time
+* update spell info for auratracker
 
 ### Credits: Haste, Skaarj, Dawn, p3lim
 
