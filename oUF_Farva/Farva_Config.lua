@@ -89,7 +89,7 @@ cfg.texture = mediaFolder.."texture.tga"
 -- focus --
 -----------
 
-	cfg.FocusFrames = true
+	cfg.FocusFrame = true
 	cfg.FocusTargetFrame = true
 	cfg.showFocusBuffs = true
 	cfg.showFocusDebuffs = true

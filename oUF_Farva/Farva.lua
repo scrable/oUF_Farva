@@ -843,7 +843,7 @@ end,
 	end,
 
 	focus = function(self, ...)
-		if cfg.FocusTargetFrame then
+		if cfg.FocusFrame then
 			Shared(self, ...)
 			self.Health:SetHeight(cfg.heightF)
 			self.Health:SetWidth(cfg.widthF)
@@ -1251,10 +1251,7 @@ oUF:SetActiveStyle("oUF_Farva_ArenaTarget")
 	end
 end
 
-
-
 oUF:Factory(function(self)
-
 	local player = spawnHelper(self, 'player', "BOTTOM", -338, 233)
 	spawnHelper(self, 'pet', "RIGHT", player, "LEFT", -10, 0)
 	local target = spawnHelper(self, 'target', "BOTTOM", 338, 233)
