@@ -6,7 +6,6 @@
 
 Farva_Config.lua
 Farva.xml
-module\oUF_AuraTracker.lua
 module\oUF_AuraWatch.lua
 module\oUF_ThreatBar.lua
 module\oUF_RaidDebuffs.lua
