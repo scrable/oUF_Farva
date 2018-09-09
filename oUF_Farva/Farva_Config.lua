@@ -68,13 +68,18 @@ cfg.texture = mediaFolder.."texture.tga"
 -- player --
 ------------
 
+	cfg.PlayerFrame = true					-- show/hide player frame
 	cfg.PlayerDebuffs = true				-- show debuffs acting on the player
 	cfg.PlayerDebuffSize = 32				-- size of player debuff
 	cfg.showExperienceBar = true		-- show an experience bar under the player frame
+	cfg.PetFrame = true							-- show the pet frame
 
 ------------
 -- target --
 ------------
+
+	cfg.TargetFrame = true
+	cfg.TargetofTargetFrame = true
 	cfg.showTargetBuffs = true
 	cfg.showTargetDebuffs = false
 	cfg.onlyShowPlayerBuffsTarget = false 		-- only show buffs casted by player (target and focus)
@@ -84,6 +89,8 @@ cfg.texture = mediaFolder.."texture.tga"
 -- focus --
 -----------
 
+	cfg.FocusFrames = true
+	cfg.FocusTargetFrame = true
 	cfg.showFocusBuffs = true
 	cfg.showFocusDebuffs = true
 	cfg.onlyShowPlayerBuffsFocus = false

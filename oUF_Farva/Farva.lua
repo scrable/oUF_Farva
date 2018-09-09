@@ -643,6 +643,7 @@ end
 -------------------------
 local UnitSpecific = {
 	player = function(self, ...)
+		if cfg.PlayerFrame then
 		Shared(self, ...)
 		MirrorBars()
 
@@ -755,230 +756,241 @@ local UnitSpecific = {
 			self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
 			self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbFS + cfg.PPyOffset)
 		end
-	end,
+	end
+end,
 
 	target = function(self, ...)
-		Shared(self, ...)
-		self.Health:SetHeight(cfg.heightT)
-		self.Health:SetWidth(cfg.widthT)
-		self.Power:SetWidth(cfg.widthT)
+		if cfg.TargetFrame then
+			Shared(self, ...)
+			self.Health:SetHeight(cfg.heightT)
+			self.Health:SetWidth(cfg.widthT)
+			self.Power:SetWidth(cfg.widthT)
 
-		if cfg.useCastbar then
-			createCastbar(self)
-			self.Castbar:SetAllPoints(self.Health)
-			self.Castbar.Text:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -2)
-			self.Castbar.Time2:SetPoint("BOTTOMRIGHT", self.Castbar.Text, "BOTTOMLEFT", -5, 0)
-			self.Castbar.Time:SetPoint("BOTTOMRIGHT", self.Castbar.Time2, "BOTTOMLEFT", 0, 0)
+			if cfg.useCastbar then
+				createCastbar(self)
+				self.Castbar:SetAllPoints(self.Health)
+				self.Castbar.Text:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -2)
+				self.Castbar.Time2:SetPoint("BOTTOMRIGHT", self.Castbar.Text, "BOTTOMLEFT", -5, 0)
+				self.Castbar.Time:SetPoint("BOTTOMRIGHT", self.Castbar.Time2, "BOTTOMLEFT", 0, 0)
 
-			if cfg.useSpellIcon then
-				self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
+				if cfg.useSpellIcon then
+					self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
+				end
 			end
-		end
 
-		self.Power.frequentUpdates = .1
-		self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
-		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
+			self.Power.frequentUpdates = .1
+			self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
+			self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
-		local htext = self.Health.value
-    htext:SetPoint('LEFT', 0, -19)
-		htext.frequentUpdates = .1
-    self:Tag(htext, '[player:hp]')
-		self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
+			local htext = self.Health.value
+	    htext:SetPoint('LEFT', 0, -19)
+			htext.frequentUpdates = .1
+	    self:Tag(htext, '[player:hp]')
+			self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
 
-		if cfg.showTargetBuffs then
-			createBuffs(self)
-			self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
-			self.Buffs.initialAnchor = "BOTTOMLEFT"
-			self.Buffs["growth-x"] = "RIGHT"
-			self.Buffs.num = 18
-			self.Buffs.size = cfg.BuffSize
-			self.Buffs.spacing = 4
-			self.Buffs:SetSize(cfg.widthT, self.Buffs.size)
+			if cfg.showTargetBuffs then
+				createBuffs(self)
+				self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
+				self.Buffs.initialAnchor = "BOTTOMLEFT"
+				self.Buffs["growth-x"] = "RIGHT"
+				self.Buffs.num = 18
+				self.Buffs.size = cfg.BuffSize
+				self.Buffs.spacing = 4
+				self.Buffs:SetSize(cfg.widthT, self.Buffs.size)
 
-			if cfg.onlyShowPlayerBuffsTarget then
-				self.Buffs.onlyShowPlayer = true
+				if cfg.onlyShowPlayerBuffsTarget then
+					self.Buffs.onlyShowPlayer = true
+				end
 			end
-		end
 
-		if cfg.showTargetDebuffs then
-			createDebuffs(self)
-			self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 3, -3)
-			self.Debuffs.initialAnchor = "LEFT"
-			self.Debuffs["growth-x"] = "RIGHT"
-			self.Debuffs["growth-y"] = "UP"
-			self.Debuffs.num = 4
-			self.Debuffs.size = cfg.DebuffSize
-			self.Debuffs.spacing = 4
-			self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
+			if cfg.showTargetDebuffs then
+				createDebuffs(self)
+				self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 3, -3)
+				self.Debuffs.initialAnchor = "LEFT"
+				self.Debuffs["growth-x"] = "RIGHT"
+				self.Debuffs["growth-y"] = "UP"
+				self.Debuffs.num = 4
+				self.Debuffs.size = cfg.DebuffSize
+				self.Debuffs.spacing = 4
+				self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
 
-			if cfg.onlyShowPlayerDebuffsTarget then
-				self.Debuffs.onlyShowPlayer = true
+				if cfg.onlyShowPlayerDebuffsTarget then
+					self.Debuffs.onlyShowPlayer = true
+				end
 			end
+
+			-- plugins
+			SpellRange(self)
+
+			 --Icons
+			local Ihld = CreateFrame("Frame", nil, self)
+			Ihld:SetAllPoints(self.Health)
+			Ihld:SetFrameLevel(6)
+
+			LIc = Ihld:CreateTexture(nil, "OVERLAY")
+			LIc:SetSize(14, 14)
+			LIc:SetPoint("LEFT", htext, "RIGHT", 4, 0)
+			self.LeaderIndicator = LIc
+
+			--target of target frame
+			local TTFrame = CreateFrame("Frame", nil, self)
+			TTFrame:SetPoint("TOPLEFT", self, "TOPLEFT", -4, 4)
+			TTFrame:SetPoint("BOTTOMRIGHT", self.Power, "BOTTOMRIGHT", 4, -4)
+			TTFrame:SetFrameLevel(0)
+
+			self:SetSize(cfg.widthT, cfg.heightT + cfg.NumbFS + cfg.PPyOffset)
 		end
-
-		-- plugins
-		SpellRange(self)
-
-		 --Icons
-		local Ihld = CreateFrame("Frame", nil, self)
-		Ihld:SetAllPoints(self.Health)
-		Ihld:SetFrameLevel(6)
-
-		LIc = Ihld:CreateTexture(nil, "OVERLAY")
-		LIc:SetSize(14, 14)
-		LIc:SetPoint("LEFT", htext, "RIGHT", 4, 0)
-		self.LeaderIndicator = LIc
-
-		--target of target frame
-		local TTFrame = CreateFrame("Frame", nil, self)
-		TTFrame:SetPoint("TOPLEFT", self, "TOPLEFT", -4, 4)
-		TTFrame:SetPoint("BOTTOMRIGHT", self.Power, "BOTTOMRIGHT", 4, -4)
-		TTFrame:SetFrameLevel(0)
-
-		self:SetSize(cfg.widthT, cfg.heightT + cfg.NumbFS + cfg.PPyOffset)
 	end,
 
 	focus = function(self, ...)
-		Shared(self, ...)
-		self.Health:SetHeight(cfg.heightF)
-		self.Health:SetWidth(cfg.widthF)
-		self.Power:SetWidth(cfg.widthF)
+		if cfg.FocusTargetFrame then
+			Shared(self, ...)
+			self.Health:SetHeight(cfg.heightF)
+			self.Health:SetWidth(cfg.widthF)
+			self.Power:SetWidth(cfg.widthF)
 
-		if cfg.useCastbar then
-			createCastbar(self)
-			self.Castbar:SetAllPoints(self.Health)
-			self.Castbar.Text:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -2)
-			self.Castbar.Time2:SetPoint("BOTTOMRIGHT", self.Castbar.Text, "BOTTOMLEFT", -5, 0)
-			self.Castbar.Time:SetPoint("BOTTOMRIGHT", self.Castbar.Time2, "BOTTOMLEFT", 0, 0)
+			if cfg.useCastbar then
+				createCastbar(self)
+				self.Castbar:SetAllPoints(self.Health)
+				self.Castbar.Text:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -2)
+				self.Castbar.Time2:SetPoint("BOTTOMRIGHT", self.Castbar.Text, "BOTTOMLEFT", -5, 0)
+				self.Castbar.Time:SetPoint("BOTTOMRIGHT", self.Castbar.Time2, "BOTTOMLEFT", 0, 0)
 
-			if cfg.useSpellIcon then
-				self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
+				if cfg.useSpellIcon then
+					self.Castbar.Icon:SetPoint("TOPRIGHT", self.Health, "TOPLEFT", -6, 0)
+				end
 			end
-		end
 
-		self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
-		self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
+			self.Name:SetPoint("TOPRIGHT", self.Power, "BOTTOMRIGHT", 0, -3)
+			self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
-		local htext = self.Health.value
-		htext:SetPoint('LEFT', 0, -19)
-		htext.frequentUpdates = .1
-		self:Tag(htext, '[player:hp]')
-		self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
+			local htext = self.Health.value
+			htext:SetPoint('LEFT', 0, -19)
+			htext.frequentUpdates = .1
+			self:Tag(htext, '[player:hp]')
+			self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
 
-		if cfg.showFocusBuffs then
-			createBuffs(self)
-			self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
-			self.Buffs.initialAnchor = "BOTTOMLEFT"
-			self.Buffs["growth-x"] = "RIGHT"
-			self.Buffs["growth-y"] = "UP"
-			self.Buffs.num = 14
-			self.Buffs.size = cfg.BuffSize
-			self.Buffs.spacing = 5
-			self.Buffs:SetSize(cfg.widthF, self.Buffs.size)
+			if cfg.showFocusBuffs then
+				createBuffs(self)
+				self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
+				self.Buffs.initialAnchor = "BOTTOMLEFT"
+				self.Buffs["growth-x"] = "RIGHT"
+				self.Buffs["growth-y"] = "UP"
+				self.Buffs.num = 14
+				self.Buffs.size = cfg.BuffSize
+				self.Buffs.spacing = 5
+				self.Buffs:SetSize(cfg.widthF, self.Buffs.size)
 
-			if cfg.onlyShowPlayerBuffsFocus then
-				self.Buffs.onlyShowPlayer = true
+				if cfg.onlyShowPlayerBuffsFocus then
+					self.Buffs.onlyShowPlayer = true
+				end
 			end
-		end
 
-		if cfg.showFocusDebuffs then
-			createDebuffs(self)
-			self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 4, -3)
-			self.Debuffs.initialAnchor = "LEFT"
-			self.Debuffs["growth-x"] = "RIGHT"
-			self.Debuffs["growth-y"] = "UP"
-			self.Debuffs.num = 5
-			self.Debuffs.size = cfg.DebuffSize
-			self.Debuffs.spacing = 4
-			self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
+			if cfg.showFocusDebuffs then
+				createDebuffs(self)
+				self.Debuffs:SetPoint("LEFT", self.Health, "RIGHT", 4, -3)
+				self.Debuffs.initialAnchor = "LEFT"
+				self.Debuffs["growth-x"] = "RIGHT"
+				self.Debuffs["growth-y"] = "UP"
+				self.Debuffs.num = 5
+				self.Debuffs.size = cfg.DebuffSize
+				self.Debuffs.spacing = 4
+				self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
 
-			if cfg.onlyShowPlayerDebuffsFocus then
-				self.Debuffs.onlyShowPlayer = true
+				if cfg.onlyShowPlayerDebuffsFocus then
+					self.Debuffs.onlyShowPlayer = true
+				end
 			end
+
+			-- plugins
+			SpellRange(self)
+
+			-- Icons
+			local Ihld = CreateFrame("Frame", nil, self)
+			Ihld:SetAllPoints(self.Health)
+			Ihld:SetFrameLevel(6)
+
+			self:SetSize(cfg.widthF, cfg.heightF + cfg.NumbFS + cfg.PPyOffset)
 		end
-
-		-- plugins
-		SpellRange(self)
-
-		-- Icons
-		local Ihld = CreateFrame("Frame", nil, self)
-		Ihld:SetAllPoints(self.Health)
-		Ihld:SetFrameLevel(6)
-
-		self:SetSize(cfg.widthF, cfg.heightF + cfg.NumbFS + cfg.PPyOffset)
 	end,
 
 	pet = function(self, ...)
-		Shared(self, ...)
+		if cfg.PetFrame then
+			Shared(self, ...)
 
-		self.Health:SetHeight(cfg.heightS)
-		self.Health:SetWidth(cfg.widthS)
-		self.Power:SetWidth(cfg.widthS)
-		self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
-		self:Tag(self.Name, '[raidcolor][shortname]')
+			self.Health:SetHeight(cfg.heightS)
+			self.Health:SetWidth(cfg.widthS)
+			self.Power:SetWidth(cfg.widthS)
+			self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
+			self:Tag(self.Name, '[raidcolor][shortname]')
 
-		self.Power.colorPower = true
+			self.Power.colorPower = true
 
-		-- plugins
-		SpellRange(self)
+			-- plugins
+			SpellRange(self)
 
-		self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+		end
 	end,
 
 	targettarget = function(self, ...)
-		Shared(self, ...)
+		if cfg.TargetofTargetFrame then
+			Shared(self, ...)
 
-		self.Health:SetHeight(cfg.heightS)
-		self.Health:SetWidth(cfg.widthS)
-		self.Power:SetWidth(cfg.widthS)
-		self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
-		self:Tag(self.Name, '[raidcolor][shortname]')
+			self.Health:SetHeight(cfg.heightS)
+			self.Health:SetWidth(cfg.widthS)
+			self.Power:SetWidth(cfg.widthS)
+			self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
+			self:Tag(self.Name, '[raidcolor][shortname]')
 
-		-- plugins
-		SpellRange(self)
+			-- plugins
+			SpellRange(self)
 
-		self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+		end
 	end,
 
 	focustarget = function(self, ...)
-		Shared(self, ...)
+		if cfg.FocusTargetFrame then
+			Shared(self, ...)
 
-		self.Health:SetHeight(cfg.heightS)
-		self.Health:SetWidth(cfg.widthS)
-		self.Power:SetWidth(cfg.widthS)
-		self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
-		self:Tag(self.Name, '[raidcolor][shortname]')
+			self.Health:SetHeight(cfg.heightS)
+			self.Health:SetWidth(cfg.widthS)
+			self.Power:SetWidth(cfg.widthS)
+			self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
+			self:Tag(self.Name, '[raidcolor][shortname]')
 
-		-- plugins
-		SpellRange(self)
+			-- plugins
+			SpellRange(self)
 
-		self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+		end
 	end,
 
 	boss = function(self, ...)
-		Shared(self, ...)
+			Shared(self, ...)
 
-		self.Health:SetHeight(cfg.heightM)
-		self.Health:SetWidth(cfg.widthM)
-		self.Power:SetWidth(cfg.widthM)
-		self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS/2)
-		self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
+			self.Health:SetHeight(cfg.heightM)
+			self.Health:SetWidth(cfg.widthM)
+			self.Power:SetWidth(cfg.widthM)
+			self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS/2)
+			self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
 
-		local htext = self.Health.value
-    htext:SetPoint('LEFT', 0, -16)
-		htext.frequentUpdates = .1
-    self:Tag(htext, '[player:hp]')
-		self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -1)
+			local htext = self.Health.value
+	    htext:SetPoint('LEFT', 0, -16)
+			htext.frequentUpdates = .1
+	    self:Tag(htext, '[player:hp]')
+			self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -1)
 
-		local alttext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
-    alttext:SetPoint('RIGHT', 0, -16)
-		alttext.frequentUpdates = .1
-    self:Tag(alttext, '[altpower]')
+			local alttext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+	    alttext:SetPoint('RIGHT', 0, -16)
+			alttext.frequentUpdates = .1
+	    self:Tag(alttext, '[altpower]')
 
-		-- plugins
-		SpellRange(self)
+			-- plugins
+			SpellRange(self)
 
-		self:SetSize(cfg.widthM, cfg.heightM + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthM, cfg.heightM + cfg.NumbFS + cfg.PPyOffset)
 	end,
 
 	MainTank = function(self, ...)
