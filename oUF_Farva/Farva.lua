@@ -631,13 +631,6 @@ local createDebuffs = function(self)
 	Debuffs.PostUpdateIcon = PostUpdateIcon
 end
 
-local createQuestIcon = function(self)
-	local q = fs(self.Health, 'OVERLAY', cfg.NumbFont, 12, cfg.FontFNum, 1, 1, 1)
-	  q:SetPoint('LEFT', name, 'RIGHT', 1, 0)
-	  q:SetText('|cff8AFF30!|r')
-	  self.QuestIndicator = q
-end
-
 -- plugin support
 local SpellRange = function(self)
 	self.SpellRange = {
@@ -830,11 +823,6 @@ local UnitSpecific = {
 		local Ihld = CreateFrame("Frame", nil, self)
 		Ihld:SetAllPoints(self.Health)
 		Ihld:SetFrameLevel(6)
-
-		local q = fs(self.Health, 'OVERLAY', cfg.NameFont, 12, cfg.FontF, 1, 1, 1)
-    q:SetPoint('LEFT', name, 'RIGHT', 1, 25)
-    q:SetText('|cff8AFF30!|r')
-    self.QuestIndicator = q
 
 		LIc = Ihld:CreateTexture(nil, "OVERLAY")
 		LIc:SetSize(14, 14)
@@ -1088,9 +1076,9 @@ do
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
 			d.icon:SetAllPoints(d)
-			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
 			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
@@ -1170,9 +1158,9 @@ do
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
 			d.icon:SetAllPoints(d)
-			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.FontFNum, 0.8, 0.8, 0.8)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
 			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
@@ -1337,7 +1325,7 @@ oUF:Factory(function(self)
 	  arenaprep[i].Health:SetAllPoints()
 	  arenaprep[i].Health:SetStatusBarTexture(cfg.blanktexture)
 
-	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.FontFNum, 1, 1, 1)
+	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
 	  arenaprep[i].Spec:SetPoint('CENTER')
 		arenaprep[i].Spec:SetJustifyH'CENTER'
 
