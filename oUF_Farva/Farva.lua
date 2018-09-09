@@ -1323,7 +1323,7 @@ oUF:Factory(function(self)
 
 	  arenaprep[i].Health = CreateFrame('StatusBar', nil, arenaprep[i])
 	  arenaprep[i].Health:SetAllPoints()
-	  arenaprep[i].Health:SetStatusBarTexture(cfg.blanktexture)
+		arenaprep[i].Health:SetStatusBarTexture(cfg.Itex)
 
 	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
 	  arenaprep[i].Spec:SetPoint('CENTER')
@@ -1357,7 +1357,7 @@ oUF:Factory(function(self)
 				    local _, spec, class = nil, 'UNKNOWN', 'UNKNOWN'
 
 				    if s and s > 0 then
-					    _, spec, _, _, _, _, class = GetSpecializationInfoByID(s)
+					    _, spec, _, _, _, class = GetSpecializationInfoByID(s)
 				    end
 
 				    if class and spec then
