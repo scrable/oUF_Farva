@@ -22,7 +22,8 @@ Also downloadable through the Twitch client or on [WoWInterface](http://www.wowi
 * update spellids for aurawatch
 * add more screenshots
 * ~~fix aurawatch icon remaining duration~~
-* update spell info for auratracker
+* ~~update spell info for auratracker~~
+* might add class power, not sure
 
 ### Credits: Haste, Skaarj, Dawn, p3lim
 
