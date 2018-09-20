@@ -553,10 +553,12 @@ local _, playerClass = UnitClass('player')
 	end
 
 	-- raid icons for all frames
-	local RaidTarget = StringParent:CreateTexture(nil, 'OVERLAY')
-	RaidTarget:SetPoint('TOP', self, 0, 8)
-	RaidTarget:SetSize(16, 16)
-	self.RaidTargetIndicator = RaidTarget
+	if cfg.ShowRaidIcons then
+		local RaidTarget = StringParent:CreateTexture(nil, 'OVERLAY')
+		RaidTarget:SetPoint('TOP', self, 0, 8)
+		RaidTarget:SetSize(16, 16)
+		self.RaidTargetIndicator = RaidTarget
+	end
 end
 
 ----------------------
@@ -1099,10 +1101,12 @@ do
 		-- plugins
 		self.Range = range
 
-		LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
-		LfDR:SetSize(12, 12)
-		LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
-		self.GroupRoleIndicator = LfDR
+		if cfg.ShowRoleIndicators then
+			LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
+			LfDR:SetSize(12, 12)
+			LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
+			self.GroupRoleIndicator = LfDR
+		end
 
 		LIc = self.Health:CreateTexture(nil, "OVERLAY")
 		LIc:SetSize(12, 12)

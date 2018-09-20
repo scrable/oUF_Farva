@@ -42,6 +42,11 @@ cfg.texture = mediaFolder.."texture.tga"
 ----------------------
 -- general settings --
 ----------------------
+
+	-- indicator icons
+	cfg.ShowRaidIcons = true
+	cfg.ShowRoleIndicators = true		-- show/hide the role each player is assigned on the raid frames
+
 	cfg.FadeOutAlpha = 0.3 					-- alpha for out of range units
 	cfg.SmoothHealthUpdate = true		-- makes the updates for health smooth
 	cfg.SmoothPowerUpdate = true		-- makes the updates for the power smooth
