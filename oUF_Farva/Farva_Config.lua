@@ -144,8 +144,8 @@ cfg.texture = mediaFolder.."texture.tga"
 --***********************
 --aurawatch
 cfg.aw = {
-        enable = true,						--enable/disable oUF_Aurawatch
-        onlyShowPresent = true,
+        enable = true,						-- enable/disable oUF_Aurawatch
+        onlyShowPresent = true,		-- true-> only show icons when the buffs are active, false => always show all icons
 				anyUnit = false,						--show only player auras or everyones auras
 }
 	cfg.AWCooldownCount = true		--enable/disable aurawatch icons spiral. false displays a solid color modified below in the spellids
