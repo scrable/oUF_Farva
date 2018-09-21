@@ -246,26 +246,26 @@ end
 
 -- update icon
 local PostUpdateIcon
-do
-	local playerUnits = {
-		player = true,
-		pet = true,
-		vehicle = true,
-	}
+	do
+		local playerUnits = {
+			player = true,
+			pet = true,
+			vehicle = true,
+		}
 
-	PostUpdateIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
-	local _, _, _, dtype, duration, expirationTime, unitCaster, _, _, _, _, _, _, _, _ = UnitAura(unit, index, icon.filter)
-	local texture = icon.icon
+		PostUpdateIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
+		local _, _, _, dtype, duration, expirationTime, unitCaster, _, _, _, _, _, _, _, _ = UnitAura(unit, index, icon.filter)
+		local texture = icon.icon
 
-	if duration and duration > 0 then
-		icon.time:Show()
-		icon.timeLeft = expirationTime
-		icon:SetScript("OnUpdate", CreateAuraTimer)
-	else
-		icon.time:Hide()
-		icon.timeLeft = math.huge
-		icon:SetScript("OnUpdate", nil)
-	end
+		if duration and duration > 0 then
+			icon.time:Show()
+			icon.timeLeft = expirationTime
+			icon:SetScript("OnUpdate", CreateAuraTimer)
+		else
+			icon.time:Hide()
+			icon.timeLeft = math.huge
+			icon:SetScript("OnUpdate", nil)
+		end
 	icon.first = true
 	end
 end
@@ -547,7 +547,7 @@ local _, playerClass = UnitClass('player')
 	self.StringParent = StringParent
 
 	if(unit ~= 'player') then
-		local pIcon = self.Health:CreateTexture(nil, 'OVERLAY')
+		local pIcon = StringParent:CreateTexture(nil, 'OVERLAY')
 		pIcon:SetSize(18, 18)
 		self.PhaseIndicator = pIcon
 	end
