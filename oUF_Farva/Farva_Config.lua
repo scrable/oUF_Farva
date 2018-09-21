@@ -181,7 +181,7 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 							{25771,{0.7, 0.3, 0.7}, 'BOTTOM'},
 	            },
 	   PRIEST = {
-	            {41635, {0.2, 0.7, 0.2}},			    -- Prayer of Mending
+	            {41635, {0.2, 0.7, 0.2}, 'TOPLEFT'},			    -- Prayer of Mending
 	            {33206, {0.89, 0.1, 0.1}},			    -- Pain Suppress
 	            {194384, {0.86, 0.52, 0}, 'BOTTOMRIGHT'},			    -- Atonement
 	            {6788, {1, 0, 0}, 'BOTTOMLEFT'},	    -- Weakened Soul
