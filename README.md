@@ -18,12 +18,13 @@ Also downloadable through the Twitch client or on [WoWInterface](http://www.wowi
 * ~~re-add experience and reputation bar~~
 * ~~embed spellrange~~
 * ~~remove classtags~~
-* add cfg for raid icons, role icon, leader icon on party/raid frame
+* ~~add cfg for raid icons, role icon, leader icon on party/raid frame~~
 * update spellids for aurawatch
 * add more screenshots
 * ~~fix aurawatch icon remaining duration~~
 * ~~update spell info for auratracker~~
 * might add class power, not sure
+* nameplates?
 
 ### Credits: Haste, Skaarj, Dawn, p3lim
 
