@@ -749,6 +749,7 @@ ORD.MatchBySpellName = false
 	279663, -- spreading epidemic
 	--fetid devourer
 	262314, -- putrid paroxysm
+	262313, -- miasma
 	--zek'voz
 	265264, -- void lash
 	265662, -- corruptors pact
@@ -762,6 +763,7 @@ ORD.MatchBySpellName = false
 	265178, -- evolving affliction
 	265206, -- immunosuppression
 	266948, -- plague bomb
+	265212, -- gestate
 	--zul reborn
 	276672, -- unleashed shadow
 	273434, -- pit of despair
