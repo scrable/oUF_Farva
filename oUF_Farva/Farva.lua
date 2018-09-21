@@ -232,14 +232,14 @@ local PostCreateIcon = function(Auras, button)
 	button.time:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
 	button.time:SetPoint("TOPLEFT", button, 3, -2)
 	button.time:SetJustifyH('CENTER')
-	button.time:SetVertexColor(unpack(cfg.sndcolor))
+	button.time:SetVertexColor(unpack(cfg.fontcolor))
 	button:SetSize(cfg.BuffSize, cfg.BuffSize)
 
 	local count = button.count
 	count:ClearAllPoints()
 	count:SetPoint("BOTTOMRIGHT", button, 0, 2)
 	count:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
-	count:SetVertexColor(unpack(cfg.sndcolor))
+	count:SetVertexColor(unpack(cfg.fontcolor))
 
 	button.icon:SetTexCoord(.08, .92, .08, .92)
 end
@@ -553,10 +553,12 @@ local _, playerClass = UnitClass('player')
 	end
 
 	-- raid icons for all frames
-	local RaidTarget = StringParent:CreateTexture(nil, 'OVERLAY')
-	RaidTarget:SetPoint('TOP', self, 0, 8)
-	RaidTarget:SetSize(16, 16)
-	self.RaidTargetIndicator = RaidTarget
+	if cfg.ShowRaidIcons then
+		local RaidTarget = StringParent:CreateTexture(nil, 'OVERLAY')
+		RaidTarget:SetPoint('TOP', self, 0, 8)
+		RaidTarget:SetSize(16, 16)
+		self.RaidTargetIndicator = RaidTarget
+	end
 end
 
 ----------------------
@@ -575,17 +577,17 @@ local createCastbar = function(self, unit)
 	cb.Text = cb:CreateFontString(nil, 'ARTWORK')
 	cb.Text:SetJustifyH("LEFT")
 	cb.Text:SetFont(cfg.NameFont, cfg.CastFS, cfg.FontF)
-	cb.Text:SetTextColor(unpack(cfg.sndcolor))
+	cb.Text:SetTextColor(unpack(cfg.fontcolor))
 
 	cb.Time = cb:CreateFontString(nil, 'ARTWORK')
 	cb.Time:SetFont(cfg.NumbFont, cfg.CastFS, cfg.fontFNum)
 	cb.Time:SetJustifyH('RIGHT')
-	cb.Time:SetTextColor(unpack(cfg.sndcolor))
+	cb.Time:SetTextColor(unpack(cfg.fontcolor))
 
 	cb.Time2 = cb:CreateFontString(nil, 'ARTWORK')
 	cb.Time2:SetFont(cfg.NumbFont, cfg.CastFS, cfg.fontFNum)
 	cb.Time2:SetJustifyH('RIGHT')
-	cb.Time2:SetTextColor(unpack(cfg.sndcolor))
+	cb.Time2:SetTextColor(unpack(cfg.fontcolor))
 
 	cb.CustomTimeText = CustomTimeText
 
@@ -1099,10 +1101,12 @@ do
 		-- plugins
 		self.Range = range
 
-		LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
-		LfDR:SetSize(12, 12)
-		LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
-		self.GroupRoleIndicator = LfDR
+		if cfg.ShowRoleIndicators then
+			LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
+			LfDR:SetSize(12, 12)
+			LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
+			self.GroupRoleIndicator = LfDR
+		end
 
 		LIc = self.Health:CreateTexture(nil, "OVERLAY")
 		LIc:SetSize(12, 12)

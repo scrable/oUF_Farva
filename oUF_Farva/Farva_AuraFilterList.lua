@@ -11,9 +11,7 @@ ORD.FilterDispellableDebuff = true
 ORD.MatchBySpellName = false
 
 --[[
-		aura filter - buffs/debuffs listed here will be visible on party, arena and raid, everything else is hidden!
-		feel free to add some/more and share the love with a pm/comment on wowinterface.com
-		... wall of text inc ...
+		aura filter - debuffs listed here will be visible on raid frames
 --]]
 
 	local RaidDebuffs = {
