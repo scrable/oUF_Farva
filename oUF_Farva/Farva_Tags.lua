@@ -92,6 +92,15 @@ oUF.Tags.Methods['player:hp']  = function(u)
 end
 oUF.Tags.Events['player:hp'] = 'UNIT_HEALTH UNIT_POWER_UPDATE UNIT_CONNECTION'
 
+oUF.Tags.Methods['tankdc'] = function(unit)
+	if unit then
+		if not UnitIsConnected(unit) then
+			 return "|cffffffff<D/C>|r "
+		end
+	end
+end
+oUF.Tags.Events['tankdc'] = 'UNIT_CONNECTION'
+
 
 oUF.Tags.Methods['color'] = function(u, r)
     local reaction = UnitReaction(u, 'player')
