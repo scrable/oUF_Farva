@@ -984,7 +984,7 @@ end,
 	    self:Tag(htext, '[player:hp]')
 			self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -1)
 
-			local alttext = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+			local alttext = fs(self.Health, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
 	    alttext:SetPoint('RIGHT', 0, -16)
 			alttext.frequentUpdates = .1
 	    self:Tag(alttext, '[altpower]')
