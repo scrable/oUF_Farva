@@ -17,7 +17,7 @@ cfg.texture = mediaFolder.."texture.tga"
 	cfg.hpTransMcolor = {40/255, 40/255, 40/255}				-- health bar color - Transparency Mode, only
 	cfg.hpTransMalpha = 0.4															-- healthbar alpha - Transparency Mode, only
 
-	cfg.RaidDebuffColor = {255/255, 255/255, 255/255}
+	cfg.RaidDebuffColor = {255/255, 255/255, 255/255}		-- color for raid debuff icon backgound, only takes effect if cfg.ColorRaidDebuffPerType is set to false
 
 -----------
 -- media --
