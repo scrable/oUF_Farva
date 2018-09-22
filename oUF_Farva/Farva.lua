@@ -975,7 +975,7 @@ end,
 			self.Health:SetHeight(cfg.heightM)
 			self.Health:SetWidth(cfg.widthM)
 			self.Power:SetWidth(cfg.widthM)
-			self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS/2)
+			self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS+3)
 			self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
 
 			local htext = self.Health.value
@@ -1000,10 +1000,11 @@ end,
 
 		self.Health:SetHeight(cfg.heightM)
 		self.Health:SetWidth(cfg.widthM)
+		self.Power:SetWidth(cfg.widthM)
 		self.Power:Hide()
-		self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS/2)
-		self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
-		self.Health.value:SetPoint("TOPRIGHT", self.Health, 0, cfg.NameFS/2)
+		self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS+3)
+		self:Tag(self.Name, '[tankdc][afkdnd][raidcolor][abbrevname]')
+		self.Health.value:SetPoint("TOPRIGHT", self.Health, 0, cfg.NameFS)
 
 		-- plugins
 		SpellRange(self)
@@ -1478,7 +1479,7 @@ oUF:Factory(function(self)
 				if i==1 then
 					unit:SetPoint("LEFT", 25, -162)
 				else
-					unit:SetPoint("TOPLEFT", boss[i-1], "BOTTOMLEFT", 0, -10)
+					unit:SetPoint("TOPLEFT", boss[i-1], "BOTTOMLEFT", 0, -24)
 				end
 				boss[i] = unit
 			end
@@ -1489,13 +1490,12 @@ oUF:Factory(function(self)
 		local Main_Tank = self:SpawnHeader("oUF_MainTank", nil, 'raid, party, solo',
 			'showRaid', true,
 			"groupFilter", "MAINTANK",
-			'yOffset', -10,
-			"template", "oUF_FarvaMTartemplate",		-- MT Target
+			'yOffset', -13-cfg.NameFS,
 			'oUF-initialConfigFunction', ([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
 			]]):format(cfg.widthM, cfg.heightM))
-		Main_Tank:SetPoint("TOPLEFT", 22, -251)
+		Main_Tank:SetPoint("TOPLEFT", 24, -250)
 	end
 end)
 
