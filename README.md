@@ -29,4 +29,4 @@ Also downloadable through the Twitch client or on [WoWInterface](http://www.wowi
 ### Credits: Haste, Skaarj, Dawn, p3lim
 
 ![](https://i.imgur.com/1DhaRvP.jpg)
-![](blob:https://imgur.com/47f5bdc9-ba04-48de-8945-7e8665c1286d)
+![](https://imgur.com/47f5bdc9-ba04-48de-8945-7e8665c1286d)
