@@ -237,7 +237,7 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	cfg.widthR = 80 		-- raid
 
 	cfg.heightPP = 2		-- power height
-	cfg.PPyOffset = 50		-- power y-offset
+	cfg.PPyOffset = 4		-- power y-offset
 
 
 ns.cfg = cfg	-- don't touch this ...
