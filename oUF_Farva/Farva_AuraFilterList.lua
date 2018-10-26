@@ -704,6 +704,7 @@ ORD.MatchBySpellName = false
 	276297, -- void seed
 	--freehold
 	257908, -- oiled blade
+	257775, -- plague step
 	--underrot
 	269301, -- putrid blood
 	259714, -- decaying spores
@@ -766,7 +767,6 @@ ORD.MatchBySpellName = false
 	276672, -- unleashed shadow
 	273434, -- pit of despair
 	276299, -- engorged burst
-	274195, -- corrupted blood
 	274358, -- rupturing blooc
 	274271, -- deathwish
 	--mythrax the unraveler

@@ -33,7 +33,7 @@ function round(num, idp)
   return math.floor(num + 0.5)
 end
 
-function CoolNumber(num)
+function FormatNumber(num)
 	if(num >= 1e6) then
 		return round(num/1e6,1).."m"
 	elseif(num >= 1e3) then
@@ -133,9 +133,9 @@ Power.value:SetText()
 		Power.value:SetText()
 	elseif(unit == "player") then
 			Power.value:Show()
-			Power.value:SetText(CoolNumber(min))
+			Power.value:SetText(FormatNumber(min))
 	else
-		Power.value:SetText(CoolNumber(min))
+		Power.value:SetText(FormatNumber(min))
 	end
 
 	-- color power text by power type
@@ -196,20 +196,20 @@ local CreateAuraTimer = function(self, elapsed)
 			self.timeLeft = self.timeLeft - GetTime()
 			self.first = false
 		end
-		if self.timeLeft > 0 then
-			local time = FormatTime(self.timeLeft)
-			self.time:SetText(time)
-			if self.timeLeft < 5 then
-				self.time:SetTextColor(1, 1, 1)
-			else
-				self.time:SetTextColor(1, 1, 1)
-			end
+	if self.timeLeft > 0 then
+		local time = FormatTime(self.timeLeft)
+		self.time:SetText(time)
+		if self.timeLeft < 5 then
+			self.time:SetTextColor(1, 1, 1)
 		else
-			self.time:Hide()
-			self:SetScript("OnUpdate", nil)
-			end
-			self.elapsed = 0
+			self.time:SetTextColor(1, 1, 1)
 		end
+	else
+		self.time:Hide()
+		self:SetScript("OnUpdate", nil)
+		end
+		self.elapsed = 0
+	end
 end
 
 -- icon style
