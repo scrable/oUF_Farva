@@ -57,7 +57,7 @@ cfg.texture = mediaFolder.."texture.tga"
 
 	cfg.useSpellIcon = false				-- show/hide castbar spellicon
 
-	cfg.ShiftClickFocus = true			-- enable/disable using shift + click for creating a focus
+	cfg.ShiftClickFocus = false			-- enable/disable using shift + click for creating a focus
 
 	cfg.BuffSize = 24								-- buff size for all frames
 	cfg.DebuffSize = 21							-- debuff size for target and focus, player debuff size is set below in player section
@@ -237,7 +237,7 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	cfg.widthR = 80 		-- raid
 
 	cfg.heightPP = 2		-- power height
-	cfg.PPyOffset = 4		-- power y-offset
+	cfg.PPyOffset = 50		-- power y-offset
 
 
 ns.cfg = cfg	-- don't touch this ...
