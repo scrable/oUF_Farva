@@ -9,7 +9,7 @@ oUF version 8.0.2+ will work
 ### Download and install
 Visit [releases](https://github.com/scrable/oUF_Farva/releases) and download the latest version
 
-Also downloadable through the Twitch client or on [WoWInterface](http://www.wowinterface.com/downloads/info24765-oUF_Farva.html)
+Also downloadable through the Twitch client, [CurseForge](https://wow.curseforge.com/projects/ouf_farva), or [WoWInterface](http://www.wowinterface.com/downloads/info24765-oUF_Farva.html)
 
 ### Todo/Plans:
 
