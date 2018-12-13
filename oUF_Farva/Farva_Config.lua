@@ -14,8 +14,8 @@ cfg.texture = mediaFolder.."texture.tga"
 	cfg.CastbarColor = {85/255, 150/255, 85/255, .8}		--enemy interruptable cast color
 
 	cfg.TransparencyMode = true													-- enable/disable transparency Mode
-	cfg.hpTransMcolor = {40/255, 40/255, 40/255}				-- health bar color - Transparency Mode, only
-	cfg.hpTransMalpha = 0.4															-- healthbar alpha - Transparency Mode, only
+	cfg.TransparencyHPBarColor = {40/255, 40/255, 40/255}				-- health bar color - Transparency Mode, only
+	cfg.TransparencyHPBarAlpha = 0.4															-- healthbar alpha - Transparency Mode, only
 
 	cfg.RaidDebuffColor = {255/255, 255/255, 255/255}		-- color for raid debuff icon backgound, only takes effect if cfg.ColorRaidDebuffPerType is set to false
 
@@ -27,19 +27,19 @@ cfg.texture = mediaFolder.."texture.tga"
 	cfg.HPtex = mediaFolder.."dM3"							-- health bar texture
 	cfg.PPtex = mediaFolder.."dM2"							-- power bar texture
 	cfg.CBtex = mediaFolder.."dM2"							-- castbar texture
-	cfg.Itex = blankTex													-- BG texture
+	cfg.BGtex = blankTex													-- BG texture
 
 -- fonts
 	cfg.NameFont = mediaFolder.."SKURRI.ttf"		-- font used for text (names)
 	cfg.NumbFont = mediaFolder.."SKURRI.ttf"		-- font used for numbers
-	cfg.NameFS = 7															-- name font size
-	cfg.PowerFS = 7  														-- font size for power, rage, mana etc
-	cfg.NumbFS = 7															-- font size used for auras duration/stack
-	cfg.hpNumbFS = 7														-- health value font size
-	cfg.CastFS = 7															-- castbar font size
-	cfg.RaidFS = 7															-- font size for numbers (aura, class tags) on raid frames
-	cfg.FontF = "OUTLINEMONOCHROME"						-- "THINOUTLINE", "OUTLINE MONOCHROME", "OUTLINE" or nil (no outline)
-	cfg.fontFNum = "OUTLINEMONOCHROME"
+	cfg.NameFontSize = 7															-- name font size
+	cfg.PowerFontSize = 7  														-- font size for power, rage, mana etc
+	cfg.NumbersFontSize = 7															-- font size used for auras duration/stack
+	cfg.hpNumbersFontSize = 7														-- health value font size
+	cfg.CastbarFontSize = 7															-- castbar font size
+	cfg.RaidFontSize = 7															-- font size for numbers (aura, class tags) on raid frames
+	cfg.FontFlags = "OUTLINEMONOCHROME"						-- "THINOUTLINE", "OUTLINE MONOCHROME", "OUTLINE" or nil (no outline)
+	cfg.NumberFontFlags = "OUTLINEMONOCHROME"
 
 ----------------------
 -- general settings --

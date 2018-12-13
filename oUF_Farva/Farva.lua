@@ -229,7 +229,7 @@ local PostCreateIcon = function(Auras, button)
 	button.overlay.Hide = function(self) self:SetVertexColor(unpack(cfg.BorderColor)) end
 
 	button.time = button:CreateFontString(nil, 'OVERLAY')
-	button.time:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
+	button.time:SetFont(cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags)
 	button.time:SetPoint("TOPLEFT", button, 3, -2)
 	button.time:SetJustifyH('CENTER')
 	button.time:SetVertexColor(unpack(cfg.fontcolor))
@@ -238,7 +238,7 @@ local PostCreateIcon = function(Auras, button)
 	local count = button.count
 	count:ClearAllPoints()
 	count:SetPoint("BOTTOMRIGHT", button, 0, 2)
-	count:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
+	count:SetFont(cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags)
 	count:SetVertexColor(unpack(cfg.fontcolor))
 
 	button.icon:SetTexCoord(.08, .92, .08, .92)
@@ -272,7 +272,7 @@ end
 
 -- update aurawatch icon
 local AWIcon = function(AWatch, icon, spellID, name, self)
-	local count = fs(icon, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
+	local count = fs(icon, 'OVERLAY', cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
 	count:SetPoint('BOTTOMRIGHT', icon, 5, -5)
 	icon.count = count
 
@@ -390,7 +390,7 @@ function MirrorBars()
 			_G[bar..'Background']:SetAllPoints(_G[bar])
 			_G[bar..'Background']:SetVertexColor(0, 0, 0, 0.5)
 
-			_G[bar..'Text']:SetFont(cfg.NameFont, cfg.NameFS, cfg.FontF)
+			_G[bar..'Text']:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
 			_G[bar..'Text']:ClearAllPoints()
 			_G[bar..'Text']:SetPoint('TOP', MirrorTimer1StatusBar, 'BOTTOM', 0, -2)
 
@@ -439,8 +439,8 @@ local _, playerClass = UnitClass('player')
 	self.Health = hp
 
 	if cfg.TransparencyMode then
-		local tmR, tmG, tmB = unpack(cfg.hpTransMcolor)
-		hp:SetStatusBarColor(tmR, tmG, tmB, cfg.hpTransMalpha)
+		local tmR, tmG, tmB = unpack(cfg.TransparencyHPBarColor)
+		hp:SetStatusBarColor(tmR, tmG, tmB, cfg.TransparencyHPBarAlpha)
 		self.Health.PostUpdate = PostUpdateHealth
 	else
 		hp.colorTapping = true
@@ -461,7 +461,7 @@ local _, playerClass = UnitClass('player')
 
 	-- hp bg
 	hpbg = hp:CreateTexture(nil, "BACKGROUND")
-	hpbg:SetTexture(cfg.Itex)
+	hpbg:SetTexture(cfg.BGtex)
 	hp.bg = hpbg
 
 	if cfg.TransparencyMode then
@@ -503,7 +503,7 @@ local _, playerClass = UnitClass('player')
 	-- pp bg
 	local ppBG = pp:CreateTexture(nil, 'BORDER')
 	ppBG:SetAllPoints()
-	ppBG:SetTexture(cfg.Itex)
+	ppBG:SetTexture(cfg.BGtex)
 	ppBG.multiplier = 0.4
 	ppBG:SetAlpha(0.5)
 	pp.bg = ppBG
@@ -519,17 +519,17 @@ local _, playerClass = UnitClass('player')
 
 	-- font strings
 	self.Health.value = hp:CreateFontString(nil, "OVERLAY")
-	self.Health.value:SetFont(cfg.NumbFont, cfg.hpNumbFS, cfg.fontFNum)
+	self.Health.value:SetFont(cfg.NumbFont, cfg.hpNumbersFontSize, cfg.NumberFontFlags)
 
 	self.Power.value = hp:CreateFontString(nil, "OVERLAY")
-	self.Power.value:SetFont(cfg.NumbFont, cfg.PowerFS, cfg.fontFNum)
+	self.Power.value:SetFont(cfg.NumbFont, cfg.PowerFontSize, cfg.NumberFontFlags)
 
 	self.Name = hp:CreateFontString(nil, "OVERLAY")
-	self.Name:SetFont(cfg.NameFont, cfg.NameFS, cfg.FontF)
+	self.Name:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
 	self:Tag(self.Name, '[raidcolor][abbrevname]')
 
 	self.Status = hp:CreateFontString(nil, "OVERLAY")
-	self.Status:SetFont(cfg.NameFont, cfg.NameFS, cfg.FontF)
+	self.Status:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
 	self:Tag(self.Status, '[afkdnd][difficulty][smartlevel] ')
 
 	-- mouseover highlight
@@ -576,16 +576,16 @@ local createCastbar = function(self, unit)
 
 	cb.Text = cb:CreateFontString(nil, 'ARTWORK')
 	cb.Text:SetJustifyH("LEFT")
-	cb.Text:SetFont(cfg.NameFont, cfg.CastFS, cfg.FontF)
+	cb.Text:SetFont(cfg.NameFont, cfg.CastbarFontSize, cfg.FontFlags)
 	cb.Text:SetTextColor(unpack(cfg.fontcolor))
 
 	cb.Time = cb:CreateFontString(nil, 'ARTWORK')
-	cb.Time:SetFont(cfg.NumbFont, cfg.CastFS, cfg.fontFNum)
+	cb.Time:SetFont(cfg.NumbFont, cfg.CastbarFontSize, cfg.NumberFontFlags)
 	cb.Time:SetJustifyH('RIGHT')
 	cb.Time:SetTextColor(unpack(cfg.fontcolor))
 
 	cb.Time2 = cb:CreateFontString(nil, 'ARTWORK')
-	cb.Time2:SetFont(cfg.NumbFont, cfg.CastFS, cfg.fontFNum)
+	cb.Time2:SetFont(cfg.NumbFont, cfg.CastbarFontSize, cfg.NumberFontFlags)
 	cb.Time2:SetJustifyH('RIGHT')
 	cb.Time2:SetTextColor(unpack(cfg.fontcolor))
 
@@ -721,7 +721,7 @@ local UnitSpecific = {
 			expbar.bg:SetVertexColor(.5, .5, .5, 0.4)
 			local xptext = expbar:CreateFontString(nil, 'OVERLAY')
 			xptext:SetAllPoints(expbar)
-			xptext:SetFont(cfg.NameFont, cfg.NameFS, cfg.fontF)
+			xptext:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
 			self:Tag(xptext, '[experience:cur] / [experience:max]   [experience:per]%')
 
 			--only show on mouseover
@@ -756,7 +756,7 @@ local UnitSpecific = {
 			self.Debuffs.spacing = 3
 			self.Debuffs.num = 14
 			self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
-			self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbersFontSize + cfg.PPyOffset)
 		end
 	end
 end,
@@ -840,7 +840,7 @@ end,
 			TTFrame:SetPoint("BOTTOMRIGHT", self.Power, "BOTTOMRIGHT", 4, -4)
 			TTFrame:SetFrameLevel(0)
 
-			self:SetSize(cfg.widthT, cfg.heightT + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthT, cfg.heightT + cfg.NumbersFontSize + cfg.PPyOffset)
 		end
 	end,
 
@@ -912,7 +912,7 @@ end,
 			Ihld:SetAllPoints(self.Health)
 			Ihld:SetFrameLevel(6)
 
-			self:SetSize(cfg.widthF, cfg.heightF + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthF, cfg.heightF + cfg.NumbersFontSize + cfg.PPyOffset)
 		end
 	end,
 
@@ -931,7 +931,7 @@ end,
 			-- plugins
 			SpellRange(self)
 
-			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbersFontSize + cfg.PPyOffset)
 		end
 	end,
 
@@ -948,7 +948,7 @@ end,
 			-- plugins
 			SpellRange(self)
 
-			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbersFontSize + cfg.PPyOffset)
 		end
 	end,
 
@@ -965,7 +965,7 @@ end,
 			-- plugins
 			SpellRange(self)
 
-			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthS, cfg.heightS + cfg.NumbersFontSize + cfg.PPyOffset)
 		end
 	end,
 
@@ -975,7 +975,7 @@ end,
 			self.Health:SetHeight(cfg.heightM)
 			self.Health:SetWidth(cfg.widthM)
 			self.Power:SetWidth(cfg.widthM)
-			self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS+3)
+			self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFontSize+3)
 			self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
 
 			local htext = self.Health.value
@@ -984,7 +984,7 @@ end,
 	    self:Tag(htext, '[player:hp]')
 			self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -1)
 
-			local alttext = fs(self.Health, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
+			local alttext = fs(self.Health, 'OVERLAY', cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
 	    alttext:SetPoint('RIGHT', 0, -16)
 			alttext.frequentUpdates = .1
 	    self:Tag(alttext, '[altpower]')
@@ -992,7 +992,7 @@ end,
 			-- plugins
 			SpellRange(self)
 
-			self:SetSize(cfg.widthM, cfg.heightM + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthM, cfg.heightM + cfg.NumbersFontSize + cfg.PPyOffset)
 	end,
 
 	MainTank = function(self, ...)
@@ -1002,9 +1002,9 @@ end,
 		self.Health:SetWidth(cfg.widthM)
 		self.Power:SetWidth(cfg.widthM)
 		self.Power:Hide()
-		self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFS+3)
+		self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFontSize+3)
 		self:Tag(self.Name, '[tankdc][afkdnd][raidcolor][abbrevname]')
-		self.Health.value:SetPoint("TOPRIGHT", self.Health, 0, cfg.NameFS)
+		self.Health.value:SetPoint("TOPRIGHT", self.Health, 0, cfg.NameFontSize)
 
 		-- plugins
 		SpellRange(self)
@@ -1044,7 +1044,7 @@ end,
 		-- plugins
 		SpellRange(self)
 
-		self:SetSize(cfg.widthPA, cfg.heightPA + cfg.NumbFS + cfg.PPyOffset)
+		self:SetSize(cfg.widthPA, cfg.heightPA + cfg.NumbersFontSize + cfg.PPyOffset)
 	end,
 
 	arenatargets = function(self, ...)
@@ -1059,7 +1059,7 @@ end,
 		self.Name:SetPoint("CENTER", self.Health, 0, 0)
 		self:Tag(self.Name, '[raidcolor][shortname]')
 
-		self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbFS + cfg.PPyOffset)
+		self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbersFontSize + cfg.PPyOffset)
 	end,
 }
 
@@ -1091,9 +1091,9 @@ do
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
 			d.icon:SetAllPoints(d)
-			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
 			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
@@ -1137,7 +1137,7 @@ do
 			self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -2)
 			self:Tag(self.Name, '[raidcolor][shortname]')
 
-			self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbFS + cfg.PPyOffset)
+			self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbersFontSize + cfg.PPyOffset)
 		end
 	end
 
@@ -1153,7 +1153,7 @@ do
 		self.Power.PostUpdate = PostUpdatePowerRaid
 		self.Power.classColor = true
 
-		local name = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFS, cfg.FontF, 1, 1, 1)
+		local name = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFontSize, cfg.FontFlags, 1, 1, 1)
 		name:SetPoint('LEFT', 2, 6)
     name:SetJustifyH'LEFT'
 		self:Tag(name, '[color][veryshort:name]')
@@ -1175,9 +1175,9 @@ do
 			d:SetBackdrop(backdrop3)
 			d.icon = d:CreateTexture(nil, 'OVERLAY')
 			d.icon:SetAllPoints(d)
-			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
+			d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
 			d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFS, cfg.fontFNum, 0.8, 0.8, 0.8)
+			d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
 			d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
 			d.ShowBossDebuff = true
 	   self.RaidDebuffs = d
@@ -1281,7 +1281,7 @@ oUF:Factory(function(self)
 			'oUF-initialConfigFunction', ([[
 			self:SetWidth(%d)
 			self:SetHeight(%d)
-			]]):format(cfg.widthR, cfg.heightR + cfg.NumbFS))
+			]]):format(cfg.widthR, cfg.heightR + cfg.NumbersFontSize))
 
 			--priest spec 1,2
 			--paladin spec 1
@@ -1337,9 +1337,9 @@ oUF:Factory(function(self)
 
 	  arenaprep[i].Health = CreateFrame('StatusBar', nil, arenaprep[i])
 	  arenaprep[i].Health:SetAllPoints()
-		arenaprep[i].Health:SetStatusBarTexture(cfg.Itex)
+		arenaprep[i].Health:SetStatusBarTexture(cfg.BGtex)
 
-	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, cfg.NumbFS, cfg.fontFNum, 1, 1, 1)
+	  arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
 	  arenaprep[i].Spec:SetPoint('CENTER')
 		arenaprep[i].Spec:SetJustifyH'CENTER'
 
@@ -1423,7 +1423,7 @@ oUF:Factory(function(self)
 			'oUF-initialConfigFunction', ([[
 			self:SetWidth(%d)
 			self:SetHeight(%d)
-			]]):format(cfg.widthR, cfg.heightR + cfg.NumbFS))
+			]]):format(cfg.widthR, cfg.heightR + cfg.NumbersFontSize))
 
 			--priest spec 1,2
 			--paladin spec 1
@@ -1490,7 +1490,7 @@ oUF:Factory(function(self)
 		local Main_Tank = self:SpawnHeader("oUF_MainTank", nil, 'raid, party, solo',
 			'showRaid', true,
 			"groupFilter", "MAINTANK",
-			'yOffset', -13-cfg.NameFS,
+			'yOffset', -13-cfg.NameFontSize,
 			'oUF-initialConfigFunction', ([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
