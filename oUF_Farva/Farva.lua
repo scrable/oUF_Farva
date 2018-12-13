@@ -226,7 +226,7 @@ local PostCreateIcon = function(Auras, button)
   button.overlay:SetPoint("BOTTOMRIGHT", button.icon, "BOTTOMRIGHT", 2, -2)
 	button.overlay:SetTexCoord(0, 1, 0, 1)
 
-	button.overlay.Hide = function(self) self:SetVertexColor(unpack(cfg.brdcolor)) end
+	button.overlay.Hide = function(self) self:SetVertexColor(unpack(cfg.BorderColor)) end
 
 	button.time = button:CreateFontString(nil, 'OVERLAY')
 	button.time:SetFont(cfg.NumbFont, cfg.NumbFS, cfg.fontFNum)
@@ -347,7 +347,7 @@ local PostCastStart = function(Castbar, unit, spell, spellrank)
 		local cbbR, cbbG, cbbB, cbbA= unpack(cfg.CastbarColor)
 		Castbar:SetStatusBarColor(cbbR, cbbG, cbbB, cbbA)
 		if cfg.useSpellIcon then
-			Castbar.IconGlow:SetBackdropColor(unpack(cfg.brdcolor))
+			Castbar.IconGlow:SetBackdropColor(unpack(cfg.BorderColor))
 		end
 	end
 end
@@ -376,7 +376,7 @@ function MirrorBars()
 		bg:Hide()
 
 			_G[bar]:SetBackdrop(backdrop3)
-			_G[bar]:SetBackdropColor(unpack(cfg.brdcolor))
+			_G[bar]:SetBackdropColor(unpack(cfg.BorderColor))
 
 			_G[bar..'Border']:Hide()
 
@@ -454,7 +454,7 @@ local _, playerClass = UnitClass('player')
 	self.Glow:SetPoint("TOPLEFT", hp, "TOPLEFT", -1, 1)
 	self.Glow:SetPoint("BOTTOMRIGHT", hp, "BOTTOMRIGHT", 1, -1)
 	self.Glow:SetBackdrop(backdrop)
-	self.Glow:SetBackdropBorderColor(unpack(cfg.brdcolor))
+	self.Glow:SetBackdropBorderColor(unpack(cfg.BorderColor))
 	self.Glow:SetFrameLevel(3)
 
 	local Framewidth = self:GetWidth()
@@ -497,7 +497,7 @@ local _, playerClass = UnitClass('player')
 	self.Glow.pp:SetPoint("TOPLEFT", pp, "TOPLEFT", -1, 1)
 	self.Glow.pp:SetPoint("BOTTOMRIGHT", pp, "BOTTOMRIGHT", 1, -1)
 	self.Glow.pp:SetBackdrop(backdrop)
-	self.Glow.pp:SetBackdropBorderColor(unpack(cfg.brdcolor))
+	self.Glow.pp:SetBackdropBorderColor(unpack(cfg.BorderColor))
 	self.Glow.pp:SetFrameLevel(1)
 
 	-- pp bg
@@ -600,7 +600,7 @@ local createCastbar = function(self, unit)
 		cb.IconGlow:SetPoint("TOPLEFT", cb.Icon, "TOPLEFT", -1, 1)
 		cb.IconGlow:SetPoint("BOTTOMRIGHT", cb.Icon, "BOTTOMRIGHT", 1, -1)
 		cb.IconGlow:SetBackdrop(backdrop2)
-		cb.IconGlow:SetBackdropColor(unpack(cfg.brdcolor))
+		cb.IconGlow:SetBackdropColor(unpack(cfg.BorderColor))
 		cb.IconGlow:SetFrameLevel(0)
 	end
 

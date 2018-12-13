@@ -10,7 +10,7 @@ cfg.texture = mediaFolder.."texture.tga"
 ------------
 	cfg.fontcolor = {255/255, 255/255, 255/255}					-- font color for numbers of castbar time and aura time/stack
 	cfg.HPBackgroundColor = {26/255, 25/255, 31/255}		-- background color for when transparency mode is disabled
-	cfg.brdcolor = {0/255, 0/255, 0/255}								-- border color
+	cfg.BorderColor = {0/255, 0/255, 0/255}								-- border color
 	cfg.CastbarColor = {85/255, 150/255, 85/255, .8}		--enemy interruptable cast color
 
 	cfg.TransparencyMode = true													-- enable/disable transparency Mode
@@ -38,8 +38,8 @@ cfg.texture = mediaFolder.."texture.tga"
 	cfg.hpNumbFS = 7														-- health value font size
 	cfg.CastFS = 7															-- castbar font size
 	cfg.RaidFS = 7															-- font size for numbers (aura, class tags) on raid frames
-	cfg.FontF = "OUTLINE MONOCHROME"						-- "THINOUTLINE", "OUTLINE MONOCHROME", "OUTLINE" or nil (no outline)
-	cfg.fontFNum = "OUTLINE MONOCHROME"
+	cfg.FontF = "OUTLINEMONOCHROME"						-- "THINOUTLINE", "OUTLINE MONOCHROME", "OUTLINE" or nil (no outline)
+	cfg.fontFNum = "OUTLINEMONOCHROME"
 
 ----------------------
 -- general settings --
