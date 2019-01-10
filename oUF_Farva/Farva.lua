@@ -1026,20 +1026,37 @@ end,
     self:Tag(htext, '[player:hp]')
 		self.Power.value:SetPoint("TOPRIGHT", htext, "BOTTOMRIGHT", 0, -2)
 
-		local Auras = CreateFrame("Frame", nil, self)
-		Auras:SetHeight(cfg.heightPA)
-		Auras:SetPoint("TOPRIGHT", self, "TOPLEFT", 300, 30)
-		Auras.initialAnchor = "TOPLEFT"
-		Auras.size = cfg.BuffSize
-		Auras:SetWidth(Auras.size * 13)
-		Auras.gap = false
-		Auras.numBuffs = 8
-		Auras.numDebuffs = 4
-		Auras.spacing = 2
-		Auras["growth-x"] = "RIGHT"
+		if cfg.showArenaBuffs then
+			createBuffs(self)
+			self.Buffs:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 4)
+			self.Buffs.initialAnchor = "BOTTOMLEFT"
+			self.Buffs["growth-x"] = "RIGHT"
+			self.Buffs["growth-y"] = "UP"
+			self.Buffs.num = 7
+			self.Buffs.size = cfg.BuffSize
+			self.Buffs.spacing = 5
+			self.Buffs:SetSize(cfg.widthPA, self.Buffs.size)
 
-		Auras.PostCreateIcon = PostCreateIcon
-		self.Auras = Auras
+			if cfg.onlyShowPlayerBuffsFocus then
+				self.Buffs.onlyShowPlayer = true
+			end
+		end
+
+		if cfg.showArenaDebuffs then
+			createDebuffs(self)
+			self.Debuffs:SetPoint("LEFT", self.Health, "LEFT", (cfg.DebuffSize*-1)-4, -3)
+			self.Debuffs.initialAnchor = "LEFT"
+			self.Debuffs["growth-x"] = "LEFT"
+			self.Debuffs["growth-y"] = "UP"
+			self.Debuffs.num = 6
+			self.Debuffs.size = cfg.DebuffSize
+			self.Debuffs.spacing = 4
+			self.Debuffs:SetSize(self.Debuffs.size*self.Debuffs.num+(self.Debuffs.spacing*self.Debuffs.num), self.Debuffs.size)
+
+			if cfg.onlyShowPlayerDebuffsFocus then
+				self.Debuffs.onlyShowPlayer = true
+			end
+		end
 
 		-- plugins
 		SpellRange(self)
@@ -1235,27 +1252,6 @@ local spawnHelper = function(self, unit, ...)
 	end
 end
 
-if cfg.ArenaFrames then
-oUF:RegisterStyle('oUF_Farva_Arena', UnitSpecific.arenaframes)
-oUF:SetActiveStyle('oUF_Farva_Arena')
-local arena = {}
-local arenatarget = {}
-	for i = 1, 5 do
-		arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
-		if i == 1 then
-			arena[i]:SetPoint('LEFT', UIParent, 'LEFT', 250, -200)
-		else
-			arena[i]:SetPoint("BOTTOMRIGHT", arena[i-1], "TOPRIGHT", 0, 50)
-		end
-	end
-
-oUF:RegisterStyle("oUF_Farva_ArenaTarget", UnitSpecific.arenatargets)
-oUF:SetActiveStyle("oUF_Farva_ArenaTarget")
-	for i = 1, 5 do
-		arenatarget[i] = oUF:Spawn("arena"..i.."target", "oUF_Arena"..i.."target"):SetPoint("TOPLEFT",arena[i], "TOPRIGHT", 8, 0)
-	end
-end
-
 oUF:Factory(function(self)
 	local player = spawnHelper(self, 'player', "BOTTOM", -338, 233)
 	spawnHelper(self, 'pet', "RIGHT", player, "LEFT", -10, 0)
@@ -1264,8 +1260,32 @@ oUF:Factory(function(self)
 	local focus = spawnHelper(self, 'focus', "CENTER", 360, -164)
 	spawnHelper(self, 'focustarget', "CENTER", 436, -209)
 
+	local arena = {}
+	local arenatarget = {}
+
 	local spec = GetSpecialization()
 	local class = UnitClass("Player")
+
+	if cfg.ArenaFrames then
+		self:RegisterStyle('oUF_Farva_Arena', UnitSpecific.arenaframes)
+		self:SetActiveStyle('oUF_Farva_Arena')
+
+		for i = 1, 5 do
+			arena[i] = self:Spawn("arena"..i, "oUF_Arena"..i)
+			arena[i]:SetAttribute('oUF-enableArenaPrep', false)
+
+			if i == 1 then
+				arena[i]:SetPoint('LEFT', UIParent, 'LEFT', 250, -200)
+			else
+				arena[i]:SetPoint("BOTTOMRIGHT", arena[i-1], "TOPRIGHT", 0, 50)
+			end
+		end
+		self:RegisterStyle("oUF_Farva_ArenaTarget", UnitSpecific.arenatargets)
+		self:SetActiveStyle("oUF_Farva_ArenaTarget")
+			for i = 1, 5 do
+				arenatarget[i] = self:Spawn("arena"..i.."target", "oUF_Arena"..i.."target"):SetPoint("TOPLEFT",arena[i], "TOPRIGHT", 8, 0)
+			end
+	end
 
 	if cfg.PartyFrames then
 		local EventFrame = CreateFrame("Frame")
@@ -1352,6 +1372,7 @@ oUF:Factory(function(self)
 	arenaprepupdate:RegisterEvent('ARENA_OPPONENT_UPDATE')
 	arenaprepupdate:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS')
 	arenaprepupdate:SetScript('OnEvent', function(self, event)
+
 	  if event == 'PLAYER_LOGIN' then
 	    for i = 1, 5 do
 		    arenaprep[i]:SetAllPoints(_G['oUF_Arena'..i])
@@ -1365,22 +1386,14 @@ oUF:Factory(function(self)
 	    if numOpps > 0 then
 		    for i = 1, 5 do
 			    local f = arenaprep[i]
-
 			    if i <= numOpps then
 				    local s = GetArenaOpponentSpec(i)
 				    local _, spec, class = nil, 'UNKNOWN', 'UNKNOWN'
-
 				    if s and s > 0 then
 					    _, spec, _, _, _, class = GetSpecializationInfoByID(s)
 				    end
-
 				    if class and spec then
-					    local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
-						if cfg.class_colorbars and color then
-						    f.Health:SetStatusBarColor(color.r, color.g, color.b)
-						else
 							f.Health:SetStatusBarColor(40/255, 40/255, 40/255)
-						end
 					    f.Spec:SetText(spec..'  -  '..LOCALIZED_CLASS_NAMES_MALE[class])
 					    f:Show()
 				    end

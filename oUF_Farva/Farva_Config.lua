@@ -135,6 +135,8 @@ cfg.texture = mediaFolder.."texture.tga"
 -----------
 
 	cfg.ArenaFrames = true	 	-- enable/disable arena frames
+	cfg.showArenaBuffs = true -- enable/disable arena buffs
+	cfg.showArenaDebuffs = true -- enable/disable arena debuffs
 
 ---------------
 -- main tank --

@@ -103,7 +103,7 @@ oUF.Tags.Events['tankdc'] = 'UNIT_CONNECTION'
 
 oUF.Tags.Methods['color'] = function(u, r)
     local reaction = UnitReaction(u, 'player')
-		if (UnitIsPlayer(u)) and not cfg.class_colorbars then
+		if (UnitIsPlayer(u)) then
         local _, class = UnitClass(u)
         return hex(oUF.colors.class[class])
     elseif reaction and not (UnitIsPlayer(u)) then

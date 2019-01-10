@@ -65,10 +65,10 @@ local function enable(self)
 		bar:Hide()
 		bar:SetMinMaxValues(0, bar.maxThreatVal or 100)
 
-		self:RegisterEvent("PLAYER_ENTERING_WORLD", OnEvent)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent)
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent)
-		self:RegisterEvent("ZONE_CHANGED_NEW_AREA", OnEvent)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", OnEvent, true)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
+		self:RegisterEvent("ZONE_CHANGED_NEW_AREA", OnEvent, true)
 
 		bar:SetScript("OnUpdate", update)
 
