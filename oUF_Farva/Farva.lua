@@ -1511,15 +1511,19 @@ oUF:Factory(function(self)
 		Main_Tank:SetPoint("TOPLEFT", 24, -250)
 	end
 end)
-
+-- to re-enable use /run EnableAddOn("Blizzard_CompactRaidFrames");EnableAddOn("Blizzard_CUFProfiles")
 -- disable blizzard raidframe manager
 if cfg.disableRaidFrameManager then
+	if CompactRaidFrameManager then
 		CompactRaidFrameManager:UnregisterAllEvents()
     CompactRaidFrameManager:HookScript('OnShow', function(s) s:Hide() end)
     CompactRaidFrameManager:Hide()
+	end
+	if CompactRaidFrameContainer then
     CompactRaidFrameContainer:UnregisterAllEvents()
     CompactRaidFrameContainer:HookScript('OnShow', function(s) s:Hide() end)
     CompactRaidFrameContainer:Hide()
+	end
 end
 
 -------------
