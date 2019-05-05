@@ -620,6 +620,11 @@ end
 -- buffs
 local createBuffs = function(self)
 	local Buffs = CreateFrame("Frame", nil, self)
+	if cfg.showStealableBuff and UnitClass("Player") == "Mage" then
+		Buffs.showStealableBuffs = true
+	else
+		Buffs.showStealableBuffs = false
+	end
 	self.Buffs = Buffs
 	Buffs.PostCreateIcon = PostCreateIcon
 	Buffs.PostUpdateIcon = PostUpdateIcon
@@ -1272,10 +1277,6 @@ oUF:Factory(function(self)
 
 		for i = 1, 5 do
 			arena[i] = self:Spawn("arena"..i, "oUF_Arena"..i)
-			--disable the default arena prep
-			--leaving this enabled will cause dummy frames to be shown
-			--causing an error with the oUF tags
-			--we need it disabled for each iteration of the arena spawn
 			arena[i]:SetAttribute('oUF-enableArenaPrep', false)
 
 			if i == 1 then

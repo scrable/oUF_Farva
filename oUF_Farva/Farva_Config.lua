@@ -70,6 +70,8 @@ cfg.texture = mediaFolder.."texture.tga"
 		height = 8,
 	}
 
+	cfg.showStealableBuff = true		-- displays stealable buffs
+
 	cfg.showDebuffColorPerType = true --[[ true colors the debuff background for different spell types - green = poison, blue = magic, purple = curse, disease = yellow, red is undispellable
 																		 		 and false removes the background color
 															 				]]--
