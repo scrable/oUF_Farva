@@ -161,7 +161,7 @@ oUF.Tags.Events['raid:hp'] = 'UNIT_HEALTH UNIT_CONNECTION'
 oUF.Tags.Methods['altpower'] = function(u)
 	local cur = UnitPower(u, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(u, ALTERNATE_POWER_INDEX)
-	local name = select(10, UnitAlternatePowerInfo(u))
+	local name = select(10, UnitPowerBarID(u))
     local per = math.floor(cur/max*100+.5)
 	if name and per > 0 then
         return(name..': '..'|cffAF5050'..format('%d%%', per))
