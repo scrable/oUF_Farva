@@ -20,7 +20,7 @@ oUF.colors.honor = {
 
 local function WatchingHonor()
 	return UnitLevel('player') >= MAX_PLAYER_LEVEL and
-		(IsWatchingHonorAsXP() or InActiveBattlefield() or IsInActiveWorldPVP())
+		(IsWatchingHonorAsXP() or C_PvP.IsActiveBattlefield or IsInActiveWorldPVP())
 end
 
 for tag, func in next, {
