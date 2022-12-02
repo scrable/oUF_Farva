@@ -216,18 +216,18 @@ end
 -- icon style
 local PostCreateIcon = function(Auras, button)
     local buttonwidth = button:GetWidth()
-    button.cd.noOCC = false -- hide OmniCC CDs
-    button.cd.noCooldownCount = false -- hide CDC CDs
-    button.cd.disableCooldown = false
+    button.Cooldown.noOCC = true -- hide OmniCC CDs
+    button.Cooldown.noCooldownCount = false -- hide CDC CDs
+    button.Cooldown.disableCooldown = false
     Auras.disableCooldown = true -- hide CD spiral
     Auras.showDebuffType = cfg.showDebuffColorPerType -- show debuff border type color
 
-    button.overlay:SetTexture("Interface\\Addons\\oUF_Farva\\media\\flash")
-    button.overlay:SetPoint("TOPLEFT", button.icon, "TOPLEFT", -2, 2)
-    button.overlay:SetPoint("BOTTOMRIGHT", button.icon, "BOTTOMRIGHT", 2, -2)
-    button.overlay:SetTexCoord(0, 1, 0, 1)
+    button.Overlay:SetTexture("Interface\\Addons\\oUF_Farva\\media\\flash")
+    button.Overlay:SetPoint("TOPLEFT", button.Icon, "TOPLEFT", -2, 2)
+    button.Overlay:SetPoint("BOTTOMRIGHT", button.Icon, "BOTTOMRIGHT", 2, -2)
+    button.Overlay:SetTexCoord(0, 1, 0, 1)
 
-    button.overlay.Hide = function(self) self:SetVertexColor(unpack(cfg.BorderColor)) end
+    button.Overlay.Hide = function(self) self:SetVertexColor(unpack(cfg.BorderColor)) end
 
     button.time = button:CreateFontString(nil, 'OVERLAY')
     button.time:SetFont(cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags)
@@ -236,17 +236,17 @@ local PostCreateIcon = function(Auras, button)
     button.time:SetVertexColor(unpack(cfg.fontcolor))
     button:SetSize(cfg.BuffSize, cfg.BuffSize)
 
-    local count = button.count
+    local count = button.Count
     count:ClearAllPoints()
     count:SetPoint("BOTTOMRIGHT", button, 0, 2)
     count:SetFont(cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags)
     count:SetVertexColor(unpack(cfg.fontcolor))
 
-    button.icon:SetTexCoord(.08, .92, .08, .92)
+    button.Icon:SetTexCoord(.08, .92, .08, .92)
 end
 
 -- update icon
-local PostUpdateIcon
+local PostUpdateButton
 do
     local playerUnits = {
         player = true,
@@ -254,8 +254,8 @@ do
         vehicle = true,
     }
 
-    PostUpdateIcon = function(icons, unit, icon, index, offset, filter, isDebuff)
-        local _, _, _, dtype, duration, expirationTime, unitCaster, _, _, _, _, _, _, _, _ = UnitAura(unit, index, icon.filter)
+    PostUpdateButton = function(self, icon, unit, data, position)
+        local _, _, _, dtype, duration, expirationTime, unitCaster, _, _, _, _, _, _, _, _ = UnitAura(unit, position)
         local texture = icon.icon
 
         if duration and duration > 0 then
@@ -298,7 +298,7 @@ local createAuraWatch = function(self, unit)
         auras.onlyShowPresent = cfg.aw.onlyShowPresent
         auras.anyUnit = cfg.aw.anyUnit
         auras.icons = {}
-        auras.PostCreateIcon = AWIcon
+        auras.PostCreateButton = AWIcon
 
         for i, v in pairs(cfg.spellIDs[class]) do
             local icon = CreateFrame('Frame', nil, auras, BackdropTemplateMixin and "BackdropTemplate")
@@ -627,16 +627,16 @@ local createBuffs = function(self)
         Buffs.showStealableBuffs = false
     end
     self.Buffs = Buffs
-    Buffs.PostCreateIcon = PostCreateIcon
-    Buffs.PostUpdateIcon = PostUpdateIcon
+    Buffs.PostCreateButton = PostCreateIcon
+    Buffs.PostUpdateButton = PostUpdateButton
 end
 
 -- debuffs
 local createDebuffs = function(self)
     local Debuffs = CreateFrame("Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate")
     self.Debuffs = Debuffs
-    Debuffs.PostCreateIcon = PostCreateIcon
-    Debuffs.PostUpdateIcon = PostUpdateIcon
+    Debuffs.PostCreateButton = PostCreateIcon
+    Debuffs.PostUpdateButton = PostUpdateButton
 end
 
 -- plugin support
@@ -654,7 +654,7 @@ local UnitSpecific = {
     player = function(self, ...)
         if cfg.PlayerFrame then
             Shared(self, ...)
-            MirrorBars()
+            --MirrorBars()
 
             if cfg.useCastbar then
                 createCastbar(self)

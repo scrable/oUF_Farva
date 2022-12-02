@@ -38,8 +38,8 @@ cfg.texture = mediaFolder.."texture.tga"
 	cfg.hpNumbersFontSize = 7														-- health value font size
 	cfg.CastbarFontSize = 7															-- castbar font size
 	cfg.RaidFontSize = 7															-- font size for numbers (aura, class tags) on raid frames
-	cfg.FontFlags = "OUTLINEMONOCHROME"						-- "THINOUTLINE", "OUTLINE MONOCHROME", "OUTLINE" or nil (no outline)
-	cfg.NumberFontFlags = "OUTLINEMONOCHROME"
+	cfg.FontFlags = "OUTLINE, MONOCHROME"						-- "THINOUTLINE", "OUTLINE MONOCHROME", "OUTLINE" or nil (no outline)
+	cfg.NumberFontFlags = "OUTLINE, MONOCHROME"
 
 ----------------------
 -- general settings --
