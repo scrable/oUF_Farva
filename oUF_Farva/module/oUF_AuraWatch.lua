@@ -37,7 +37,7 @@ you can specify, as explained below.
 		Default false
 		Set to true for oUF_AW to to show an aura no matter what unit it
 		originates from. This will override any fromUnits setting.
-	PostCreateIcon
+	PostCreateButton
 		Default nil
 		A function to call when an icon is created to modify it, such as adding
 		a border or repositioning the count fontstring. Leave as nil to ignore.
@@ -150,7 +150,7 @@ local function DefaultResetIcon(watch, icon, count, duration, expire)
 				icon.cd:Hide()
 			end
 		end
-		if icon.count then
+		if icon.count and count ~= 0 then
 			icon.count:SetText(count > 1 and count)
 		end
 		if icon.overlay then
@@ -294,7 +294,7 @@ local function SetupIcons(self)
 
 		watch.watched[icon.spellID] = icon
 
-		if watch.PostCreateIcon then watch:PostCreateIcon(icon, icon.spellID, name, self) end
+		if watch.PostCreateButton then watch:PostCreateButton(icon, icon.spellID, name, self) end
 	end
 end
 
