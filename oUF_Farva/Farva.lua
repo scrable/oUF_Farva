@@ -677,21 +677,27 @@ local UnitSpecific = {
             if cfg.showExperienceBar then
                 if UnitLevel('player') < MAX_PLAYER_LEVEL then
                     htext:SetPoint('RIGHT', 2, -31)
-                    self.Castbar:SetAllPoints(self.Health)
-                    self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -19)
-                    self.Castbar.Time:SetPoint("BOTTOMLEFT", self.Castbar.Text, "BOTTOMRIGHT", 2, 0)
-                    self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
+                    if cfg.useCastbar then
+                        self.Castbar:SetAllPoints(self.Health)
+                        self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -19)
+                        self.Castbar.Time:SetPoint("BOTTOMLEFT", self.Castbar.Text, "BOTTOMRIGHT", 2, 0)
+                        self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
+                    end
                 else
                     htext:SetPoint('RIGHT', 2, -19)
-                    self.Castbar:SetAllPoints(self.Health)
-                    self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
-                    self.Castbar.Time:SetPoint("BOTTOMLEFT", self.Castbar.Text, "BOTTOMRIGHT", 2, 0)
-                    self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
+                    if cfg.useCastbar then
+                        self.Castbar:SetAllPoints(self.Health)
+                        self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
+                        self.Castbar.Time:SetPoint("BOTTOMLEFT", self.Castbar.Text, "BOTTOMRIGHT", 2, 0)
+                        self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
+                    end
                 end
             end
             htext.frequentUpdates = .1
             self:Tag(htext, '[player:hp]')
             self.Power.value:SetPoint("TOPRIGHT", htext, "BOTTOMRIGHT", 0, -2)
+
+            self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbersFontSize + cfg.PPyOffset)
 
             -- Icons
             local Ihld = CreateFrame("Frame", nil, self)
@@ -763,8 +769,8 @@ local UnitSpecific = {
                 self.Debuffs.spacing = 3
                 self.Debuffs.num = 14
                 self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
-                self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbersFontSize + cfg.PPyOffset)
             end
+
         end
     end,
     target = function(self, ...)
