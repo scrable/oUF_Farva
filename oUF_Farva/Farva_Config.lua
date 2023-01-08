@@ -166,12 +166,12 @@ cfg.aw = {
 
 cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	    DRUID = {
-							{29166,{0, 1, 1}, 'BOTTOMRIGHT'},								-- Innervate
+				{29166,{0, 1, 1}, 'BOTTOMRIGHT'},								-- Innervate
 	            {8936, {0.8, 0.4, 0}, 'TOPLEFT'},								-- Regrowth
 	            {102342, {0.38, 0.22, 0.1}},										-- Ironbark
 	            {48438, {0.4, 0.8, 0.2}, 'BOTTOMLEFT'},					-- Wild Growth
 	            {774, {0.8, 0.4, 0.8},'TOPRIGHT'},							-- Rejuvenation
-							{33763, {.7, .7, .7}, 'TOP'}										-- lifebloom
+				{33763, {.7, .7, .7}, 'TOP'}										-- lifebloom
 	            },
 	     MONK = {
 	            {119611, {0.2, 0.7, 0.7}},			    						-- Renewing Mist
@@ -184,7 +184,7 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	            {1022, {0.2, 0.2, 1}, 'BOTTOMLEFT'},						-- Hand of Protection
 	            {1044, {0.89, 0.45, 0}, 'BOTTOMLEFT'},  				-- Hand of Freedom
 	            {53563, {0.7, 0.3, 0.7}, 'TOPRIGHT'},   				-- Beacon of Light
-							{25771,{0.7, 0.3, 0.7}, 'BOTTOM'},
+				{25771,{0.7, 0.3, 0.7}, 'BOTTOM'},
 	            },
 	   PRIEST = {
 	            {41635, {0.2, 0.7, 0.2}, 'BOTTOMRIGHT'},			  -- Prayer of Mending
@@ -193,8 +193,8 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
 	            {6788, {1, 0, 0}, 'BOTTOMLEFT'},	    					-- Weakened Soul
 	            {17, {0.81, 0.85, 0.1}, 'TOPLEFT'},	    				-- Power Word: Shield
 	            {139, {0.4, 0.7, 0.2}, 'TOPRIGHT'},     				-- Renew
-							{47788, {.8,.8,.8}, 'TOP'},											-- guardian spirit
-							{271466, {.2, .4, .2}, 'TOP', 6, 0}							-- luminous barrier
+				{47788, {.8,.8,.8}, 'TOP'},											-- guardian spirit
+				{271466, {.2, .4, .2}, 'TOP', 6, 0}							-- luminous barrier
 	            },
 	   SHAMAN = {
 	            {61295, {0.7, 0.3, 0.7}, 'TOPRIGHT'},   				-- Riptide
@@ -202,7 +202,7 @@ cfg.spellIDs = {		--spellIDs of auras to track with aurawatch
   DEATHKNIGHT = {
 	            },
 	DEMONHUNTER = {
-							},
+				  },
 	   HUNTER = {
 	            {34477, {0.2, 0.2, 1}},				    							-- Misdirection
 	            },
