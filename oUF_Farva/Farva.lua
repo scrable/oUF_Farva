@@ -214,7 +214,7 @@ local CreateAuraTimer = function(self, elapsed)
 end
 
 -- icon style
-local PostCreateIcon = function(Auras, button)
+local PostCreateButton = function(Auras, button)
     local buttonwidth = button:GetWidth()
     button.Cooldown.noOCC = true -- hide OmniCC CDs
     button.Cooldown.noCooldownCount = false -- hide CDC CDs
@@ -247,20 +247,11 @@ end
 
 -- update icon
 local PostUpdateButton
-do
-    local playerUnits = {
-        player = true,
-        pet = true,
-        vehicle = true,
-    }
-
-    PostUpdateButton = function(self, icon, unit, data, position)
-        local _, _, _, dtype, duration, expirationTime, unitCaster, _, _, _, _, _, _, _, _ = UnitAura(unit, position)
-        local texture = icon.icon
-
-        if duration and duration > 0 then
+    do
+        PostUpdateButton = function(self, icon, unit, data, position)
+        if data.duration and data.duration > 0 then
             icon.time:Show()
-            icon.timeLeft = expirationTime
+            icon.timeLeft = data.expirationTime
             icon:SetScript("OnUpdate", CreateAuraTimer)
         else
             icon.time:Hide()
@@ -627,7 +618,7 @@ local createBuffs = function(self)
         Buffs.showStealableBuffs = false
     end
     self.Buffs = Buffs
-    Buffs.PostCreateButton = PostCreateIcon
+    Buffs.PostCreateButton = PostCreateButton
     Buffs.PostUpdateButton = PostUpdateButton
 end
 
@@ -635,7 +626,7 @@ end
 local createDebuffs = function(self)
     local Debuffs = CreateFrame("Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate")
     self.Debuffs = Debuffs
-    Debuffs.PostCreateButton = PostCreateIcon
+    Debuffs.PostCreateButton = PostCreateButton
     Debuffs.PostUpdateButton = PostUpdateButton
 end
 
