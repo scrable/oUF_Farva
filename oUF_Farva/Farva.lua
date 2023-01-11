@@ -1,28 +1,34 @@
 ﻿local addon, ns = ...
 local cfg = ns.cfg
 local tags = ns.tags
-local _, playerClass = UnitClass('player')
-local _, class = UnitClass('player')
+local _, class = UnitClass("player")
 
 local blankTex = "Interface\\Buttons\\WHITE8x8"
-local backdrop = { edgeFile = blankTex, edgeSize = 1 }
-local backdrop2 = { bgFile = blankTex }
-local backdrop3 = { bgFile = blankTex, insets = { left = -1, right = -1, top = -1, bottom = -1 } }
+local backdrop = {edgeFile = blankTex, edgeSize = 1}
+local backdrop2 = {bgFile = blankTex}
+local backdrop3 = {bgFile = blankTex, insets = {left = -1, right = -1, top = -1, bottom = -1}}
 
 -- change some colors
-local colors = setmetatable({
-    power = setmetatable({
-        ["MANA"] = { 0.36, 0.45, 0.88 },
-        ["RAGE"] = { 0.8, 0.21, 0.31 },
-        ["FUEL"] = { 0, 0.55, 0.5 },
-        ["FOCUS"] = { 0.71, 0.43, 0.27 },
-        ["ENERGY"] = { 0.85, 0.83, 0.35 },
-        ["AMMOSLOT"] = { 0.8, 0.6, 0 },
-        ["RUNIC_POWER"] = { 0, 0.82, 1 },
-        ["POWER_TYPE_STEAM"] = { 0.55, 0.57, 0.61 },
-        ["POWER_TYPE_PYRITE"] = { 0.60, 0.09, 0.17 },
-    }, { __index = oUF.colors.power }),
-}, { __index = oUF.colors })
+local colors =
+    setmetatable(
+    {
+        power = setmetatable(
+            {
+                ["MANA"] = {0.36, 0.45, 0.88},
+                ["RAGE"] = {0.8, 0.21, 0.31},
+                ["FUEL"] = {0, 0.55, 0.5},
+                ["FOCUS"] = {0.71, 0.43, 0.27},
+                ["ENERGY"] = {0.85, 0.83, 0.35},
+                ["AMMOSLOT"] = {0.8, 0.6, 0},
+                ["RUNIC_POWER"] = {0, 0.82, 1},
+                ["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
+                ["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17}
+            },
+            {__index = oUF.colors.power}
+        )
+    },
+    {__index = oUF.colors}
+)
 
 -- format numbers
 function round(num, idp)
@@ -55,16 +61,58 @@ fs = function(parent, layer, font, fontsize, outline, r, g, b, justify)
     return string
 end
 
+-- check player class & spec and see if it is a healer
+function isHealer()
+    local spec = GetSpecialization()
+    if
+        ((class == "PRIEST" and spec == 1) or (class == "PRIEST" and spec == 2) or (class == "SHAMAN" and spec == 3) or
+            (class == "PALADIN" and spec == 1) or
+            (class == "MONK" and spec == 2) or
+            (class == "DRUID" and spec == 4))
+     then
+        return true
+    else
+        return false
+    end
+end
+
+-- move raid frames if healing spec is in use
+function checkTalentUpdate()
+    local EventFrame = CreateFrame("Frame")
+    EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
+    EventFrame:SetScript(
+        "OnEvent",
+        function(self, event, ...)
+            self[event](self, ...)
+        end
+    )
+
+    function EventFrame:PLAYER_TALENT_UPDATE()
+        if (cfg.healer) then
+            self:ClearAllPoints()
+            if isHealer() then
+                self:SetPoint("CENTER", cfg.healerX, cfg.healerY)
+            else
+                self:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+            end
+        else
+            self:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+        end
+    end
+end
+
 -- frame creator
 framebd = function(parent, anchor)
-    local frame = CreateFrame('Frame', nil, parent, BackdropTemplateMixin and "BackdropTemplate")
-    frame:SetFrameStrata('BACKGROUND')
-    frame:SetPoint('TOPLEFT', anchor, 'TOPLEFT', -4, 4)
-    frame:SetPoint('BOTTOMRIGHT', anchor, 'BOTTOMRIGHT', 4, -4)
-    frame:SetBackdrop({
-        bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-        insets = { left = 3, right = 3, top = 3, bottom = 3 }
-    })
+    local frame = CreateFrame("Frame", nil, parent, BackdropTemplateMixin and "BackdropTemplate")
+    frame:SetFrameStrata("BACKGROUND")
+    frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", -4, 4)
+    frame:SetPoint("BOTTOMRIGHT", anchor, "BOTTOMRIGHT", 4, -4)
+    frame:SetBackdrop(
+        {
+            bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
+            insets = {left = 3, right = 3, top = 3, bottom = 3}
+        }
+    )
     frame:SetBackdropColor(.05, .05, .05)
     frame:SetBackdropBorderColor(0, 0, 0)
     return frame
@@ -77,7 +125,7 @@ end
 
 -- bar creator
 createStatusbar = function(parent, tex, layer, height, width, r, g, b, alpha)
-    local bar = CreateFrame 'StatusBar'
+    local bar = CreateFrame "StatusBar"
     bar:SetParent(parent)
     if height then
         bar:SetHeight(height)
@@ -94,11 +142,9 @@ end
 -- health update
 local PostUpdateHealth = function(Health, unit, min, max)
     local self = Health:GetParent()
-    local d = (round(min / max, 2) * 100)
-    local c = UnitClassification(unit)
 
     local HPheight = Health:GetHeight()
-    self.Health.bg:SetPoint('LEFT', Health:GetStatusBarTexture(), 'RIGHT')
+    self.Health.bg:SetPoint("LEFT", Health:GetStatusBarTexture(), "RIGHT")
     self.Health.bg:SetHeight(HPheight)
 
     -- set health background color for transparency mode
@@ -156,11 +202,11 @@ end
 -- custom castbar text (curCastTime/maxCastTime)
 local function CustomTimeText(self, duration)
     if self.casting then
-        self.Time:SetFormattedText('%.2f /', (self.max - duration))
-        self.Time2:SetFormattedText(' %.2f', self.max)
+        self.Time:SetFormattedText("%.2f /", (self.max - duration))
+        self.Time2:SetFormattedText(" %.2f", self.max)
     elseif self.channeling then
-        self.Time:SetFormattedText('%.2f /', duration)
-        self.Time2:SetFormattedText(' %.2f', self.max)
+        self.Time:SetFormattedText("%.2f /", duration)
+        self.Time2:SetFormattedText(" %.2f", self.max)
     end
 end
 
@@ -177,7 +223,7 @@ local FormatTime = function(s)
         return format("%dh", floor(s / hour + 0.5)), s % hour
     elseif s >= minute then
         if s <= minute * 5 then
-            return format('%d:%02d', floor(s / 60), s % minute), s - floor(s)
+            return format("%d:%02d", floor(s / 60), s % minute), s - floor(s)
         end
         return format("%dm", floor(s / minute + 0.5)), s % minute
     elseif s >= minute / 12 then
@@ -185,7 +231,6 @@ local FormatTime = function(s)
     end
     return format("%d", s), (s * 100 - floor(s * 100)) / 100
 end
-
 
 -- aura timer
 local CreateAuraTimer = function(self, elapsed)
@@ -215,7 +260,6 @@ end
 
 -- icon style
 local PostCreateButton = function(Auras, button)
-    local buttonwidth = button:GetWidth()
     button.Cooldown.noOCC = true -- hide OmniCC CDs
     button.Cooldown.noCooldownCount = false -- hide CDC CDs
     button.Cooldown.disableCooldown = false
@@ -227,12 +271,14 @@ local PostCreateButton = function(Auras, button)
     button.Overlay:SetPoint("BOTTOMRIGHT", button.Icon, "BOTTOMRIGHT", 2, -2)
     button.Overlay:SetTexCoord(0, 1, 0, 1)
 
-    button.Overlay.Hide = function(self) self:SetVertexColor(unpack(cfg.BorderColor)) end
+    button.Overlay.Hide = function(self)
+        self:SetVertexColor(unpack(cfg.BorderColor))
+    end
 
-    button.time = button:CreateFontString(nil, 'OVERLAY')
+    button.time = button:CreateFontString(nil, "OVERLAY")
     button.time:SetFont(cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags)
     button.time:SetPoint("TOPLEFT", button, 3, -2)
-    button.time:SetJustifyH('CENTER')
+    button.time:SetJustifyH("CENTER")
     button.time:SetVertexColor(unpack(cfg.fontcolor))
     button:SetSize(cfg.BuffSize, cfg.BuffSize)
 
@@ -247,8 +293,8 @@ end
 
 -- update icon
 local PostUpdateButton
-    do
-        PostUpdateButton = function(self, icon, unit, data, position)
+do
+    PostUpdateButton = function(self, icon, unit, data, position)
         if data.duration and data.duration > 0 then
             icon.time:Show()
             icon.timeLeft = data.expirationTime
@@ -264,12 +310,12 @@ end
 
 -- update aurawatch icon
 local AWIcon = function(AWatch, icon, spellID, name, self)
-    local count = fs(icon, 'OVERLAY', cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
-    count:SetPoint('BOTTOMRIGHT', icon, 5, -5)
+    local count = fs(icon, "OVERLAY", cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
+    count:SetPoint("BOTTOMRIGHT", icon, 5, -5)
     icon.count = count
 
     if cfg.AWCooldownCount then
-        local f = CreateFrame('Frame', nil, icon, BackdropTemplateMixin and "BackdropTemplate")
+        local f = CreateFrame("Frame", nil, icon, BackdropTemplateMixin and "BackdropTemplate")
         f:SetAllPoints(icon)
         local tex = f:CreateTexture()
         tex:SetAllPoints()
@@ -283,7 +329,7 @@ end
 -- initial creation of aurawatch
 local createAuraWatch = function(self, unit)
     if cfg.aw.enable then
-        local auras = CreateFrame('Frame', nil, self, BackdropTemplateMixin and "BackdropTemplate")
+        local auras = CreateFrame("Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate")
         auras:SetAllPoints(self.Health)
 
         auras.onlyShowPresent = cfg.aw.onlyShowPresent
@@ -292,13 +338,13 @@ local createAuraWatch = function(self, unit)
         auras.PostCreateButton = AWIcon
 
         for i, v in pairs(cfg.spellIDs[class]) do
-            local icon = CreateFrame('Frame', nil, auras, BackdropTemplateMixin and "BackdropTemplate")
+            local icon = CreateFrame("Frame", nil, auras, BackdropTemplateMixin and "BackdropTemplate")
             icon.spellID = v[1]
             icon:SetSize(8, 8)
             if v[3] then
                 icon:SetPoint(v[3])
             else
-                icon:SetPoint('BOTTOMLEFT', self.Health, 'BOTTOMRIGHT', -8 * i, 16)
+                icon:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -8 * i, 16)
             end
             icon:SetBackdrop(backdrop_1px)
             icon:SetBackdropColor(0, 0, 0, 1)
@@ -352,43 +398,47 @@ local PostCastStop = function(Castbar, unit)
 end
 
 local PostCastStopUpdate = function(self, event, unit)
-    if (unit ~= self.unit) then return end
+    if (unit ~= self.unit) then
+        return
+    end
     return PostCastStop(self.Castbar, unit)
 end
 
 -- skin mirror bars
 function MirrorBars()
     if (MirrorBars) then
-        for _, bar in pairs({
-            'MirrorTimer1',
-            'MirrorTimer2',
-            'MirrorTimer3',
-        }) do
+        for _, bar in pairs(
+            {
+                "MirrorTimer1",
+                "MirrorTimer2",
+                "MirrorTimer3"
+            }
+        ) do
             local bg = select(1, _G[bar]:GetRegions())
             bg:Hide()
             Mixin(_G[bar], BackdropTemplateMixin)
             _G[bar]:SetBackdrop(backdrop3)
             _G[bar]:SetBackdropColor(unpack(cfg.BorderColor))
 
-            _G[bar .. 'Border']:Hide()
+            _G[bar .. "Border"]:Hide()
 
             _G[bar]:SetParent(UIParent)
             _G[bar]:SetScale(1)
             _G[bar]:SetHeight(4)
             _G[bar]:SetWidth(160)
 
-            _G[bar .. 'Background'] = _G[bar]:CreateTexture(bar .. 'Background', 'BACKGROUND', _G[bar])
-            _G[bar .. 'Background']:SetTexture(blankTex)
-            _G[bar .. 'Background']:SetAllPoints(_G[bar])
-            _G[bar .. 'Background']:SetVertexColor(0, 0, 0, 0.5)
+            _G[bar .. "Background"] = _G[bar]:CreateTexture(bar .. "Background", "BACKGROUND", _G[bar])
+            _G[bar .. "Background"]:SetTexture(blankTex)
+            _G[bar .. "Background"]:SetAllPoints(_G[bar])
+            _G[bar .. "Background"]:SetVertexColor(0, 0, 0, 0.5)
 
-            _G[bar .. 'Text']:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
-            _G[bar .. 'Text']:ClearAllPoints()
-            _G[bar .. 'Text']:SetPoint('TOP', MirrorTimer1StatusBar, 'BOTTOM', 0, -2)
+            _G[bar .. "Text"]:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
+            _G[bar .. "Text"]:ClearAllPoints()
+            _G[bar .. "Text"]:SetPoint("TOP", MirrorTimer1StatusBar, "BOTTOM", 0, -2)
 
-            _G[bar .. 'StatusBar']:SetStatusBarTexture(cfg.HPtex)
+            _G[bar .. "StatusBar"]:SetStatusBarTexture(cfg.HPtex)
 
-            _G[bar .. 'StatusBar']:SetAllPoints(_G[bar])
+            _G[bar .. "StatusBar"]:SetAllPoints(_G[bar])
         end
     end
 end
@@ -397,22 +447,20 @@ end
 -- shared stuff for all units --
 --------------------------------
 local Shared = function(self, unit, isSingle)
-    local _, playerClass = UnitClass('player')
-
     self:SetScript("OnEnter", UnitFrame_OnEnter)
     self:SetScript("OnLeave", UnitFrame_OnLeave)
     self:RegisterForClicks "AnyUp"
 
     -- set/clear focus with shift + left click
     if cfg.ShiftClickFocus then
-        local ModKey = 'Shift'
+        local ModKey = "Shift"
         local MouseButton = 1
-        local key = ModKey .. '-type' .. (MouseButton or '')
-        if (self.unit == 'focus') then
-            self:SetAttribute(key, 'macro')
-            self:SetAttribute('macrotext', '/clearfocus')
+        local key = ModKey .. "-type" .. (MouseButton or "")
+        if (self.unit == "focus") then
+            self:SetAttribute(key, "macro")
+            self:SetAttribute("macrotext", "/clearfocus")
         else
-            self:SetAttribute(key, 'focus')
+            self:SetAttribute(key, "focus")
         end
     end
 
@@ -449,7 +497,7 @@ local Shared = function(self, unit, isSingle)
     self.Glow:SetBackdropBorderColor(unpack(cfg.BorderColor))
     self.Glow:SetFrameLevel(3)
 
-    local Framewidth = self:GetWidth()
+    --local Framewidth = self:GetWidth()
 
     -- hp bg
     hpbg = hp:CreateTexture(nil, "BACKGROUND")
@@ -493,7 +541,7 @@ local Shared = function(self, unit, isSingle)
     self.Glow.pp:SetFrameLevel(1)
 
     -- pp bg
-    local ppBG = pp:CreateTexture(nil, 'BORDER')
+    local ppBG = pp:CreateTexture(nil, "BORDER")
     ppBG:SetAllPoints()
     ppBG:SetTexture(cfg.BGtex)
     ppBG.multiplier = 0.4
@@ -518,11 +566,11 @@ local Shared = function(self, unit, isSingle)
 
     self.Name = hp:CreateFontString(nil, "OVERLAY")
     self.Name:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
-    self:Tag(self.Name, '[raidcolor][abbrevname]')
+    self:Tag(self.Name, "[raidcolor][abbrevname]")
 
     self.Status = hp:CreateFontString(nil, "OVERLAY")
     self.Status:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
-    self:Tag(self.Status, '[afkdnd][difficulty][smartlevel] ')
+    self:Tag(self.Status, "[afkdnd][difficulty][smartlevel] ")
 
     -- mouseover highlight
     local mov = self.Health:CreateTexture(nil, "OVERLAY")
@@ -534,20 +582,20 @@ local Shared = function(self, unit, isSingle)
     mov:Hide()
     self.Mouseover = mov
 
-    local StringParent = CreateFrame('Frame', nil, self)
+    local StringParent = CreateFrame("Frame", nil, self)
     StringParent:SetFrameLevel(20)
     self.StringParent = StringParent
 
-    if (unit ~= 'player') then
-        local pIcon = StringParent:CreateTexture(nil, 'OVERLAY')
+    if (unit ~= "player") then
+        local pIcon = StringParent:CreateTexture(nil, "OVERLAY")
         pIcon:SetSize(18, 18)
         self.PhaseIndicator = pIcon
     end
 
     -- raid icons for all frames
     if cfg.ShowRaidIcons then
-        local RaidTarget = StringParent:CreateTexture(nil, 'OVERLAY')
-        RaidTarget:SetPoint('TOP', self, 0, 8)
+        local RaidTarget = StringParent:CreateTexture(nil, "OVERLAY")
+        RaidTarget:SetPoint("TOP", self, 0, 8)
         RaidTarget:SetSize(16, 16)
         self.RaidTargetIndicator = RaidTarget
     end
@@ -566,25 +614,25 @@ local createCastbar = function(self, unit)
 
     self.Castbar = cb
 
-    cb.Text = cb:CreateFontString(nil, 'ARTWORK')
+    cb.Text = cb:CreateFontString(nil, "ARTWORK")
     cb.Text:SetJustifyH("LEFT")
     cb.Text:SetFont(cfg.NameFont, cfg.CastbarFontSize, cfg.FontFlags)
     cb.Text:SetTextColor(unpack(cfg.fontcolor))
 
-    cb.Time = cb:CreateFontString(nil, 'ARTWORK')
+    cb.Time = cb:CreateFontString(nil, "ARTWORK")
     cb.Time:SetFont(cfg.NumbFont, cfg.CastbarFontSize, cfg.NumberFontFlags)
-    cb.Time:SetJustifyH('RIGHT')
+    cb.Time:SetJustifyH("RIGHT")
     cb.Time:SetTextColor(unpack(cfg.fontcolor))
 
-    cb.Time2 = cb:CreateFontString(nil, 'ARTWORK')
+    cb.Time2 = cb:CreateFontString(nil, "ARTWORK")
     cb.Time2:SetFont(cfg.NumbFont, cfg.CastbarFontSize, cfg.NumberFontFlags)
-    cb.Time2:SetJustifyH('RIGHT')
+    cb.Time2:SetJustifyH("RIGHT")
     cb.Time2:SetTextColor(unpack(cfg.fontcolor))
 
     cb.CustomTimeText = CustomTimeText
 
     if cfg.useSpellIcon then
-        cb.Icon = cb:CreateTexture(nil, 'OVERLAY')
+        cb.Icon = cb:CreateTexture(nil, "OVERLAY")
         cb.Icon:SetSize(28, 28)
         cb.Icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 
@@ -596,11 +644,11 @@ local createCastbar = function(self, unit)
         cb.IconGlow:SetFrameLevel(0)
     end
 
-    cb.Spark = cb:CreateTexture(nil, 'OVERLAY')
-    cb.Spark:SetBlendMode('ADD')
+    cb.Spark = cb:CreateTexture(nil, "OVERLAY")
+    cb.Spark:SetBlendMode("ADD")
     cb.Spark:SetSize(6, cfg.heightP * 2.5)
 
-    self:RegisterEvent('UNIT_NAME_UPDATE', PostCastStopUpdate)
+    self:RegisterEvent("UNIT_NAME_UPDATE", PostCastStopUpdate)
     table.insert(self.__elements, PostCastStopUpdate)
 
     cb.PostCastStart = PostCastStart
@@ -652,7 +700,8 @@ local UnitSpecific = {
 
                 -- disable blizzards pet castbar
                 PetCastingBarFrame:UnregisterAllEvents()
-                PetCastingBarFrame.Show = function() end
+                PetCastingBarFrame.Show = function()
+                end
                 PetCastingBarFrame:Hide()
 
                 if cfg.useSpellIcon then
@@ -666,8 +715,8 @@ local UnitSpecific = {
 
             local htext = self.Health.value
             if cfg.showExperienceBar then
-                if UnitLevel('player') < MAX_PLAYER_LEVEL then
-                    htext:SetPoint('RIGHT', 2, -31)
+                if UnitLevel("player") < MAX_PLAYER_LEVEL then
+                    htext:SetPoint("RIGHT", 2, -31)
                     if cfg.useCastbar then
                         self.Castbar:SetAllPoints(self.Health)
                         self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -19)
@@ -675,7 +724,7 @@ local UnitSpecific = {
                         self.Castbar.Time2:SetPoint("BOTTOMLEFT", self.Castbar.Time, "BOTTOMRIGHT", 0, 0)
                     end
                 else
-                    htext:SetPoint('RIGHT', 2, -19)
+                    htext:SetPoint("RIGHT", 2, -19)
                     if cfg.useCastbar then
                         self.Castbar:SetAllPoints(self.Health)
                         self.Castbar.Text:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
@@ -685,7 +734,7 @@ local UnitSpecific = {
                 end
             end
             htext.frequentUpdates = .1
-            self:Tag(htext, '[player:hp]')
+            self:Tag(htext, "[player:hp]")
             self.Power.value:SetPoint("TOPRIGHT", htext, "BOTTOMRIGHT", 0, -2)
 
             self:SetSize(cfg.widthP, cfg.heightP + cfg.NumbersFontSize + cfg.PPyOffset)
@@ -695,12 +744,12 @@ local UnitSpecific = {
             Ihld:SetAllPoints(self.Health)
             Ihld:SetFrameLevel(6)
 
-            RIc = Ihld:CreateTexture(nil, 'OVERLAY')
+            RIc = Ihld:CreateTexture(nil, "OVERLAY")
             RIc:SetSize(14, 14)
             RIc:SetPoint("TOPLEFT", self.Health, 4, 6)
             self.RestingIndicator = RIc
 
-            CIc = Ihld:CreateTexture(nil, 'OVERLAY')
+            CIc = Ihld:CreateTexture(nil, "OVERLAY")
             CIc:SetSize(16, 16)
             CIc:SetPoint("LEFT", RIc, "RIGHT", 4, 0)
             self.CombatIndicator = CIc
@@ -715,35 +764,46 @@ local UnitSpecific = {
             --experience bar
             if cfg.showExperienceBar then
                 local expbar = createStatusbar(self, cfg.texture, nil, cfg.heightP, cfg.widthP, 0, .7, 1, 1)
-                expbar:SetFrameStrata('LOW')
+                expbar:SetFrameStrata("LOW")
                 expbar:SetPoint("BOTTOM", self, "BOTTOM", 0, -9)
                 expbar.Rested = createStatusbar(expbar, cfg.texture, nil, nil, nil, 0, .5, .5, .6)
                 expbar.Rested:SetAllPoints(expbar)
-                expbar.bg = expbar.Rested:CreateTexture(nil, 'BORDER')
+                expbar.bg = expbar.Rested:CreateTexture(nil, "BORDER")
                 expbar.bg:SetAllPoints(expbar)
                 expbar.bg:SetTexture(cfg.texture)
                 expbar.bg:SetVertexColor(.5, .5, .5, 0.4)
-                local xptext = expbar:CreateFontString(nil, 'OVERLAY')
+                local xptext = expbar:CreateFontString(nil, "OVERLAY")
                 xptext:SetAllPoints(expbar)
                 xptext:SetFont(cfg.NameFont, cfg.NameFontSize, cfg.FontFlags)
-                self:Tag(xptext, '[experience:cur] / [experience:max]   [experience:per]%')
+                self:Tag(xptext, "[experience:cur] / [experience:max]   [experience:per]%")
 
                 --only show on mouseover
                 xptext:Hide()
-                expbar:SetScript('OnEnter', function(self) UIFrameFadeIn(xptext, 0.3, 0, 1) end)
-                expbar:SetScript('OnLeave', function(self) UIFrameFadeOut(xptext, 0.3, 1, 0) end)
+                expbar:SetScript(
+                    "OnEnter",
+                    function(self)
+                        UIFrameFadeIn(xptext, 0.3, 0, 1)
+                    end
+                )
+                expbar:SetScript(
+                    "OnLeave",
+                    function(self)
+                        UIFrameFadeOut(xptext, 0.3, 1, 0)
+                    end
+                )
 
                 expbar.bd = framebd(expbar, expbar)
                 self.Experience = expbar
             end
 
             if cfg.threat.enable then
-                local threat = createStatusbar(UIParent, cfg.texture, nil, cfg.threat.height, cfg.threat.width, 1, 1, 1, 1)
-                threat:SetFrameStrata('LOW')
+                local threat =
+                    createStatusbar(UIParent, cfg.texture, nil, cfg.threat.height, cfg.threat.width, 1, 1, 1, 1)
+                threat:SetFrameStrata("LOW")
                 threat:SetPoint(unpack(cfg.threat.pos))
                 threat.useRawThreat = false
                 threat.usePlayerTarget = false
-                threat.bg = threat:CreateTexture(nil, 'BACKGROUND')
+                threat.bg = threat:CreateTexture(nil, "BACKGROUND")
                 threat.bg:SetAllPoints(threat)
                 threat.bg:SetTexture(cfg.texture)
                 threat.bg:SetVertexColor(1, 0, 0, 0.2)
@@ -761,7 +821,6 @@ local UnitSpecific = {
                 self.Debuffs.num = 14
                 self.Debuffs:SetSize(cfg.widthP, self.Debuffs.size)
             end
-
         end
     end,
     target = function(self, ...)
@@ -788,9 +847,9 @@ local UnitSpecific = {
             self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
             local htext = self.Health.value
-            htext:SetPoint('LEFT', 0, -19)
+            htext:SetPoint("LEFT", 0, -19)
             htext.frequentUpdates = .1
-            self:Tag(htext, '[player:hp]')
+            self:Tag(htext, "[player:hp]")
             self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
 
             if cfg.showTargetBuffs then
@@ -817,7 +876,10 @@ local UnitSpecific = {
                 self.Debuffs.num = 4
                 self.Debuffs.size = cfg.DebuffSize
                 self.Debuffs.spacing = 4
-                self.Debuffs:SetSize(self.Debuffs.size * self.Debuffs.num + (self.Debuffs.spacing * self.Debuffs.num), self.Debuffs.size)
+                self.Debuffs:SetSize(
+                    self.Debuffs.size * self.Debuffs.num + (self.Debuffs.spacing * self.Debuffs.num),
+                    self.Debuffs.size
+                )
 
                 if cfg.onlyShowPlayerDebuffsTarget then
                     self.Debuffs.onlyShowPlayer = true
@@ -869,9 +931,9 @@ local UnitSpecific = {
             self.Status:SetPoint("TOPRIGHT", self.Name, "TOPLEFT", 0, 0)
 
             local htext = self.Health.value
-            htext:SetPoint('LEFT', 0, -19)
+            htext:SetPoint("LEFT", 0, -19)
             htext.frequentUpdates = .1
-            self:Tag(htext, '[player:hp]')
+            self:Tag(htext, "[player:hp]")
             self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -2)
 
             if cfg.showFocusBuffs then
@@ -899,7 +961,10 @@ local UnitSpecific = {
                 self.Debuffs.num = 5
                 self.Debuffs.size = cfg.DebuffSize
                 self.Debuffs.spacing = 4
-                self.Debuffs:SetSize(self.Debuffs.size * self.Debuffs.num + (self.Debuffs.spacing * self.Debuffs.num), self.Debuffs.size)
+                self.Debuffs:SetSize(
+                    self.Debuffs.size * self.Debuffs.num + (self.Debuffs.spacing * self.Debuffs.num),
+                    self.Debuffs.size
+                )
 
                 if cfg.onlyShowPlayerDebuffsFocus then
                     self.Debuffs.onlyShowPlayer = true
@@ -925,7 +990,7 @@ local UnitSpecific = {
             self.Health:SetWidth(cfg.widthS)
             self.Power:SetWidth(cfg.widthS)
             self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
-            self:Tag(self.Name, '[raidcolor][shortname]')
+            self:Tag(self.Name, "[raidcolor][shortname]")
 
             self.Power.colorPower = true
 
@@ -943,7 +1008,7 @@ local UnitSpecific = {
             self.Health:SetWidth(cfg.widthS)
             self.Power:SetWidth(cfg.widthS)
             self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
-            self:Tag(self.Name, '[raidcolor][shortname]')
+            self:Tag(self.Name, "[raidcolor][shortname]")
 
             -- plugins
             SpellRange(self)
@@ -959,7 +1024,7 @@ local UnitSpecific = {
             self.Health:SetWidth(cfg.widthS)
             self.Power:SetWidth(cfg.widthS)
             self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -3)
-            self:Tag(self.Name, '[raidcolor][shortname]')
+            self:Tag(self.Name, "[raidcolor][shortname]")
 
             -- plugins
             SpellRange(self)
@@ -974,18 +1039,18 @@ local UnitSpecific = {
         self.Health:SetWidth(cfg.widthM)
         self.Power:SetWidth(cfg.widthM)
         self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFontSize + 3)
-        self:Tag(self.Name, '[afkdnd][raidcolor][abbrevname]')
+        self:Tag(self.Name, "[afkdnd][raidcolor][abbrevname]")
 
         local htext = self.Health.value
-        htext:SetPoint('LEFT', 0, -16)
+        htext:SetPoint("LEFT", 0, -16)
         htext.frequentUpdates = .1
-        self:Tag(htext, '[player:hp]')
+        self:Tag(htext, "[player:hp]")
         self.Power.value:SetPoint("TOPLEFT", htext, "BOTTOMLEFT", 0, -1)
 
-        local alttext = fs(self.Health, 'OVERLAY', cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
-        alttext:SetPoint('RIGHT', 0, -16)
+        local alttext = fs(self.Health, "OVERLAY", cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
+        alttext:SetPoint("RIGHT", 0, -16)
         alttext.frequentUpdates = .1
-        self:Tag(alttext, '[altpower]')
+        self:Tag(alttext, "[altpower]")
 
         -- plugins
         SpellRange(self)
@@ -1000,7 +1065,7 @@ local UnitSpecific = {
         self.Power:SetWidth(cfg.widthM)
         self.Power:Hide()
         self.Name:SetPoint("TOPLEFT", self.Health, 0, cfg.NameFontSize + 3)
-        self:Tag(self.Name, '[tankdc][afkdnd][raidcolor][abbrevname]')
+        self:Tag(self.Name, "[tankdc][afkdnd][raidcolor][abbrevname]")
         self.Health.value:SetPoint("TOPRIGHT", self.Health, 0, cfg.NameFontSize)
 
         -- plugins
@@ -1016,9 +1081,9 @@ local UnitSpecific = {
         self.Name:SetPoint("TOPLEFT", self.Status, "TOPRIGHT", 0, 0)
 
         local htext = self.Health.value
-        htext:SetPoint('RIGHT', 2, -19)
+        htext:SetPoint("RIGHT", 2, -19)
         htext.frequentUpdates = .1
-        self:Tag(htext, '[player:hp]')
+        self:Tag(htext, "[player:hp]")
         self.Power.value:SetPoint("TOPRIGHT", htext, "BOTTOMRIGHT", 0, -2)
 
         if cfg.showArenaBuffs then
@@ -1046,7 +1111,10 @@ local UnitSpecific = {
             self.Debuffs.num = 6
             self.Debuffs.size = cfg.DebuffSize
             self.Debuffs.spacing = 4
-            self.Debuffs:SetSize(self.Debuffs.size * self.Debuffs.num + (self.Debuffs.spacing * self.Debuffs.num), self.Debuffs.size)
+            self.Debuffs:SetSize(
+                self.Debuffs.size * self.Debuffs.num + (self.Debuffs.spacing * self.Debuffs.num),
+                self.Debuffs.size
+            )
 
             if cfg.onlyShowPlayerDebuffsFocus then
                 self.Debuffs.onlyShowPlayer = true
@@ -1068,23 +1136,23 @@ local UnitSpecific = {
         self.Health:SetWidth(cfg.widthS)
         self.Power:SetWidth(cfg.widthS)
         self.Name:SetPoint("CENTER", self.Health, 0, 0)
-        self:Tag(self.Name, '[raidcolor][shortname]')
+        self:Tag(self.Name, "[raidcolor][shortname]")
 
         self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbersFontSize + cfg.PPyOffset)
-    end,
+    end
 }
 
 -- raid, party
 do
     local range = {
         insideAlpha = 1,
-        outsideAlpha = cfg.FadeOutAlpha,
+        outsideAlpha = cfg.FadeOutAlpha
     }
 
     UnitSpecific.party = function(self, ...)
         Shared(self, ...)
 
-        self.unit = 'party'
+        self.unit = "party"
 
         self.Health:SetHeight(cfg.heightPA)
         self.Health:SetWidth(cfg.widthPA)
@@ -1095,17 +1163,17 @@ do
         self.Status:SetPoint("TOPLEFT", self.Power, "BOTTOMLEFT", 0, -2)
         self.Name:SetPoint("TOPLEFT", self.Status, "TOPRIGHT", 0, 0)
         if cfg.RaidDebuffs then
-            local d = CreateFrame('Frame', nil, self, BackdropTemplateMixin and "BackdropTemplate")
+            local d = CreateFrame("Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate")
             d:SetSize(cfg.raidDebuffSize, cfg.raidDebuffSize)
-            d:SetPoint('CENTER', 0, 4)
-            d:SetFrameStrata 'HIGH'
+            d:SetPoint("CENTER", 0, 4)
+            d:SetFrameStrata "HIGH"
             d:SetBackdrop(backdrop3)
-            d.icon = d:CreateTexture(nil, 'OVERLAY')
+            d.icon = d:CreateTexture(nil, "OVERLAY")
             d.icon:SetAllPoints(d)
-            d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
-            d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-            d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
-            d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
+            d.time = fs(d, "OVERLAY", cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
+            d.time:SetPoint("TOPLEFT", d, "TOPLEFT", 0, 0)
+            d.count = fs(d, "OVERLAY", cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
+            d.count:SetPoint("BOTTOMRIGHT", d, "BOTTOMRIGHT", 2, 0)
             d.ShowBossDebuff = true
             self.RaidDebuffs = d
         end
@@ -1114,7 +1182,7 @@ do
         self.Range = range
 
         if cfg.ShowRoleIndicators then
-            LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
+            LfDR = self.Health:CreateTexture(nil, "OVERLAY")
             LfDR:SetSize(12, 12)
             LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
             self.GroupRoleIndicator = LfDR
@@ -1125,7 +1193,7 @@ do
         LIc:SetPoint("LEFT", LfDR, "RIGHT", 4, 0)
         self.LeaderIndicator = LIc
 
-        rChk = self.Health:CreateTexture(nil, 'OVERLAY')
+        rChk = self.Health:CreateTexture(nil, "OVERLAY")
         rChk:SetSize(18, 18)
         rChk:SetPoint("CENTER", self.Health, 0, 0)
         rChk.fadeTimer = 6
@@ -1134,7 +1202,6 @@ do
 
         -- party pets
         if (self:GetAttribute("unitsuffix") == "pet") then
-
             -- clear up the inherited mess ...
             self.Auras:ClearAllPoints()
             self.Name:ClearAllPoints()
@@ -1146,7 +1213,7 @@ do
             self.Health:SetWidth(cfg.widthS)
             self.Power:SetWidth(cfg.widthS)
             self.Name:SetPoint("TOP", self.Power, "BOTTOM", 0, -2)
-            self:Tag(self.Name, '[raidcolor][shortname]')
+            self:Tag(self.Name, "[raidcolor][shortname]")
 
             self:SetSize(cfg.widthS, cfg.heightPA + cfg.NumbersFontSize + cfg.PPyOffset)
         end
@@ -1164,32 +1231,32 @@ do
         self.Power.PostUpdate = PostUpdatePowerRaid
         self.Power.classColor = true
 
-        local name = fs(self.Health, 'OVERLAY', cfg.NameFont, cfg.NameFontSize, cfg.FontFlags, 1, 1, 1)
-        name:SetPoint('LEFT', 2, 6)
-        name:SetJustifyH 'LEFT'
-        self:Tag(name, '[color][veryshort:name]')
+        local name = fs(self.Health, "OVERLAY", cfg.NameFont, cfg.NameFontSize, cfg.FontFlags, 1, 1, 1)
+        name:SetPoint("LEFT", 2, 6)
+        name:SetJustifyH "LEFT"
+        self:Tag(name, "[color][veryshort:name]")
 
         local htext = self.Health.value
-        htext:SetPoint('RIGHT', -2, -5)
-        htext:SetJustifyH 'RIGHT'
+        htext:SetPoint("RIGHT", -2, -5)
+        htext:SetJustifyH "RIGHT"
         htext.frequentUpdates = true
-        self:Tag(htext, '[raid:hp]')
+        self:Tag(htext, "[raid:hp]")
 
         local rDhF = CreateFrame("Frame", nil, self)
         rDhF:SetAllPoints(self.Health)
         rDhF:SetFrameLevel(10)
         if cfg.RaidDebuffs then
-            local d = CreateFrame('Frame', nil, self, BackdropTemplateMixin and "BackdropTemplate")
+            local d = CreateFrame("Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate")
             d:SetSize(cfg.raidDebuffSize, cfg.raidDebuffSize)
-            d:SetPoint('CENTER', 0, 4)
-            d:SetFrameStrata 'HIGH'
+            d:SetPoint("CENTER", 0, 4)
+            d:SetFrameStrata "HIGH"
             d:SetBackdrop(backdrop3)
-            d.icon = d:CreateTexture(nil, 'OVERLAY')
+            d.icon = d:CreateTexture(nil, "OVERLAY")
             d.icon:SetAllPoints(d)
-            d.time = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
-            d.time:SetPoint('TOPLEFT', d, 'TOPLEFT', 0, 0)
-            d.count = fs(d, 'OVERLAY', cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
-            d.count:SetPoint('BOTTOMRIGHT', d, 'BOTTOMRIGHT', 2, 0)
+            d.time = fs(d, "OVERLAY", cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
+            d.time:SetPoint("TOPLEFT", d, "TOPLEFT", 0, 0)
+            d.count = fs(d, "OVERLAY", cfg.NumbFont, cfg.RaidFontSize, cfg.NumberFontFlags, 0.8, 0.8, 0.8)
+            d.count:SetPoint("BOTTOMRIGHT", d, "BOTTOMRIGHT", 2, 0)
             d.ShowBossDebuff = true
             self.RaidDebuffs = d
         end
@@ -1202,7 +1269,7 @@ do
             self.Power.Smooth = true
         end
 
-        LfDR = self.Health:CreateTexture(nil, 'OVERLAY')
+        LfDR = self.Health:CreateTexture(nil, "OVERLAY")
         LfDR:SetSize(12, 12)
         LfDR:SetPoint("TOPLEFT", self.Health, 2, 6)
         self.GroupRoleIndicator = LfDR
@@ -1212,7 +1279,7 @@ do
         LIc:SetPoint("LEFT", LfDR, "RIGHT", 4, 0)
         self.LeaderIndicator = LIc
 
-        rChk = self.Health:CreateTexture(nil, 'OVERLAY')
+        rChk = self.Health:CreateTexture(nil, "OVERLAY")
         rChk:SetSize(18, 18)
         rChk:SetPoint("CENTER", self.Health, 0, 0)
         rChk.fadeTimer = 6
@@ -1229,293 +1296,295 @@ end
 oUF:RegisterStyle("Farva", Shared)
 
 for unit, layout in next, UnitSpecific do
-    oUF:RegisterStyle('Farva - ' .. unit:gsub("^%l", string.upper), layout)
+    oUF:RegisterStyle("Farva - " .. unit:gsub("^%l", string.upper), layout)
 end
 
 local spawnHelper = function(self, unit, ...)
     if (UnitSpecific[unit]) then
-        self:SetActiveStyle('Farva - ' .. unit:gsub("^%l", string.upper))
+        self:SetActiveStyle("Farva - " .. unit:gsub("^%l", string.upper))
         local object = self:Spawn(unit)
         object:SetPoint(...)
         return object
     else
-        self:SetActiveStyle 'Farva'
+        self:SetActiveStyle "Farva"
         local object = self:Spawn(unit)
         object:SetPoint(...)
         return object
     end
 end
 
-oUF:Factory(function(self)
-    local player = spawnHelper(self, 'player', "BOTTOM", -338, 233)
-    spawnHelper(self, 'pet', "RIGHT", player, "LEFT", -10, 0)
-    local target = spawnHelper(self, 'target', "BOTTOM", 338, 233)
-    spawnHelper(self, 'targettarget', "BOTTOM", 436, 191)
-    local focus = spawnHelper(self, 'focus', "CENTER", 360, -164)
-    spawnHelper(self, 'focustarget', "CENTER", 436, -209)
+oUF:Factory(
+    function(self)
+        local player = spawnHelper(self, "player", "BOTTOM", -338, 233)
+        spawnHelper(self, "pet", "RIGHT", player, "LEFT", -10, 0)
+        spawnHelper(self, "target", "BOTTOM", 338, 233)
+        spawnHelper(self, "targettarget", "BOTTOM", 436, 191)
+        spawnHelper(self, "focus", "CENTER", 360, -164)
+        spawnHelper(self, "focustarget", "CENTER", 436, -209)
 
-    local arena = {}
-    local arenatarget = {}
+        local arena = {}
+        local arenatarget = {}
 
-    local spec = GetSpecialization()
-    local class = UnitClass("Player")
+        if cfg.ArenaFrames then
+            self:RegisterStyle("oUF_Farva_Arena", UnitSpecific.arenaframes)
+            self:SetActiveStyle("oUF_Farva_Arena")
 
-    if cfg.ArenaFrames then
-        self:RegisterStyle('oUF_Farva_Arena', UnitSpecific.arenaframes)
-        self:SetActiveStyle('oUF_Farva_Arena')
+            for i = 1, 5 do
+                arena[i] = self:Spawn("arena" .. i, "oUF_Arena" .. i)
+                arena[i]:SetAttribute("oUF-enableArenaPrep", false)
 
-        for i = 1, 5 do
-            arena[i] = self:Spawn("arena" .. i, "oUF_Arena" .. i)
-            arena[i]:SetAttribute('oUF-enableArenaPrep', false)
-
-            if i == 1 then
-                arena[i]:SetPoint('LEFT', UIParent, 'LEFT', 250, -200)
-            else
-                arena[i]:SetPoint("BOTTOMRIGHT", arena[i - 1], "TOPRIGHT", 0, 50)
+                if i == 1 then
+                    arena[i]:SetPoint("LEFT", UIParent, "LEFT", 250, -200)
+                else
+                    arena[i]:SetPoint("BOTTOMRIGHT", arena[i - 1], "TOPRIGHT", 0, 50)
+                end
+            end
+            self:RegisterStyle("oUF_Farva_ArenaTarget", UnitSpecific.arenatargets)
+            self:SetActiveStyle("oUF_Farva_ArenaTarget")
+            for i = 1, 5 do
+                arenatarget[i] =
+                    self:Spawn("arena" .. i .. "target", "oUF_Arena" .. i .. "target"):SetPoint(
+                    "TOPLEFT",
+                    arena[i],
+                    "TOPRIGHT",
+                    8,
+                    0
+                )
             end
         end
-        self:RegisterStyle("oUF_Farva_ArenaTarget", UnitSpecific.arenatargets)
-        self:SetActiveStyle("oUF_Farva_ArenaTarget")
-        for i = 1, 5 do
-            arenatarget[i] = self:Spawn("arena" .. i .. "target", "oUF_Arena" .. i .. "target"):SetPoint("TOPLEFT", arena[i], "TOPRIGHT", 8, 0)
-        end
-    end
 
-    if cfg.PartyFrames then
-        local EventFrame = CreateFrame("Frame")
-        EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
-        EventFrame:SetScript("OnEvent", function(self, event, ...)
-            self[event](self, ...)
-        end)
-
-        self:SetActiveStyle 'Farva - Raid'
-        local party = self:SpawnHeader('oUF_Party', nil, 'custom  [@raid6, exists] hide; show',
-            'showPlayer',
-            true, 'showSolo', false, 'showParty', true, 'point', 'RIGHT', 'xOffset', -5,
-            'oUF-initialConfigFunction', ([[
+        if cfg.PartyFrames then
+            self:SetActiveStyle "Farva - Raid"
+            local party =
+                self:SpawnHeader(
+                "oUF_Party",
+                nil,
+                "custom  [@raid6, exists] hide; show",
+                "showPlayer",
+                true,
+                "showSolo",
+                false,
+                "showParty",
+                true,
+                "point",
+                "RIGHT",
+                "xOffset",
+                -5,
+                "oUF-initialConfigFunction",
+                ([[
 			self:SetWidth(%d)
 			self:SetHeight(%d)
-			]]):format(cfg.widthR, cfg.heightR + cfg.NumbersFontSize))
+			]]):format(
+                    cfg.widthR,
+                    cfg.heightR + cfg.NumbersFontSize
+                )
+            )
 
-        --priest spec 1,2
-        --paladin spec 1
-        --shaman spec 3
-        --monk spec 2
-        --druid spec 4
+            --function fired after spec changes
+            if (cfg.PartyFrames) then
+                checkTalentUpdate()
+            end
 
-        --function fired after spec changes
-        function EventFrame:PLAYER_TALENT_UPDATE()
-            if cfg.PartyFrames then
-                if (cfg.healer) then
-                    party:ClearAllPoints()
-                    local spec = GetSpecialization()
-                    if ((class == "Priest" and spec == 1)
-                            or (class == "Priest" and spec == 2)
-                            or (class == "Shaman" and spec == 3)
-                            or (class == "Paladin" and spec == 1)
-                            or (class == "Monk" and spec == 2)
-                            or (class == "Druid" and spec == 4)) then
-                        party:SetPoint("CENTER", cfg.healerX, cfg.healerY)
-                    else
-                        party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
-                    end
+            --initial setpoints
+            if (cfg.healer) then
+                if isHealer() then
+                    party:SetPoint("CENTER", cfg.healerX, cfg.healerY)
                 else
                     party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
                 end
-            end
-        end
-
-        --initial setpoints
-        if (cfg.healer) then
-            if ((class == "Priest" and spec == 1)
-                    or (class == "Priest" and spec == 2)
-                    or (class == "Shaman" and spec == 3)
-                    or (class == "Paladin" and spec == 1)
-                    or (class == "Monk" and spec == 2)
-                    or (class == "Druid" and spec == 4)) then
-                party:SetPoint("CENTER", cfg.healerX, cfg.healerY)
             else
                 party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
             end
-        else
-            party:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
         end
-    end
 
-    local arenaprep = {}
-    for i = 1, 5 do
-        arenaprep[i] = CreateFrame('Frame', 'oUF_ArenaPrep' .. i, UIParent, BackdropTemplateMixin and "BackdropTemplate")
-        arenaprep[i]:SetAllPoints(_G['oUF_Arena' .. i])
-        arenaprep[i]:SetFrameStrata('BACKGROUND')
-        arenaprep[i].framebd = framebd(arenaprep[i], arenaprep[i])
+        local arenaprep = {}
+        for i = 1, 5 do
+            arenaprep[i] =
+                CreateFrame("Frame", "oUF_ArenaPrep" .. i, UIParent, BackdropTemplateMixin and "BackdropTemplate")
+            arenaprep[i]:SetAllPoints(_G["oUF_Arena" .. i])
+            arenaprep[i]:SetFrameStrata("BACKGROUND")
+            arenaprep[i].framebd = framebd(arenaprep[i], arenaprep[i])
 
-        arenaprep[i].Health = CreateFrame('StatusBar', nil, arenaprep[i], BackdropTemplateMixin and "BackdropTemplate")
-        arenaprep[i].Health:SetAllPoints()
-        arenaprep[i].Health:SetStatusBarTexture(cfg.BGtex)
+            arenaprep[i].Health =
+                CreateFrame("StatusBar", nil, arenaprep[i], BackdropTemplateMixin and "BackdropTemplate")
+            arenaprep[i].Health:SetAllPoints()
+            arenaprep[i].Health:SetStatusBarTexture(cfg.BGtex)
 
-        arenaprep[i].Spec = fs(arenaprep[i].Health, 'OVERLAY', cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
-        arenaprep[i].Spec:SetPoint('CENTER')
-        arenaprep[i].Spec:SetJustifyH 'CENTER'
+            arenaprep[i].Spec =
+                fs(arenaprep[i].Health, "OVERLAY", cfg.NumbFont, cfg.NumbersFontSize, cfg.NumberFontFlags, 1, 1, 1)
+            arenaprep[i].Spec:SetPoint("CENTER")
+            arenaprep[i].Spec:SetJustifyH "CENTER"
 
-        arenaprep[i]:Hide()
-    end
+            arenaprep[i]:Hide()
+        end
 
-    local arenaprepupdate = CreateFrame('Frame')
-    arenaprepupdate:RegisterEvent('PLAYER_LOGIN')
-    arenaprepupdate:RegisterEvent('PLAYER_ENTERING_WORLD')
-    arenaprepupdate:RegisterEvent('ARENA_OPPONENT_UPDATE')
-    arenaprepupdate:RegisterEvent('ARENA_PREP_OPPONENT_SPECIALIZATIONS')
-    arenaprepupdate:SetScript('OnEvent', function(self, event)
-
-        if event == 'PLAYER_LOGIN' then
-            for i = 1, 5 do
-                arenaprep[i]:SetAllPoints(_G['oUF_Arena' .. i])
-            end
-        elseif event == 'ARENA_OPPONENT_UPDATE' then
-            for i = 1, 5 do
-                arenaprep[i]:Hide()
-            end
-        else
-            local numOpps = GetNumArenaOpponentSpecs()
-            if numOpps > 0 then
-                for i = 1, 5 do
-                    local f = arenaprep[i]
-                    if i <= numOpps then
-                        local s = GetArenaOpponentSpec(i)
-                        local _, spec, class = nil, 'UNKNOWN', 'UNKNOWN'
-                        if s and s > 0 then
-                            _, spec, _, _, _, class = GetSpecializationInfoByID(s)
-                        end
-                        if class and spec then
-                            f.Health:SetStatusBarColor(40 / 255, 40 / 255, 40 / 255)
-                            f.Spec:SetText(spec .. '  -  ' .. LOCALIZED_CLASS_NAMES_MALE[class])
-                            f:Show()
+        local arenaprepupdate = CreateFrame("Frame")
+        arenaprepupdate:RegisterEvent("PLAYER_LOGIN")
+        arenaprepupdate:RegisterEvent("PLAYER_ENTERING_WORLD")
+        arenaprepupdate:RegisterEvent("ARENA_OPPONENT_UPDATE")
+        arenaprepupdate:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
+        arenaprepupdate:SetScript(
+            "OnEvent",
+            function(self, event)
+                if event == "PLAYER_LOGIN" then
+                    for i = 1, 5 do
+                        arenaprep[i]:SetAllPoints(_G["oUF_Arena" .. i])
+                    end
+                elseif event == "ARENA_OPPONENT_UPDATE" then
+                    for i = 1, 5 do
+                        arenaprep[i]:Hide()
+                    end
+                else
+                    local numOpps = GetNumArenaOpponentSpecs()
+                    if numOpps > 0 then
+                        for i = 1, 5 do
+                            local f = arenaprep[i]
+                            if i <= numOpps then
+                                local s = GetArenaOpponentSpec(i)
+                                local _, spec, class = nil, "UNKNOWN", "UNKNOWN"
+                                if s and s > 0 then
+                                    _, spec, _, _, _, class = GetSpecializationInfoByID(s)
+                                end
+                                if class and spec then
+                                    f.Health:SetStatusBarColor(40 / 255, 40 / 255, 40 / 255)
+                                    f.Spec:SetText(spec .. "  -  " .. LOCALIZED_CLASS_NAMES_MALE[class])
+                                    f:Show()
+                                end
+                            else
+                                f:Hide()
+                            end
                         end
                     else
-                        f:Hide()
+                        for i = 1, 5 do
+                            arenaprep[i]:Hide()
+                        end
                     end
                 end
-            else
-                for i = 1, 5 do
-                    arenaprep[i]:Hide()
-                end
             end
-        end
-    end)
+        )
 
-    if cfg.RaidFrames then
-        local EventFrame = CreateFrame("Frame")
-        EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
-        EventFrame:SetScript("OnEvent", function(self, event, ...)
-            self[event](self, ...)
-        end)
-
-        self:SetActiveStyle "Farva - Raid"
-        local raid = self:SpawnHeader(nil, nil, 'custom [@raid6,exists] show; hide',
-            'showPlayer', true,
-            'showSolo', true,
-            'showParty', true,
-            'showRaid', true,
-            'xoffset', 5,
-            'yOffset', -10,
-            'point', 'LEFT',
-            'groupFilter', '1,2,3,4,5,6,7,8',
-            'groupingOrder', '1,2,3,4,5,6,7,8',
-            'groupBy', 'GROUP',
-            'maxColumns', 8,
-            'unitsPerColumn', 5,
-            'columnSpacing', -1,
-            'sortMethod', 'INDEX',
-            'columnAnchorPoint', 'TOP',
-            'oUF-initialConfigFunction', ([[
+        if cfg.RaidFrames then
+            self:SetActiveStyle "Farva - Raid"
+            local raid =
+                self:SpawnHeader(
+                nil,
+                nil,
+                "custom [@raid6,exists] show; hide",
+                "showPlayer",
+                true,
+                "showSolo",
+                true,
+                "showParty",
+                true,
+                "showRaid",
+                true,
+                "xoffset",
+                5,
+                "yOffset",
+                -10,
+                "point",
+                "LEFT",
+                "groupFilter",
+                "1,2,3,4,5,6,7,8",
+                "groupingOrder",
+                "1,2,3,4,5,6,7,8",
+                "groupBy",
+                "GROUP",
+                "maxColumns",
+                8,
+                "unitsPerColumn",
+                5,
+                "columnSpacing",
+                -1,
+                "sortMethod",
+                "INDEX",
+                "columnAnchorPoint",
+                "TOP",
+                "oUF-initialConfigFunction",
+                ([[
 			self:SetWidth(%d)
 			self:SetHeight(%d)
-			]]):format(cfg.widthR, cfg.heightR + cfg.NumbersFontSize))
+			]]):format(
+                    cfg.widthR,
+                    cfg.heightR + cfg.NumbersFontSize
+                )
+            )
 
-        --priest spec 1,2
-        --paladin spec 1
-        --shaman spec 3
-        --monk spec 2
-        --druid spec 4
+            if (cfg.RaidFrames) then
+                checkTalentUpdate()
+            end
 
-        --function fired after spec changes
-        function EventFrame:PLAYER_TALENT_UPDATE()
-            if cfg.RaidFrames then
-                if (cfg.healer) then
-                    raid:ClearAllPoints()
-                    local spec = GetSpecialization()
-                    if ((class == "Priest" and spec == 1)
-                            or (class == "Priest" and spec == 2)
-                            or (class == "Shaman" and spec == 3)
-                            or (class == "Paladin" and spec == 1)
-                            or (class == "Monk" and spec == 2)
-                            or (class == "Druid" and spec == 4)) then
-                        raid:SetPoint("CENTER", cfg.healerX, cfg.healerY)
-                    else
-                        raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
-                    end
+            --initial setpoints
+            if (cfg.healer) then
+                if isHealer() then
+                    raid:SetPoint("CENTER", cfg.healerX, cfg.healerY)
                 else
                     raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
                 end
-            end
-        end
-
-        --initial setpoints
-        if (cfg.healer) then
-            if ((class == "Priest" and spec == 1)
-                    or (class == "Priest" and spec == 2)
-                    or (class == "Shaman" and spec == 3)
-                    or (class == "Paladin" and spec == 1)
-                    or (class == "Monk" and spec == 2)
-                    or (class == "Druid" and spec == 4)) then
-                raid:SetPoint("CENTER", cfg.healerX, cfg.healerY)
             else
                 raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
             end
-        else
-            raid:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
         end
-    end
 
-    if cfg.BossFrames then
-        self:SetActiveStyle "Farva - Boss"
-        local boss = {}
-        for i = 1, MAX_BOSS_FRAMES do
-            local unit = self:Spawn("boss" .. i, "oUF_FarvaBoss" .. i)
+        if cfg.BossFrames then
+            self:SetActiveStyle "Farva - Boss"
+            local boss = {}
+            for i = 1, MAX_BOSS_FRAMES do
+                local unit = self:Spawn("boss" .. i, "oUF_FarvaBoss" .. i)
 
-            if i == 1 then
-                unit:SetPoint("LEFT", 25, -162)
-            else
-                unit:SetPoint("TOPLEFT", boss[i - 1], "BOTTOMLEFT", 0, -24)
+                if i == 1 then
+                    unit:SetPoint("LEFT", 25, -162)
+                else
+                    unit:SetPoint("TOPLEFT", boss[i - 1], "BOTTOMLEFT", 0, -24)
+                end
+                boss[i] = unit
             end
-            boss[i] = unit
         end
-    end
 
-    if cfg.MTFrames then
-        self:SetActiveStyle "Farva - MainTank"
-        local Main_Tank = self:SpawnHeader("oUF_MainTank", nil, 'raid, party, solo',
-            'showRaid', true,
-            "groupFilter", "MAINTANK",
-            'yOffset', -13 - cfg.NameFontSize,
-            'oUF-initialConfigFunction', ([[
+        if cfg.MTFrames then
+            self:SetActiveStyle "Farva - MainTank"
+            local Main_Tank =
+                self:SpawnHeader(
+                "oUF_MainTank",
+                nil,
+                "raid, party, solo",
+                "showRaid",
+                true,
+                "groupFilter",
+                "MAINTANK",
+                "yOffset",
+                -13 - cfg.NameFontSize,
+                "oUF-initialConfigFunction",
+                ([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
-			]]):format(cfg.widthM, cfg.heightM))
-        Main_Tank:SetPoint("TOPLEFT", 24, -250)
+			]]):format(cfg.widthM, cfg.heightM)
+            )
+            Main_Tank:SetPoint("TOPLEFT", 24, -250)
+        end
     end
-end)
+)
 -- to re-enable use /run EnableAddOn("Blizzard_CompactRaidFrames");EnableAddOn("Blizzard_CUFProfiles")
 -- disable blizzard raidframe manager
 if cfg.disableRaidFrameManager then
     if CompactRaidFrameManager then
         CompactRaidFrameManager:UnregisterAllEvents()
-        CompactRaidFrameManager:HookScript('OnShow', function(s) s:Hide() end)
+        CompactRaidFrameManager:HookScript(
+            "OnShow",
+            function(s)
+                s:Hide()
+            end
+        )
         CompactRaidFrameManager:Hide()
     end
     if CompactRaidFrameContainer then
         CompactRaidFrameContainer:UnregisterAllEvents()
-        CompactRaidFrameContainer:HookScript('OnShow', function(s) s:Hide() end)
+        CompactRaidFrameContainer:HookScript(
+            "OnShow",
+            function(s)
+                s:Hide()
+            end
+        )
         CompactRaidFrameContainer:Hide()
     end
 end
