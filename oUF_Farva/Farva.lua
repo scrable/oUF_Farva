@@ -77,7 +77,7 @@ function isHealer()
 end
 
 -- move raid frames if healing spec is in use
-function checkTalentUpdate()
+function checkTalentUpdate(frame)
     local EventFrame = CreateFrame("Frame")
     EventFrame:RegisterEvent("PLAYER_TALENT_UPDATE")
     EventFrame:SetScript(
@@ -89,14 +89,14 @@ function checkTalentUpdate()
 
     function EventFrame:PLAYER_TALENT_UPDATE()
         if (cfg.healer) then
-            self:ClearAllPoints()
+            frame:ClearAllPoints()
             if isHealer() then
-                self:SetPoint("CENTER", cfg.healerX, cfg.healerY)
+                frame:SetPoint("CENTER", cfg.healerX, cfg.healerY)
             else
-                self:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+                frame:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
             end
         else
-            self:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
+            frame:SetPoint("BOTTOMRIGHT", cfg.partyX, cfg.partyY)
         end
     end
 end
@@ -1382,7 +1382,7 @@ oUF:Factory(
 
             --function fired after spec changes
             if (cfg.PartyFrames) then
-                checkTalentUpdate()
+                checkTalentUpdate(party)
             end
 
             --initial setpoints
@@ -1511,7 +1511,7 @@ oUF:Factory(
             )
 
             if (cfg.RaidFrames) then
-                checkTalentUpdate()
+                checkTalentUpdate(raid)
             end
 
             --initial setpoints
