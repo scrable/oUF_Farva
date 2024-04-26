@@ -1,0 +1,18 @@
+{
+    "Lua.diagnostics.globals": [
+        "ALTERNATE_POWER_INDEX",
+        "UnitFrame_OnEnter",
+        "UnitFrame_OnLeave",
+        "CompactRaidFrameManager",
+        "CompactRaidFrameContainer",
+        "MAX_BOSS_FRAMES",
+        "PetCastingBarFrame",
+        "MAX_PLAYER_LEVEL",
+        "NumberFontNormal",
+        "HONOR",
+        "HONOR_LEVEL_LABEL",
+        "COMBAT_XP_GAIN",
+        "TUTORIAL_TITLE26",
+        "IsWatchingHonorAsXP"
+    ]
+}
